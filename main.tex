@@ -1,0 +1,71 @@
+\RequirePackage{fix-cm}
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\documentclass[twocolumn]{svjour3}          % twocolumn
+
+\smartqed  % flush right qed marks, e.g. at end of proof
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{csquotes}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\journalname{Software and Systems Modeling}
+
+% custom commands
+
+\newcommand{\NOTE}[1]{\textcolor{red}{#1}}
+
+\begin{document}
+
+\input{sections/TitleAndAuthors}
+
+\date{Received: date / Accepted: date}
+
+\maketitle
+
+
+\input{sections/Abstract}
+
+\NOTE{\emph{Estimated overall length:} 30--35 p. in two-column SoSyM format + references}
+
+%\NOTE{A sample note}
+
+\input{sections/Introduction}
+
+\input{sections/FamiliesToPersons}
+
+\input{sections/Foundations}
+
+\input{sections/Benchmarx}
+
+\input{sections/TransformationTools}
+
+\input{sections/Solutions}
+
+\input{sections/Evaluation}
+
+\input{sections/RelatedWork}
+
+\input{sections/Conclusion}
+
+
+
+
+% BibTeX users please use one of
+\bibliographystyle{plain}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliography{meta/references}   % name your BibTeX data base
+
+
+
+\end{document}
+% end of file template.tex
+
