@@ -20,7 +20,11 @@
 
 % custom commands
 
+\newcommand{\code}[1]{\texttt{#1}}
+
 \newcommand{\NOTE}[1]{\textcolor{red}{#1}}
+
+% Overleaf project: https://v2.overleaf.com/4826897137gcytcjpchpdv
 
 \begin{document}
 
@@ -33,9 +37,11 @@
 
 \input{sections/Abstract}
 
+\NOTE{Notes not being part of the text are given in red color.}
+
 \NOTE{\emph{Estimated overall length:} 30--35 p. in two-column SoSyM format + references}
 
-%\NOTE{A sample note}
+\clearpage
 
 \input{sections/Introduction}
 
@@ -62,7 +68,7 @@
 \bibliographystyle{plain}      % basic style, author-year citations
 %\bibliographystyle{spmpsci}      % mathematics and physical sciences
 %\bibliographystyle{spphys}       % APS-like style for physics
-%\bibliography{meta/references}   % name your BibTeX data base
+\bibliography{references}   % name your BibTeX data base
 
 
 
