@@ -46,7 +46,7 @@ A families model is \emph{consistent} with a persons model if a bijective mappin
 	\item  The name of every person $p$ is ``$f.name$,~$m.name$'', where $m$ is the member (in family $f$) paired with $p$.
 \end{enumerate}
 
-An example of mutually consistent models, conforming to the metamodel of Figure~\ref{fig:metamodels}, is given in Figure~\ref{fig:models}. Birthday attributes in the persons model are omitted because they are not relevant for the consistency relation.
+An example of mutually consistent models, conforming to the metamodel of Figure~\ref{fig:metamodels}, is given as on object diagram in Figure~\ref{fig:models}. Birthday attributes in the persons model are omitted because they are not relevant for the consistency relation. Furthermore, inverse links (e.g., \code{familiesInverse}) are not shown to keep the figure simple.
 
 
 
@@ -76,7 +76,7 @@ In \emph{backward direction}, the effect of an update depends on the values of t
 
 \NOTE{Maybe this subsection is obsolete. As it stands, there are some problems with definitions. Here, correctness merely requires that the consistency relation holds after an update propagation; in Section~1, this notion was used with reference to the test cases. Furthermore, the round-trip laws are not stated precisely. The cited reference refers to the view-update scenario, which is not applicable here. Anyway: This subsection should be retained only if the laws are defined precisely  in Section~3; then, it should be re-aligned with Section~3.}
 
-\noindent The transformations developed for the Families to Persons benchmark should satisfy a set of general \emph{laws} \cite{SOSYM-Stevens2010}. First, the result of a transformation from $s$ to $t$ should be \emph{correct}, i.e., $s$ and $t$ should be mutually consistent (see Section~\ref{sec:MetamodelsAndConsistency}). Furthermore, transformations should be \emph{hippocratic}: The target model should not be changed if consistency has already been established. Thus, an immediate re-run of a transformation establishing correctness should have no effect (even if configuration paramaters are switched in the backward transformation). Finally, \emph{round-trip laws} \cite{TOPLAS2007-Foster} should be satisfied: A backward transformation immediately following a forward transformation should leave the original source model untouched; likewise for a forward transformation following a backward transformation.
+\noindent The transformations developed for the Families to Persons benchmark should satisfy a set of general \emph{laws} \cite{SOSYM-Stevens2010}. First, the result of a transformation from $s$ to $t$ should be \emph{correct}, i.e., $s$ and $t$ should be mutually consistent (see Section~\ref{sec:MetamodelsAndConsistency}). Furthermore, transformations should be \emph{hippocratic}: The target model should not be changed if consistency has already been established. Thus, an immediate re-run of a transformation establishing correctness should have no effect (even if configuration parameters are switched in the backward transformation). Finally, \emph{round-trip laws} \cite{TOPLAS2007-Foster} should be satisfied: A backward transformation immediately following a forward transformation should leave the original source model untouched; likewise for a forward transformation following a backward transformation.
 
 \subsection{Challenges}
 \label{sec:Challenges}
