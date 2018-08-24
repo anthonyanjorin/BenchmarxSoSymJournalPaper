@@ -1,41 +1,78 @@
 \section{Introduction}
 \label{sec:Introduction}
-
-
+%
 \NOTE{\emph{Length:} 2 p., \emph{Responsible:} Bernhard}
 
-\noindent \emph{Bidirectional transformations (bx)} are mechanisms for specifying and maintaining consistency between two artifacts, denoted as \emph{source} and \emph{target}, respectively. A bidirectional transformation is executed in both \emph{forward} and \emph{backward} direction (from source to target and vice versa, respectively). Bidirectional transformations have been studied in many areas, including e.g.\ model-driven software development, graphical user interfaces, and transformation between heterogeneous data formats \cite{ICMT2009-Czarnecki}.
+\emph{Bidirectional transformations (bx)} are mechanisms for specifying and maintaining consistency between two artifacts,\footnote{In general between multiple artifacts.} denoted as \emph{source} and \emph{target}, respectively. 
+A bidirectional transformation can be executed to restore consistency in both \emph{forward} (source to target) and \emph{backward} (target to source) directions. 
+Bx have been studied in many areas, including model-driven software development, graphical user interfaces, and transformations between heterogeneous data formats~\cite{ICMT2009-Czarnecki}.
 
-While bx problems may be solved with unidirectional languages and tools, separate realization of forward and backward transformations with mutually consistent behavior proves difficult, laborious, and error-prone. In response to these problems, dedicated languages and tools for bx have been developed. In fact, a wide spectrum of bx approaches have been proposed; see \cite{SOSYM-Hidaka2016} for a feature-based classification.
+While bx problems may be solved using unidirectional languages and tools, maintaining a separate implementation of forward and backward synchronizers with mutually consistent behavior can be difficult, laborious, and error-prone. 
+In an attempt to better address bx-specific challenges, a variety of dedicated languages and tools for bx have been developed to assist software developers in solving bx problems more efficiently and reliably. 
+Indeed, a wide spectrum of bx approaches has been reported in the literature; see e.g., \cite{SOSYM-Hidaka2016} for a detailed feature-based classification.
 
-Accordingly, a variety of \emph{bx languages and tools} have been developed which intend to assist software developers in solving bx problems more efficiently and reliably. Due to their heterogeneity, however, bx tools are hard to compare. For this reason, the need for \emph{benchmarks} for bx tools was recognized early \cite{ICMT2009-Czarnecki}. Furthermore, a \emph{repository} of \emph{benchmark examples} was set up which has been extended continuously \cite{Cheney2014}. Finally, a proposal for structuring benchmarks was made \cite{AnjorinCG0RS14}. However, apart from these activities, no benchmarks have been actually conducted until recently.
+Due to their substantial heterogeneity, however, bx tools are difficult to compare with the consequence that fundamental differences and commonalities are still not well understood.
+This situation hinders the development of better bx tools that combine the strengths and avoid the weaknesses of existing tools.
+To promote the understanding of bx languages and tools, therefore, the need for bx \emph{benchmarks} was identified early~\cite{ICMT2009-Czarnecki}. 
+As a first step towards this goal, a curated \emph{repository} of \emph{benchmark examples} was set up and is continuously being extended~\cite{Cheney2014}.
+Subsequently, a proposal for additional requirements that bx examples must fulfill to become bx benchmarks (benchmarx) was made~\cite{AnjorinCG0RS14}. 
+Contrary to expectations, however, these preparatory activities and proposal did not result in any actual bx benchmarks.
+We claim this is due to additional and substantial \emph{practical} challenges involved in setting up a bx benchmark that can be run for multiple, diverse bx tools.
 
-This paper presents \emph{Benchmarx} \cite{Anjorin2017}, a practical framework for bx benchmarks which was developed based on the conceptual work presented in \cite{AnjorinCG0RS14}. Benchmarx provides an infrastructure on top of which bx benchmarks may be implemented. In particular, the framework takes the heterogeneity of bx tools into account by abstracting from technological spaces, tool architectures, and the data maintained by the tools. A benchmark for a specific bx problem is implemented by providing a suite of test cases. A solution to the bx problem may then be developed in a specific bx tool. By implementing a set of interfaces, the benchmark may be executed in the bx tool. In this way, the bx tool may be evaluated with respect to \emph{conciseness} (size of the transformation definition), \emph{correctness} (passed vs.\ failed test cases), and \emph{performance} (runtime).
+This paper, therefore, presents \emph{Benchmarx}~\cite{Anjorin2017}, a practical framework for bx benchmarks developed based on the conceptual work of Anjorin et al.~\cite{AnjorinCG0RS14}.
+Benchmarx provides an infrastructure on top of which bx benchmarks can be implemented. 
+In particular, the framework takes the heterogeneity of bx tools into account by abstracting from technological spaces, specific tool architectures, and the internal data maintained by the tools. 
+A benchmark for a specific bx problem is implemented by providing a suite of test cases. 
+By implementing a set of general interfaces, a solution to the bx problem developed using a specific bx tool can then be executed and evaluated using the provided test suite.  
+Furthermore, the interpretation of test results is supported by identifying a set of tool features required by bx tests, thus enabling a fine-grained classification into expected and unexpected passed and failed test cases.
+This is crucial to enable the evaluation of specialized bx tools that cannot be expected to pass all tests.
 
-As initial example for applying the Benchmarx infrastructure, \emph{Families to Persons}, a popular transformation case, was implemented and applied to a variety of bx tools. The Families to Persons benchmark demands for synchronizing a database of families consisting of mother, father, daughters, and sons with a database containing a flat set of male and female persons with birthdays not being maintained in the families database. This transformation case was proposed originally as part of the ATL \cite{SCP-Jouault2008} transformation zoo\footnote{\url{http://www.eclipse.org/atl/atlTransformations/\#Families2Persons}}. We implemented the Families to Persons case in the Benchmarx framework and submitted it as a case description to the Transformation Tool Contest 2017 (TTC 2017) \cite{Anjorin2017a}. 
+To provide a simple, but nonetheless non-trivial initial example of how to apply the Benchmarx infrastructure, the well-known \emph{Families-to-Persons} case was implemented as a bx benchmark and applied to a variety of bx tools. 
+The Families-to-Persons benchmark, originally proposed as part of the ATL~\cite{SCP-Jouault2008} transformation zoo,\footnote{\url{http://www.eclipse.org/atl/atlTransformations/\#Families2Persons}} involves synchronizing a database of families consisting of mother, father, daughters, and sons, with a database containing a set of unconnected male and female persons with birthdays that cannot be inferred from the families database. 
 
-We selected the Families to Persons case for several reasons: It is small and may be implemented in bx tools with acceptable effort. Furthermore, the data structures are rather simple and permit solutions also in bx tools operating on trees rather than on graph-like structures. Finally, while it is simple and implementable with acceptable effort, it poses a number of challenges such as heterogeneous data, loss of information, the absence of keys, non-determinism, renamings and moves, order dependent update behavior, and application-specific requirements to change operations.
+We selected the Families-to-Persons case for several reasons: It is small and may be implemented in bx tools with acceptable effort. Furthermore, the data structures are rather simple and permit solutions using bx tools that operate on trees rather than on graph-like structures. 
+Finally, despite its simplicity, it still poses a number of relevant challenges including heterogeneous data, loss of information, the absence of keys or any other form of identifiers, non-determinism, renaming and moves, order-dependent update behavior, and application-specific requirements to change operations.
 
-\NOTE{Solution experts should check the references --- one for each tool --- and the descriptions below.} 
+\NOTE{Solution experts should check the references --- one for each tool --- and the brief descriptions below.} 
 
-In addition to the Benchmarx framework, this paper presents and compares seven \emph{solutions} to the Families to Persons case in bx tools which differ considerably with respect to language paradigms as well as tool architectures: \emph{eMoflon} \cite{Leblebici2014a}, which is based on triple graph grammars; \emph{EVL+STrace} \cite{IST2018-Samimi}, which combines constraints with procedural repair actions; \emph{JTL} \cite{SLE2010-Cicchetti}, providing a declarative, relational language for constraint definitions; \emph{BiGUL} \cite{PEPM2016-Ko}, which offers a functional language in which one transformation direction (get) is derived automatically from its opposite (put); \emph{SDMLib}\footnote{\url{www.sdmlib.org}}, in which both directions are defined explicitly by programmed graph transformations; \emph{BXtend} \cite{MODELSWARD2018-Buchmann}, a bx framework where forward and backward transformations are programmed in a procedural language (Xtend); and finally \emph{NMF} \cite{SoSyM2017-Hinkel}, which offers an internal DSL based on C\# for the functional specification of synchronization rules.
-
-This paper is based on several predecessor publications: the description of the Benchmarx infrastructure \cite{Anjorin2017}, the description of the Families to Persons case for TTC 2017 \cite{Anjorin2017a}, and the presentation of a part of the solutions discussed in this paper, again published in the TTC 2017 proceedings \cite{Samimi-Dehkordi2017,Zundorf2017,Hinkel2017}. 
 %The solutions in JTL and BXtend have not been published before. Preliminary versions of the solutions in eMoflon and BiGUL were sketched as proof-of-concept in  \cite{Anjorin2017}, but extended and revised afterwards, resulting in reference solutions for the TTC 2017 case. 
+To solicit a wide range of solutions, we submitted the Families-to-Persons benchmarx as a case description to the Transformation Tool Contest 2017 (TTC 2017)~\cite{Anjorin2017a}.
+Based on a selection of the solutions from TTC 2017, therefore, this paper is able to not only present the Benchmarx framework in detail, but also to compare and evaluate seven solutions to the Families-to-Persons benchmarks developed with tools that differ considerably: 
+\emph{BiGUL}~\cite{PEPM2016-Ko}, 
+\emph{BXtend}~\cite{MODELSWARD2018-Buchmann}, 
+\emph{eMoflon}~\cite{Leblebici2014a}, 
+\emph{EVL+STrace}~\cite{IST2018-Samimi}, 
+\emph{JTL}~\cite{SLE2010-Cicchetti}, 
+\emph{NMF}~\cite{SoSyM2017-Hinkel},
+and 
+\emph{SDMLib}.\footnote{\url{www.sdmlib.org}}
 
+This paper builds on several predecessor publications: the initial description of the Benchmarx infrastructure~\cite{Anjorin2017}, the description of the Families-to-Persons case for TTC 2017~\cite{Anjorin2017a}, and the presentation of some of the solutions discussed in this paper, also published as part of the TTC 2017 proceedings~\cite{Hinkel2017,Samimi-Dehkordi2017,Zundorf2017}. 
+%
 The current paper intends to underpin the following claims:
 
 \begin{enumerate}
-	\item The Benchmarx infrastructure is designed for benchmarks executed with the help of  heterogeneous bx tools which differ with respect to technological spaces, tool architectures, bx paradigms, and bx languages.
-	\item By implementing a benchmark in the framework, bx tools may be compared with respect to conciseness, correctness, and performance. 
-	\item Comparing the solutions assists in understanding the relationships between different bx approaches.
+	\item The Benchmarx infrastructure is designed for implementing benchmarks to be executed by heterogeneous bx tools, which differ with respect to technological spaces, tool architectures, bx paradigms, and bx languages.
+	\item The Benchmarx framework provides a means of classifying test cases, enabling a useful interpretation of test results for diverse bx tools with a wide range of capabilities and limitations.  
+	\item Comparing different solutions to the same benchmark assists in better understanding the fundamental differences between and commonalities shared by different bx approaches.
 \end{enumerate}
 
-\emph{Comparing and evaluating solutions implemented in bx tools covering a wide spectrum of bx approaches} constitutes a crucial added value of this paper. Previous publications essentially presented the Benchmarx infrastructure as well as individual solutions in isolation, failing to achieve this goal. After all, the need for comparing and evaluating bx tools has been the driving force behind the Benchmarx initiative.
+The primary novel contribution of this paper is \emph{comparing and evaluating solutions implemented in bx tools covering a wide spectrum of bx approaches}.
+This constitutes a crucial added value of this paper as previous publications essentially presented the Benchmarx infrastructure and individual solutions in isolation, failing to achieve this goal. 
+After all, the need for comparing and evaluating diverse bx tools has been the driving force behind the Benchmarx initiative.
 
-With respect to comparison and evaluation, we follow a \emph{qualitative} rather than a \emph{quantitiative approach}. While we do collect metrics such as lines of code (measuring conciseness), number of failed and passed test cases (measuring correctness), and runtime (measuring performance), our primary goal is \underline{not} to identify the ``best'' bx tool with respect to these metrics. We have to recognize that bx tools vary considerably with respect to their functionality and tool architecture. Therefore, it is problematic to compare tools which have been built to serve different purposes. Rather, we would like to explore the relationships between features of bx tools and properties of solutions developed with these tools. 
+With respect to comparison and evaluation, we follow a \emph{qualitative} rather than a \emph{quantitative approach}. 
+While we do collect and discuss metrics such as lines of code indicating (arguably) conciseness, number of (un)expected failed and passed test cases (measuring correctness), and run time (measuring performance), our primary goal is \textbf{not} to identify the ``best'' bx tool with respect to these metrics. 
+We have to recognize that bx tools vary considerably with respect to their functionality and tool architecture. 
+It is, therefore, problematic to compare tools that have been built for different purposes. 
+We strive instead to explore the relationships between features of bx tools and properties of solutions developed with these tools. 
 %
-For this reason, this paper is written in a neutral style and is not meant to present a ranking among the solutions along the spirit of the Transformation Tool Contest series. 
+To this end, this paper is written in a neutral style and, in contrast to the spirit of the Transformation Tool Contest series, is not meant to imply a ranking among the solutions. 
 %Readers who are nevertheless interested in the results of the TTC 2017 competition in  are referred to the TTC 2017 web page\footnote{\url{https://www.transformation-tool-contest.eu/2017/}}; it should be noted, however, that only three out of seven solutions presented in this paper participated in TTC 2017. 
 
-The rest of this paper is structured as follows: Section~\ref{sec:FamiliesToPersons} introduces the Families to Persons benchmark, which will be used as running example in all subsequent sections. Section~\ref{sec:Foundations} defines the conceptual foundations upon which our work is built. Section~\ref{sec:Benchmarx} describes the design of the Benchmarx framework. Section~\ref{sec:TransformationTools} introduces and classifies the bx tools in which the benchmark was implemented. The solutions developed in these tools are presented in Section~\ref{sec:Solutions}. A comparison and evaluation of these solutions follows in Section~\ref{sec:Evaluation}. Section~\ref{sec:RelatedWork} discusses related work, and Section~\ref{sec:Conclusion} concludes the paper.
+The rest of this paper is structured as follows: Section~\ref{sec:FamiliesToPersons} introduces the Families-to-Persons case, which will be used as running example in all subsequent sections. 
+Section~\ref{sec:Foundations} provides the conceptual foundations upon which our work is built. 
+Section~\ref{sec:Benchmarx} describes the design of the Benchmarx framework. 
+Section~\ref{sec:TransformationTools} introduces and classifies the bx tools with which the Families-to-Persons benchmark was implemented. The solutions developed in these tools are presented in Section~\ref{sec:Solutions}. 
+A comparison and evaluation of these solutions follows in Section~\ref{sec:Evaluation}. 
+Section~\ref{sec:RelatedWork} discusses related work, and Section~\ref{sec:Conclusion} concludes the paper.

@@ -1,11 +1,19 @@
 \begin{abstract}
 	\NOTE{\emph{Responsible: } Bernhard}
 	
-	Bidirectional transformations (bx) are required in a wide range of application domains. While bx problems may be solved with unidirectional languages and tools, separate realization of forward and backward transformations with mutually consistent behavior proves difficult, laborious, and error-prone. In response to these problems, dedicated languages and tools for bx have been developed. However, due to their heterogeneity, approaches to bx are hard to compare. This motivates the need for benchmarks which facilitate the comparison of bx approaches.  
+	Bidirectional transformations (bx) are relevant for a wide range of application domains. 
+	While bx problems may be solved with unidirectional languages and tools, maintaining separate implementations of forward and backward synchronizers with mutually consistent behavior can be difficult, laborious, and error-prone. 
+	To address the challenges involved in handling bx problems, dedicated languages and tools for bx have been developed. 
+	Due to their heterogeneity, however, the numerous and diverse approaches to bx are difficult to compare, with the consequence that fundamental differences and similarities are not yet well understood. 
+	This motivates the need for suitable benchmarks that facilitate the comparison of bx approaches.  
 	
-	This paper presents Benchmarx, a novel framework for evaluating bx tools. In particular, the framework takes the heterogeneity of bx tools into account by abstracting from technological spaces, tool architectures, and the data maintained by the tools. A benchmark for a specific bx problem is implemented by providing a suite of test cases. A solution to the bx problem may then be developed in a specific bx tool. By implementing a set of interfaces, the benchmark may be executed in the bx tool. In this way, the bx tool may be evaluated with respect to conciseness (size of the transformation definition), correctness (passed vs.\ failed test cases), and performance (runtime).
+	This paper presents Benchmarx, a novel framework for evaluating bx tools that takes the heterogeneity of bx tools into account.
+	The Benchmarx framework abstracts from technological spaces, specific tool architectures, and the internal data maintained by the tools.
+	A benchmark for a specific bx problem is implemented by providing a suite of executable test cases. 
+	By implementing a set of general interfaces, a solution to such a benchmark may then be developed using a specific bx tool and evaluated by executing the test suite. 
 	
-	To illustrate the use of the Benchmarx framework, we present a variety of solutions to the well known Families to Persons benchmark, which demands for synchronizing a database of families consisting of mother, father, daughters, and sons with a database containing a flat set of male and female persons. These solutions were selected to demonstrate and compare considerably different approaches to solving bx problems, ranging from procedural approaches with pairs of unidirectional transformations at one end to declarative bidirectional approaches at the opposite end of the spectrum. 
+	To illustrate the use of the Benchmarx framework, we present a variety of solutions to the well-known Families-to-Persons benchmark, which involves synchronizing a database of families consisting of mother, father, daughters, and sons, with a database containing only unconnected male and female persons. 
+	The solutions were selected to demonstrate how the Benchmarx framework supports the systematic comparison of considerably different approaches to solving bx problems, including procedural approaches using pairs of unidirectional transformations, approaches that suitably combine bidirectional primitives, and approaches that utilize a grammar-based or constraint-based consistency specification for consistency restoration.
 	
-	\keywords{Bidirectional transformation \and Benchmark}
+	\keywords{Bidirectional Transformation \and Benchmark}
 \end{abstract}
