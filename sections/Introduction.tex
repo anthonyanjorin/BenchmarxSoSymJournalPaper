@@ -9,15 +9,17 @@ Bx have been studied in many areas, including model-driven software development,
 
 While bx problems may be solved using unidirectional languages and tools, maintaining a separate implementation of forward and backward synchronizers with mutually consistent behavior can be difficult, laborious, and error-prone. 
 In an attempt to better address bx-specific challenges, a variety of dedicated languages and tools for bx have been developed to assist software developers in solving bx problems more efficiently and reliably. 
-Indeed, a wide spectrum of bx approaches has been reported in the literature; see e.g., \cite{SOSYM-Hidaka2016} for a detailed feature-based classification.
+Indeed, a wide spectrum of bx approaches has been reported in the literature; for example, a detailed feature-based classification was provided by Hidaka et~al.~\cite{SOSYM-Hidaka2016}.
 
 Due to their substantial heterogeneity, however, bx tools are difficult to compare with the consequence that fundamental differences and commonalities are still not well understood.
 This situation hinders the development of better bx tools that combine the strengths and avoid the weaknesses of existing tools.
 To promote the understanding of bx languages and tools, therefore, the need for bx \emph{benchmarks} was identified early~\cite{ICMT2009-Czarnecki}. 
+
 As a first step towards this goal, a curated \emph{repository} of \emph{benchmark examples} was set up and is continuously being extended~\cite{Cheney2014}.
-Subsequently, a proposal for additional requirements that bx examples must fulfill to become bx benchmarks (benchmarx) was made~\cite{AnjorinCG0RS14}. 
+Subsequently, a proposal for additional requirements that a bx example must fulfill to become a bx benchmark was made~\cite{AnjorinCG0RS14}. 
+
 Contrary to expectations, however, these preparatory activities and proposal did not result in any actual bx benchmarks.
-We claim this is due to additional and substantial \emph{practical} challenges involved in setting up a bx benchmark that can be run for multiple, diverse bx tools.
+We claim this is due to additional and substantial \emph{practical} challenges involved in setting up a bx benchmark that can be run for  diverse bx tools.
 
 This paper, therefore, presents \emph{Benchmarx}~\cite{Anjorin2017}, a practical framework for bx benchmarks developed based on the conceptual work of Anjorin et al.~\cite{AnjorinCG0RS14}.
 Benchmarx provides an infrastructure on top of which bx benchmarks can be implemented. 
@@ -36,7 +38,7 @@ Finally, despite its simplicity, it still poses a number of relevant challenges 
 \NOTE{Solution experts should check the references --- one for each tool --- and the brief descriptions below.} 
 
 %The solutions in JTL and BXtend have not been published before. Preliminary versions of the solutions in eMoflon and BiGUL were sketched as proof-of-concept in  \cite{Anjorin2017}, but extended and revised afterwards, resulting in reference solutions for the TTC 2017 case. 
-To solicit a wide range of solutions, we submitted the Families-to-Persons benchmarx as a case description to the Transformation Tool Contest 2017 (TTC 2017)~\cite{Anjorin2017a}.
+To solicit a wide range of solutions, we submitted the Families-to-Persons benchmark as a case description to the Transformation Tool Contest 2017 (TTC 2017)~\cite{Anjorin2017a}.
 Based on a selection of the solutions from TTC 2017, therefore, this paper is able to not only present the Benchmarx framework in detail, but also to compare and evaluate seven solutions to the Families-to-Persons benchmarks developed with tools that differ considerably: 
 \emph{BiGUL}~\cite{PEPM2016-Ko}, 
 \emph{BXtend}~\cite{MODELSWARD2018-Buchmann}, 
@@ -53,8 +55,8 @@ The current paper intends to underpin the following claims:
 
 \begin{enumerate}
 	\item The Benchmarx infrastructure is designed for implementing benchmarks to be executed by heterogeneous bx tools, which differ with respect to technological spaces, tool architectures, bx paradigms, and bx languages.
-	\item The Benchmarx framework provides a means of classifying test cases, enabling a useful interpretation of test results for diverse bx tools with a wide range of capabilities and limitations.  
-	\item Comparing different solutions to the same benchmark assists in better understanding the fundamental differences between and commonalities shared by different bx approaches.
+	\item The Benchmarx framework provides a classification of test cases, enabling a useful interpretation of test results for bx tools with a wide range of capabilities.  
+	\item Comparing different solutions to the same benchmark assists in understanding the fundamental differences between different bx approaches.
 \end{enumerate}
 
 The primary novel contribution of this paper is \emph{comparing and evaluating solutions implemented in bx tools covering a wide spectrum of bx approaches}.

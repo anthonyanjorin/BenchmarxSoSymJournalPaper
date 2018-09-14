@@ -1,27 +1,35 @@
 
 
-\section{The Families to Persons Benchmark}
+\section{The Families-to-Persons benchmark}
 \label{sec:FamiliesToPersons}
 
 \NOTE{\emph{Length:} 2 p., \emph{Resonsible:} Bernhard}
 
 %\NOTE{Based on TTC 2017, Section~2, or ENASE 2018, Section~3. Metamodels, functionality of batch and incremental transformations, challenges. Presentation of test cases, classified according to the developed taxonomy.}
 
-\noindent As mentioned, different variants of the Families to Persons case have been proposed in the literature. Below, we will present the TTC 2017 variant of the case, mainly following  \cite{Anjorin2017a} and \cite{ENASE2018-Westfechtel}, in the terminology of model-driven software development, even though tools solving the case are not required to be model-driven. 
+Different variants of the Families-to-Persons case have been proposed in the literature. 
+We present in this section the TTC 2017 variant of the case~\cite{Anjorin2017a,ENASE2018-Westfechtel}, using standard terminology taken from Model-Driven Engineering (MDE)~\cite{RodriguesdaSilva2015139}.\footnote{Note that bx tools are not required to be compatible with any specific MDE standard to be able to solve the case.} 
+%
+%\begin{figure}[tb!]
+%	\centering
+%	\includegraphics[width=0.8\columnwidth]{diagrams/Families2PersonsCase}
+%	\caption{The Families to Persons case}
+%	\label{fig:case}
+%\end{figure}
+%
+In the Families-to-Persons case, two related, but differently structured models have to be kept consistent: A \emph{families model} with parents and children, and a \emph{persons model} containing a flat set of males and females. 
+Updates may be performed on both models, and have to be propagated in both forward and backward directions. 
+The case is symmetric~\cite{Diskin2014}, i.e., neither model is a strict view of the other and information loss may occur in both transformation directions.
 
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[width=0.8\columnwidth]{diagrams/Families2PersonsCase}
-	\caption{The Families to Persons case}
-	\label{fig:case}
-\end{figure}
-
-In the Families to Persons case, two related, but differently structured models have to be kept consistent (Figure~\ref{fig:case}): A \emph{families model} with parents and children, and a \emph{persons model} containing a flat set of males and females. Updates may be performed on both models, and have to be propagated in both directions. Neither model is a view of its opposite; information loss may occur in both transformation directions.
-
-\subsection{Metamodels and Consistency}
+\subsection{Metamodels and consistency}
 \label{sec:MetamodelsAndConsistency}
 
-For metamodeling, we employ \emph{Ecore} --- an implementation of Essential MOF, a subset of MOF \cite{MOF-2.5.1}, provided by the Eclipse Modeling Framework \cite{steinberg09}. Please note that we adopt the following terminology: A \emph{model} represents a collection of instance data. A \emph{metamodel} is a ``model for models" and defines the types of objects, attributes, and links, as well as the rules for their composition. When implementing the benchmark in a bx tool, the metamodel displayed in Figure~\ref{fig:metamodels} may be reused as it stands, or it may be represented in a different --- yet equivalent --- way (e.g., type definitions in a functional programming language, as done in BiGUL).
+For metamodeling, we employ \emph{Ecore} --- an implementation of Essential MOF, a subset of MOF~\cite{MOF-2.5.1}, provided by the Eclipse Modeling Framework~\cite{steinberg09}. 
+We adopt the following terminology~\cite{RodriguesdaSilva2015139}: 
+A \emph{system} is a generic concept for designating a software application, software platform or any other software artifact.
+A \emph{model} is an abstraction of a system under study, which is more suitable for certain purposes.
+A \emph{metamodel} is a model that defines the structure of a set of models, i.e., a modeling language.
+When implementing the benchmark in a bx tool, the metamodels depicted in Figure~\ref{fig:metamodels} may be used directly, or may be represented in an equivalent manner (e.g., type definitions in a functional programming language (Haskell) as required for BiGUL).
 
 \begin{figure}[tb!]
 	\centering
@@ -37,59 +45,214 @@ For metamodeling, we employ \emph{Ecore} --- an implementation of Essential MOF,
 	\label{fig:models}
 \end{figure*}
 
-We assume a unique root in each model. A family register stores an unordered collection of families. Each family has members who are distinguished by their roles. The metamodel permits at most one mother and at most one father as well as an arbitrary number of daughters and sons. A person register maintains a flat unordered collection of persons who have a birthday and are either male or female. Note that key properties may be assumed in neither model: There may be multiple families with the same name, name clashes are even allowed within a single family, and there may be multiple persons with the same name and birthday. 
+We assume a unique root in each model (a family and a person register, respectively). 
+A family register stores an unordered collection of families. 
+Each family has members who are distinguished by their roles. 
+The metamodel permits at most one mother and at most one father as well as an arbitrary number of daughters and sons. 
+A person register maintains a flat unordered collection of persons who have a birthday and are either male or female. 
+Note that key (combinations of) properties cannot be assumed in either model: There may be multiple families with the same name, family members with the same name even within a single family, and multiple persons with the same name and even the same birthday. 
 
-A families model is \emph{consistent} with a persons model if a bijective mapping between family members and persons can be established such that the following conditions hold:
+A families model is \emph{consistent} with a persons model if a bijective mapping between family members and persons can be established such that:
 
 \begin{enumerate}
 	\item  Mothers and daughters (fathers and sons) are paired with females (males).
 	\item  The name of every person $p$ is ``$f.name$,~$m.name$'', where $m$ is the member (in family $f$) paired with $p$.
 \end{enumerate}
 
-An example of mutually consistent models, conforming to the metamodel of Figure~\ref{fig:metamodels}, is given as on object diagram in Figure~\ref{fig:models}. Birthday attributes in the persons model are omitted because they are not relevant for the consistency relation. Furthermore, inverse links (e.g., \code{familiesInverse}) are not shown to keep the figure simple.
+An example of mutually consistent models, conforming to the metamodels in Figure~\ref{fig:metamodels}, is depicted as an object diagram in Figure~\ref{fig:models}. 
+To simplify the diagram, all inverse links (e.g., \code{familiesInverse}) are omitted.
+
+The \emph{consistency relation} between families models and persons models is \emph{non-deterministic} in both directions: For a given families model, there are multiple consistent persons models (the birthdays may be chosen arbitrarily). Conversely, a given persons model is consistent with multiple families models (due to different groupings into families and different roles, e.g., mother or daughter).
+
+%\subsection{Consistency Restoration According to Bx Laws}
+\subsection{Consistency restoration}
+\label{sec:ConsistencyRestoration}
+
+%The family-to-persons benchmark is currently restricted to forward and backward consistency restoration.
+%A forward (backward) consistency restorer can only change the target (source) model to restore consistency and is not allowed to change the current source (target) model.
+%The exact details of the possible range of further input and output artifacts is discussed later in Section~\ref{sec:Foundations}. 
+%
+
+\subsubsection{Properties of consistency restoration}
+
+In the Families-to-Persons benchmark, the approach to \emph{consistency restoration} is characterized by the following properties:
+
+\begin{description}
+	\item[\textbf{Unidirectional consistency restoration}] Starting\\ from a consistent pair of source and target models, the source model is modified, and updates are propagated to the target model. Consistency restoration does not modify the source model; rather it reestablishes consistency by updating the target model.
+	
+	\item[\textbf{Operation-based update propagation}] Bx tools are provided with operational deltas, i.e., sequences of changes operations, which they need to propagate from the source to the target model.
+	
+	\item[\textbf{Propagation on demand}] Updates need to be propagated on demand only; bx tools are not required to perform live propagation, i.e., immediate propagation of each elementary change.
+		
+	\item[\textbf{Alternating updates}] It is assumed that the target model has not been modified at all while updating the source model, or the changes do not affect the consistency relation (e.g., changes of birthdays in the persons model are allowed).
+	
+	\item[\textbf{Batch and incremental transformations}] Con\-sist-\\ency restoration operates incrementally as it modifies an existing target model. Batch transformations are treated as a special case: Empty source and target models are taken as starting point; then, updates constructing the source model are propagated to the target model.
+	
+	\item[\textbf{No user interactions}] Consistency restoration operates automatically and does not involve any decisions to be performed interactively at runtime.
+\end{description}
+
+The properties listed above describe the way how the benchmark is designed. However, they do not prescribe the architecture of a bx tool executing the benchmark (see Section~\ref{sec:Foundations}). For example, it is possible to execute the benchmark with a tool supporting live propagation. Furthermore, rather than processing operational deltas, a bx tool may compare the old and the new state of the source model to infer the changes.
+
+\subsubsection{Bx laws}
+\label{sec:BxLaws}
+
+A variety of \emph{bx laws} have been proposed in the literature; see e.g.\ \cite{Cheney2015,Stevens2008c}. The Families-to-Persons benchmark takes the following laws into account:
+
+\begin{description}
+	\item[\textbf{Correctness}] Consistency restoration actually has to  produce consistent pairs of models, according to the definition given in Section~\ref{sec:MetamodelsAndConsistency}. All test cases check for consistency by requiring a target model which is consistent with the source model.
+	\item[\textbf{Hippocraticness}] Hippocraticness means that the target model is not updated if is already consistent with the source model. More precisely, we consider an operational variant of hippocraticness: Starting with a consistent pair of a source model and a target model, propagation of any delta being composed only of operations not affecting the target model leaves the target model unchanged. Several test cases are dedicated to check this property.
+\end{description}
+
+It should be noted that our definition of hippocraticness differs from the state-based definition introduced in \cite{SOSYM-Stevens2010}: It is not required that bx tools may deal with independently constructed models and then check for consistency before restoration. Rather, the concept of \emph{synchronization dialogue} to be introduced in Section~\ref{sec:Benchmarx} ensures that all synchronizations begin with a defined start state (consisting of a families model with an empty family register and a persons model with an empty person register, respectively). Bx tools may initialize internal data structures (e.g., correspondences) before the dialogue proceeds by propagating changes in forward or backward direction.
+
+\emph{Round-trip laws} have not been considered explicitly because they are implied: If forward and backward consistency restorers are correct and hippocratic, the forward (backward) consistency restorer produces a consistent pair of models. Furthermore, if the opposite restorer is invoked immediately, it will not change the original source model any more, due to its hippocraticness. Therefore, test cases for round-trip laws would not provide additional insights.
+
+As mentioned earlier, the consistency relation between families models and persons models is non-de\-ter\-min\-istic in both directions. Correctness and hippocraticness are not sufficient to determine the behavior of consistency restoration uniquely. Intuitively, we assume that changes are propagated as precisely as possible from the source to the target model, with minimal impact on the target model. However, there is no formalization of this property which is accepted generally and may be applied in all circumstances. Some authors view consistency restoration as an optimization problem, frequently referred to as \emph{least change} \cite{SOSYM-Macedo2016}. Others prefer a more relaxed approach, denoted as principle of \emph{least surprise} \cite{Cheney2015}.
+
+Without delving deeply into this issue, we observe that neither of these principles is sufficient to derive the behavior of consistency restoration in a unique way. In some way, however, consistency restoration has to be defined as precisely as possible. Unresolved non-determinism would not only make implementation of test cases much more difficult, it would also result in unpredictable behavior, which, as we believe, would violate the principle of least surprise.
+
+Therefore, we decided to specify consistency restoration explicitly, taking correctness, hippocraticness, but also the principles of least change and/or least surprise (as informal guidelines) into account. Furthermore, we refrain from a formal specification and provide an informal --- yet (hopefully) precise --- description of the expected behavior. All test cases conform to this description. Formalizing these requirements is a task which we intentionally leave to the bx tool users who implement the benchmark.
+
+Altogether, the behavior of consistency restoration is fixed through a requirements specification, which is constrained, but not totally fixed by the bx laws mentioned above. Thus, in general bx tools have to provide for \emph{flexibility}: Users of bx tools must be able to realize \emph{application-specific requirements}.
 
 
+%We now provide an informal description of how consistency is to be restored in both these directions, starting with an overview of basic well-behavedness ``bx laws'' proposed by Cheney et al. and Stevens~\cite{Cheney2015,Stevens2008c}, which were used to guide the choice of the desired synchronization behavior manifested in the benchmark as a test suite.
 
-\subsection{Batch Transformations}
-\label{sec:BatchTransformations}
+%We require forward (backward) consistency restoration to be \emph{correct}, i.e., that the resulting source and target models be consistent.
+%In addition, we require \emph{hippocraticness}, i.e., that forward consistency restoration only change the target model if this is indeed necessary (consistency has not already been established).
+%In some cases, we also have to invoke the principle of least surprise as discussed by Cheney et al.~\cite{Cheney2015}.
+%There currently exists no formal characterization of ``least surprise'' that is applicable to all scenarios, and the test cases that rely on least surprise were defined by collaborating with multiple case and solution authors until a consensus was achieved.
 
-After running a transformation in any direction, it is required that the participating models are mutually consistent according the definition given above. However, this requirement does not suffice to define the functionality of transformations in a unique way. Below, we first consider \emph{batch transformations}, where the target model is created from scratch.
+\subsubsection{Synchronization behavior}      
 
-The functionality of a \emph{forward transformation} may be defined in a straightforward way: Map each family member to a person of the same gender and compose the person's name from the family name and the first name; the birthday remains unset because no data are stored in the families model from which birthdays could be inferred. This transformation is deterministic (but not injective). When applied to the families model on the left-hand side of Figure~\ref{fig:models}, it returns the persons model on the right-hand side. 
+In the following, we discuss the expected synchronization behavior for a series of ``small'' changes grouped according to model element (family, family member, person, \ldots) and then according to a limited set of change types (create, delete, update, move).
+This overview is sufficient to provide a high-level intuition for the benchmark.
+The actual test cases of course combine different changes and are more involved. However, the behavior of composite changes is \emph{induced} by the behavior of elementary changes.
 
-The \emph{backward transformation} is more involved: A person may be mapped either to a parent or a child, and persons may be grouped into families in different ways. The consistency relation is \emph{non-deterministic}: For a given persons model, there are multiple families models which satisfy the consistency relation. As a consequence, there are different options to define the behavior of the backward transformation.
+\paragraph{Forward consistency restoration}
 
-We decided to require a \emph{configurable} backward transformation, which is controlled by two Boolean parameters: \code{prefer\-Parent\-To\-Child} defines whether a person is mapped to a parent or a child. \code{prefer\-Existing\-To\-New\-Family} determines whether a person is added to an existing family (if available), or a new family  is created along with a single family member. If both parameters are set to true, the second parameter takes precedence: If a family is available with a matching family name, but there is no matching family with an unoccupied parent role, the member is inserted into an existing family as a child.
+Here, consistency of the persons model has to be restored after changes to the families model. Defining consistency restoration is straightforward because the families model is determined uniquely, with the exception of birthday attributes. To resolve non-determinism, we require to assign a default value to the birthday of a new person. After this resolution, consistency restoration operates deterministically.
 
-%Please notice that the configuration parameters reduce non-determinism without eliminating it completely. If  both configuration parameters are set to true, the resulting families model depends on the order in which persons are processed. For example, in Figure~\ref{fig:models}, there are three candidates for the father role in the Smith family (recall that the collection of persons is unordered). 
+Operations on \emph{families} should be processed as follows:
 
- 
-\subsection{Incremental Transformations}
-\label{sec:IncrementalTransformations}
+\begin{description}
+    \item[\textbf{Creation:}]
+    New families can be created and must be inserted into the family register.
+    This has no effect on the target model, which should not be changed.
+    
+    \item[\textbf{Deletion:}]
+    A family can be deleted together with all its family members.
+    All persons corresponding to the deleted family members should be deleted.
+    
+    \item[\textbf{Update:}]
+    A family can be renamed.  All persons corresponding to the family members in the renamed family should be renamed to restore consistency.
+    
+    \item[\textbf{Move:}]
+    Families cannot be moved as there is only a single family register and the collection of families is unordered.
+\end{description}
 
-For \emph{incremental transformations}, updates such as insertions, deletions, changes of attribute values, and move operations have to be considered. In \emph{forward direction}, insertion of a family has no effect on the target model. Insertion of a member results in insertion of a corresponding person; likewise for deletions. If a family is deleted, all persons corresponding to its members are deleted. If a member is renamed, the corresponding person is renamed accordingly. If a family is renamed, all persons corresponding to family members are renamed. If a member is moved, different cases have to be distinguished. If the gender is retained, the corresponding person object is preserved; otherwise, it is deleted, and a new person object with a different gender is created whose attributes are copied from the old person object. A local move within a family does not affect the corresponding person's name; a move to another family results in a potential update of the person's name. 
 
-In \emph{backward direction}, the effect of an update depends on the values of the configuration parameters which may vary between different transformation executions. Please note that the parameter settings must not affect already established correspondences; rather, they apply only to future updates. Deletion of a person propagates to the corresponding family member. If a person is inserted, it depends on the configuration parameters how insertion propagates to the families model (see above). Persons cannot be moved because the persons model consists of a single, flat, and unordered collection. Changes of birthdays do not propagate to the opposite model. If the first name of a person is changed, the first name of the corresponding family member is updated accordingly. Finally, if the family name of a person is changed, this change does not affect the current family and its members: The family preserves its name even if it does not contain other members; thus, the update has no side effects on the existing family. Rather, the corresponding family member is moved to another family, which may have to be created before the move; the precise update behavior depends on the parameter settings.
+Changes to \emph{family members} should be propagated in the following way: 
 
-\subsection{Transformation Laws}
-\label{sec:TranformationLaws}
+\begin{description}
+    \item[\textbf{Creation:}]
+    New family members can be created and must be immediately added to a family.
+    A new person of the same gender as the family member should be created and added to the person register.
+    The person's name should be appropriately composed from the family member's family name and surname.
+    The birthday of the person should have a default value (arbitrarily fixed by the benchmark). 
+    
+    \item[\textbf{Deletion:}]
+    A family member can be deleted.  The corresponding person in the person register should be deleted.
+    
+    \item[\textbf{Update:}]
+    A family member can be renamed.  The corresponding person should be renamed accordingly.
+    
+    \item[\textbf{Move:}]
+    If a member is moved, different cases have to be distinguished.
+    If the gender is retained, the corresponding person object should be preserved; otherwise, the person should be deleted, and a new person with a different gender is created whose attributes are copied from the old person. 
+    A ``local'' move within a family does not affect the corresponding person's name; a move to another family results in a potential update of the person's name.
+\end{description}
 
-\NOTE{Maybe this subsection is obsolete. As it stands, there are some problems with definitions. Here, correctness merely requires that the consistency relation holds after an update propagation; in Section~1, this notion was used with reference to the test cases. Furthermore, the round-trip laws are not stated precisely. The cited reference refers to the view-update scenario, which is not applicable here. Anyway: This subsection should be retained only if the laws are defined precisely  in Section~3; then, it should be re-aligned with Section~3.}
 
-\noindent The transformations developed for the Families to Persons benchmark should satisfy a set of general \emph{laws} \cite{SOSYM-Stevens2010}. First, the result of a transformation from $s$ to $t$ should be \emph{correct}, i.e., $s$ and $t$ should be mutually consistent (see Section~\ref{sec:MetamodelsAndConsistency}). Furthermore, transformations should be \emph{hippocratic}: The target model should not be changed if consistency has already been established. Thus, an immediate re-run of a transformation establishing correctness should have no effect (even if configuration parameters are switched in the backward transformation). Finally, \emph{round-trip laws} \cite{TOPLAS2007-Foster} should be satisfied: A backward transformation immediately following a forward transformation should leave the original source model untouched; likewise for a forward transformation following a backward transformation.
+\paragraph{Backward consistency restoration}
+
+Here, consistency res\-to\-ra\-tion is more involved as a person may be mapped either to a parent or a child, and persons may be grouped into families in different ways. As argued earlier, non-determinism should be resolved as far as possible. This may be achieved in different ways. A \emph{default transformation} would fix specific mapping options (e.g., all persons may be mapped to children and grouped into the same family if their family names agree). 
+
+
+%Without configuration, backward consistency would be \emph{non-deterministic}: For a given persons model, there are multiple families models that would all be in line with correctness, hippocraticness and even least surprise. 
+
+To provide for more flexibility, we decided to require a \emph{configurable} backward consistency restorer, to be controlled by an \emph{update policy}\footnote{In practice this could either represent run time user interaction or compile time design preferences.} that must set two Boolean parameters:
+(i) \code{prefer\-Parent\-To\-Child} determining whether a person is to be mapped to a parent or a child (if both options are possible), and (ii) \code{prefer\-Existing\-To\-New\-Family} determining whether a person is to be mapped to a family member added to an existing family, or added to a newly created family containing only this single family member (again if both options are possible). 
+If both parameters are set to true, the second parameter should take precedence: If the only existing family with a matching family name has no unoccupied parent role, the member is inserted into the family as a child (thus respecting (ii) and ignoring (i)).
+
+It should be noted that the update policy does not resolve non-determinism completely. For example, let us assume that persons should be added to existing families as children. If we insert another person with family name \code{Smith} into the persons model, a corresponding member may be inserted either into family \code{f1} or into \code{f2} (Figure~\ref{fig:models}). Furthermore, the update behavior may depend on the \emph{order} of change operations. For example, if persons should be added to existing families as parents, and two male persons with family name \code{Miller} are added to the persons model, the first person will be added as a father and the second person as a son. 
+
+%Note that the update policy reduces non-determinism without eliminating it completely. 
+%If  both configuration parameters are set to true, the resulting families model depends on the order in which persons are processed. 
+%For example, in Figure~\ref{fig:models}, there are three candidates for the father role in the Smith family (recall that the collection of persons is unordered). 
+
+Let us now consider the change operations on \emph{persons} in detail:
+
+\begin{description}
+    \item[\textbf{Creation:}]
+    New persons can be created and must be added to the person register.
+    A new family member with correct gender and name should be created in a suitable family in the family register.
+    The update policy is consulted if it is possible to add the new family member to an existing family, and if the family member can be added as a parent or a child.
+    
+    \item[\textbf{Deletion:}]
+    Persons can be deleted.
+    The corresponding family member should be deleted. 
+
+    \item[\textbf{Update:}]
+    Changes of birthdays do not propagate to the source model. 
+
+    The first name of a person can be changed; 
+    the name of the corresponding family member should be updated accordingly. 
+
+    The family name of a person can be changed; 
+    this change should not affect the current family and its members.
+    The family preserves its name even if it does not contain any other members.
+    The corresponding family member should instead be moved to another family, which may have to be created as required; the precise update behavior if there are multiple possibilities depends on the update policy.
+    
+    \item[\textbf{Move:}]
+    Persons cannot be moved because the persons model consists of a single, flat, and unordered collection. 
+\end{description}
+
+The update policy constitutes an example of \emph{ap\-pli\-ca\-tion-specific requirements}, as discussed at the end of Section~\ref{sec:BxLaws}. The rules for handling changes to family names are application-specific, as well. They are based on the underlying assumption that the person intends to leave its family (e.g., because of marriage). This kind of update propagation may (arguably) be considered reasonable; we simply take it for granted, being required by the (imaginative) customer. However, in certain circumstances it may violate principles such as least change (e.g., if the person was the single member of a family), which is used only as a general guideline, not as a strict law. 
+
 
 \subsection{Challenges}
 \label{sec:Challenges}
 
-The Families to Persons case includes a number of \emph{challenges} which are summarized below:
+The Families-to-Persons case includes a number of diverse \emph{challenges} summarized below.
 
 \begin{description}
-	\item[\textbf{Heterogeneous metamodels}] The transformation has to perform a mapping between heterogeneous metamodels, where the same information is represented in different ways (concerning e.g.\ names and genders).
-	\item[\textbf{Loss of information}] The family structure is lost in the forward transformation; birthdays are lost in the backward transformation.
-	\item[\textbf{No keys}] There are no uniquely identifying properties for family members or persons, which makes propagation of changes difficult.
-	\item[\textbf{Non-determinism}] The consistency relation is non-deterministic: For a given families model, there are multiple persons models satisfying the consistency relation (since birthdays may be arbitrarily selected). Likewise, for a given persons model there are multiple families models being consistent with the persons model (due to different groupings into families and different roles in these families)
-	\item[\textbf{Configurability}] The behavior of the backward transformation is controlled by configuration parameters for determining roles of persons and groupings of persons into families. Parameters may be changed from execution to execution and should affect only new elements of the persons model in each run.
-	\item[\textbf{Renamings and moves}] Changes to be propagated include not only creations and deletions, but also renamings and moves, which must not be reduced to deletions and creations (otherwise, the principle of \emph{least change} \cite{SOSYM-Macedo2016}, which demands that the changes are propagated in a minimally invasive way, would be violated). 
-	\item[\textbf{Order-dependent update behavior}] The backward transformation depends on the order in which change operations on the persons model are processed. For example, if two persons are to be inserted into the same family as parents, the first one will be inserted as parent, and the second one will follow as a child.
-	\item[\textbf{Specific requirements to change operations}] The\\ case description includes specific requirements to change operations. For example, if the family name of a person is changed, the person should be moved to another family (rather than having the family name updated, with side effects on other members). 
+	\item[\textbf{Heterogeneous metamodels:}] 
+	Solutions must establish a mapping between heterogeneous metamodels, where the same information is represented in different ways (concerning e.g., names and genders).
+	
+	\item[\textbf{Loss of information:}] 
+	The scenario is symmetric as the family structure is only present in the source, and birthdays are only present in the target.
+	
+	\item[\textbf{No keys:}] 
+	There are no uniquely identifying properties for family members or persons, which makes propagation of changes difficult.
+	
+	\item[\textbf{Non-determinism:}] 
+	The consistency relation is not de\-ter\-mi\-ni\-stic: For a given families model, there can be multiple correct persons models (birthdays may be arbitrarily selected). 
+	Likewise, for a given persons model there can be multiple correct families models (due to different groupings into families and different roles in these families). Consistency restoration has to deal with this non-determinism (and resolve it as far as possible).
+	
+	\item[\textbf{Configurability:}] 
+	The behavior of backward con\-sis\-ten\-cy restoration is controlled by an update policy determining roles of members and groupings of members into families. 
+	The update policy may be changed at run time and should take effect only for future updates (no global reshuffling of the families model after the update policy has been changed).
+	
+	\item[\textbf{Renaming and movement:}] 
+	Changes to be pro\-pa\-ga\-ted include not only creations and deletions, but also renamings and moves, which must not be reduced to deletions and creations to avoid violating the principle of \emph{least surprise}~\cite{Cheney2015,SOSYM-Macedo2016}, which demands that changes be propagated in a minimally invasive way. 
+	
+	\item[\textbf{Order-dependent update behavior:}] 
+	Backward consistency restoration depends on the order in which change operations on the persons model are processed. 
+	For example, if two persons of the same gender are to be inserted into the same family as parents, only the first person can be inserted as a parent; the second person must be added as a child.
+	
+	\item[\textbf{Specific least surprise requirements:}]~
+	The bench\-mark requires adherence to a case-specific definition of what ``least surprise'' is to mean.
+	For example, if the family name of a person is changed, the corresponding family member should be moved to another family (rather than having the family name updated, with possible side effects on other members).
+	This definition of which change is ``better'' or ``smaller'' than another is arguably arbitrary and must be treated as an additional requirement.
 \end{description}
