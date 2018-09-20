@@ -4,7 +4,7 @@
 %\NOTE{\emph{Length:} 2 p., \emph{Responsible:} Thomas}
 %
 %\NOTE{Overview of the framework, provided components, approach to tool integration, synchronization dialogues, design and classification of test cases, execution of test cases.}
-\subsection{Overview}
+%\subsection{Overview}
 
 \begin{figure}[tb!]
 	\centering
@@ -13,42 +13,65 @@
 	\label{fig:featureModelBenchmarxTestCase}
 \end{figure}
 
-The Benchmarx framework is a component-based framework allowing for a comparison of arbitrary BX tools. The major challenge in benchmarking bx tools is that different tools may use different input data. Addressing this challenge requires a unifying design space, in which different tool architectures can be placed and respectively classified. 
+The Benchmarx framework is a component-based framework allowing for a comparison of arbitrary bx tools. 
+A major challenge that must be addressed by the framework is that different bx tools may require different input data. 
+The Benchmarx framework must thus provide a unifying design space, in which different bx tool architectures can be placed, classified, and evaluated. 
 
-The framework is based on Eclipse EMF technology, but it is also open to bx tools operating on plain Java Objects and even non-JVM based tools. JUnit test cases are used to setup and execute the benchmarx tests. Assertions ensure the respective pre- and postconditions and the expected transformation results. In order to compare the expected and the actual resulting target models of each transformation run, a string representation of the respective models is used. In that way, non-EMF and even non-JVM-based tools may be used and no restrictions on the input data of the tools considered are imposed. 
+While the general conceptual design of the Benchmarx framework can be transferred to any technological space, we provide a reference implementation based on Eclipse, the Eclipse Modeling Framework (EMF), JUnit as a unit testing framework, and Java.
+To ensure that non-EMF and even non-JVM-based bx tools can be integrated with no restrictions on the input data of the tools, we use a string representation of produced and expected models established by convention for each benchmark example.
+The current solutions to the Families-to-Persons case show that it is indeed possible to integrate diverse bx tools with reasonable effort.
 
-\subsection{Design of the Test Cases}
+\subsection{Design of a Benchmarx Test Suite}
 
-As an extension of the feature model for bx tool architectures, Figure \ref{fig:featureModelBenchmarxTestCase} depicts a feature model for benchmarx test cases. Every benchmarx test case must state the required bx tool architecture (c.f. Fig. \ref{fig:featureModelBxTools}), its direction to be \textbf{fwd} (forward), \textbf{bwd} (backward) or \textbf{round trip}, and the combination of different change types applied in the test. The set of possible change types can be extended in the future to accommodate more expressive frameworks. 
+Figure \ref{fig:featureModelBenchmarxTestCase} depicts a feature model for benchmarx test cases. 
+Every benchmarx test case must state the relevant application scenario (cf. figure~\ref{fig:featureModelBxTools}), its direction to be (exclusively) \emph{fwd} (forward), \emph{bwd} (backward) or a mix of both, i.e., a \emph{round trip}, and the combination of different change types applied in the test. 
+The set of possible change types can be extended in the future to accommodate more expressive frameworks. 
 
-The test cases provided for the Families to Persons case are separated into two different categories: (1) batch test cases and (2) incremental ones. Each category comprises test cases for each transformation direction. Please note that in the following the term \emph{forward} is used for transformations from the Families model to the Persons model. Accordingly, a \emph{backward} transformation describes a transformation from the Persons model to the Families model.
+Benchmarx is designed as a generic framework for benchmarking bx tools; we thus strive to minimize requirements regarding the typically tool-specific representation of deltas and corrs. 
+Instead of establishing some standard data structure for deltas and corrs, test cases are designed as \emph{synchronization dialogs}. 
+A synchronization dialog always starts from the same agreed upon initial consistent state, and then applies a sequence of edits to the source and target models. 
+Only the resulting models are directly asserted by comparing them with expected versions.
+In this manner, each bx tool is free to maintain arbitrary internal state, e.g., recording deltas during edit application, or maintaining corrs in whatever format is required.
 
-While the batch test cases are used to check if a given source model is transformed into a target model correctly, updates of the corresponding source models are taken into account by the incremental ones. In particular, renaming, deleting and moving persons and family members respectively, are addressed in these test cases. In order to keep the number of test cases manageable, only the batch category contains separate test cases for each combination of configuration parameters. In the incremental category, the parameters are changed dynamically during test case execution.
-
-Benchmarx is designed as a generic framework for benchmarking BX tools, and -- as stated above -- not all of the tools provide access to internal data structures like correspondence models or output deltas of a synchronization run, the JUnit test cases are designed as \emph{synchronisation dialogues}. They always start from the same agreed upon consistent state, from which a sequence of deltas are propagated. Only the resulting output models are to be directly asserted by comparing them with expected versions. 
-
-A benchmarx test case is depicted schematically to the left of Figure \ref{fig:benchmarxTestCase}, with a concrete test case for our example to the right, following the proposed structure and representing an instantiation with JavaDoc, Java, and JUnit.
-
+A benchmarx test case is depicted schematically to the left of figure \ref{fig:benchmarxTestCase}, with a concrete test case for our example depicted to the right of figure~\ref{fig:benchmarxTestCase}, following the proposed schema using JavaDoc, Java, and JUnit as implementation technologies.
+%
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[width=\columnwidth]{diagrams/testCase}
-	\caption{A benchmarx test case as a synchronisation dialogue}
+	\caption{A benchmarx test case as a synchronization dialog}
 	\label{fig:benchmarxTestCase}
 \end{figure}
+%
+Each test case contains a documentation (cf. label~1 in figure~\ref{fig:benchmarxTestCase}) stating (i)~what is being tested, (ii)~the expected behaviour, and (iii)~a list of the concrete features of the test case taken from figure~\ref{fig:featureModelBenchmarxTestCase} to clarify at a glance if a given bx tool can be expected to pass the test or not, i.e., if the relevant application scenario for the test case matches the addressed application scenario of the (implemented solution with the) bx tool. 
 
-Each test case contains a documentation (cf. Label 1 in Figure \ref{fig:benchmarxTestCase}) stating (i) what is being tested, (ii) the expected behaviour, and (iii) a list of the concrete features of the test case taken from Figure \ref{fig:featureModelBenchmarxTestCase} to clarify at a glance if a given bx tool can pass the test or not. 
+The test case itself starts by initializing the bx tool which is being tested (label~2); the agreed upon starting state is hereby established (e.g., for the Families-to-Persons benchmark this comprises a single empty family register and a corresponding single empty person register), and all necessary internal (auxiliary) tool-specific data structures can be created.
 
-The test case itself starts with an initialisation command invoked on the bx tool which is being tested (Label 2), where the agreed upon starting state is established (e.g., for the Families to Persons benchmarx this comprises a single empty family register and a corresponding single empty person register), and all neccessary internal (auxiliary) data structures are created.
+%%%%% TONY is here %%%%%>
 
-Part three (Label 3) of a test case consists of a series of propagation steps, used to establish the precondition of the test. Although this creates a dependency to other tests (asserting exactly this precondition), the handling of the required correspondence model is simplified, as the bx tool can build up the neccessary internal state that must go along with the precondition. I.e. the old consistent correspondence model is ``passed'' implicitly to the bx tool via a series of preparatory propagation steps. The precondition is finally asserted (Label 4), representing a well-defined starting point. If the test requires a runtime update policy, this is configured just before propagating the actual input delta (Label 5). The last part of a test case (Label 6) is an assertion of the postcondition, checking if the final source and target models are as expected. 
+The subsequent part of a test case (label~3) consists of a series of propagation steps, used to establish the precondition of the test. 
+Although this creates a dependency on other tests (asserting exactly this precondition), it allows us to abstract from any tool-specific corr representation, as every bx tool can build up whatever internal state it requires along with the precondition. 
+In this manner, the input corr is ``passed'' implicitly to the bx tool via a series of preparatory propagation steps.
+Each propagation step is specified in the test case as a source or target edit (realized as a Java lambda expression), which is passed to the bx tool and is to be performed on the source or target model.
+In this manner, the bx tool can record\footnote{EMF supports this via a notification framework.} whatever it wants when applying the edit to produce, e.g., a tool-specific representation of an o-delta or s-delta.
 
-In the concrete test case shown in Figure \ref{fig:benchmarxTestCase}, a number of persons are created in the person register and then propagated backward to establish a consistent family register that is asserted as a precondition. As part of the actual test, a person named \texttt{Simpson, Bart} is now renamed in the person register; this change is now propagated backward with the update policy to prefer creating parents (if possible) to creating children. Please note that in this test scenario multiple persons with the name \emph{Bart Simpson} are used. As a consequence, the respective correspondences between those persons and their counterparts in the family model need to be managed.
+The precondition is finally asserted (label~4), representing a well-defined starting point for the test. 
+If the test requires a runtime update policy (cf. section~\ref{sec:Introduction}), this is configured (label~5) just before propagating the relevant input edit.
+A sequence of such (optional) configuration and edit propagation steps form the primary synchronization dialogue used to establish the postcondition (label~5).
+The final part of a test case (label~6) is an assertion of the postcondition, checking if the final source and target models are as expected. 
 
-\subsection{Implementation in a Tool}
+In the concrete test case depicted to the right of figure~\ref{fig:benchmarxTestCase}, a number of persons are created in the person register and then propagated backward to establish a consistent family register that is asserted as a precondition. 
+As part of the actual test, a person named \texttt{Simpson, Bart} is now renamed in the person register; this change is propagated backward with a runtime update policy set to prefer creating parents (if possible) to creating children. 
+Note that in this particular test, two persons with the name \emph{Bart Simpson} are created as part of the precondition (indicated by the target edit \texttt{createSimpsonsWithTwoBarts}). 
+As a consequence, this test can only be reliably passed if corrs are exploited as explicit input (indicated by the feature \texttt{corr-based} in the classification of the test). 
 
-In order to use a specific bx tool with the benchmarx framework, the interface \code{BXTool} needs to be implemented. Please note, although the Benchmarx Framework itself is written in Java, it is possible to also use it with non-JVM based BX tools (c.f, our reference implementation for the tool BiGUL). Figure \ref{fig:refImplementation} gives an overview and explanation of the methods to be implemented. Reference implementations for \emph{eMoflon} \cite{}, \emph{BiGUL} \cite{}, \emph{medini QVT}\footnote{http://projects.ikv.de/qvt} and \emph{BXtend} \cite{MODELSWARD2018-Buchmann} may be found in the benchmarx Github repository. Please note that for EMF-based tools, an abstract class \code{BXToolForEMF} already exists where tool integrators may subclass from. This class already contains implementations for both \code{assert} methods. As explained in the previous subsection, the method \code{initiateSynchronisationDialogue} is invoked on each test case run and is used to establish the agreed upon common starting state consisting of a single empty family register and its corresponding single and empty persons register plus all neccessary and tool-specific internal data structures. The methods \code{performAndPropagateTargetEdit} and \code{performAnd-\\} \code{PropagateSourceEdit} are called from the test cases when corresponding edit deltas should be performed and propagated on the corresponding models. In contrast, the methods \code{performIdleTargetEdit} and \code{per\-formIdleSourceEdit} are used to modify source and target models, respectively, without propagating the change. These methods should be used whenever a change in the respective models does not affect the opposite model, e.g. when the birthday date of a person is changed, or the role of a family member within its containing family.
+The current test suite provided for the Families-to-Persons case consists of such test cases as in figure~\ref{fig:benchmarxTestCase} separated into two broad categories: (1)~\emph{batch} test cases providing only the input model and no horizontal input (initial-batch-based), and (2)~\emph{alignment-based} test cases providing an input delta and input corr (delta-corr-based).
+More tests covering the other bx application scenarios identified in figure~\ref{fig:architectureLandscape} can be added in the future.
+Each category comprises test cases for each transformation direction.\footnote{Recall from section~\ref{sec:Introduction} that the \emph{forward} direction is from the Families model to the Persons model, while \emph{backward} is from the Persons model to the Families model.}
 
-Please note, that we use parameterized test cases, where the \code{BXTool}s are the parameters. In order to run the test cases for a single tool, the respective test runner has to be instantiated in the corresponding collection the class \code{FamiliesToPersonsTestCase}. 
+While the batch test cases are basic tests used to check if a given source model is transformed into a new target model correctly, different input source deltas are handled by the alignment-based tests. 
+In particular, renaming, deleting, and moving persons and family members are currently addressed in these test cases. 
+To keep the number of test cases manageable, only the batch category contains separate test cases for each combination of configuration parameters.
+In the alignment-based category, the parameters (preferences represented by the update policy) are changed dynamically during test case execution.
 
 \begin{figure}[tb!]
 	\centering
@@ -57,5 +80,16 @@ Please note, that we use parameterized test cases, where the \code{BXTool}s are 
 	\label{fig:refImplementation}
 \end{figure}
 
+\subsection{Implementing a Benchmark with a Bx Tool}
 
+In order to use a specific bx tool with the benchmarx framework, a single interface \code{BXTool}, depicted and described in figure~\ref{fig:refImplementation}, needs to be implemented. 
+For EMF-based tools, we provide an abstract class \code{BX\-Tool\-For\-EMF} that contains implementations for both \code{assert} methods and can be subclassed to simplify the integration in the benchmark.
 
+The method \code{initiate\-Synchronisation\-Dialogue} is invoked before each test case run and is used to establish the agreed upon common starting state for a given benchmark.
+For the Families-to-Persons case, this consists of a single empty family register and its corresponding single and empty persons register, plus all internal, tool-specific internal data structures. 
+
+The methods \code{perform\-And\-Propagate\-Source\-Edit} and \code{perform\-And-Propagate\-Target\-Edit} are called from the test cases when corresponding edits should be performed and propagated on the corresponding models. 
+In contrast, the methods \code{per\-form\-Idle\-Source\-Edit} and \code{per\-form\-Idle\-Target\-Edit} are used to modify source and target models, respectively, without propagating the change.
+These methods should be used whenever a change in the respective models does not affect the opposite model, e.g., when the birthday date of a person is changed, or the role of a family member within its containing family.
+
+Multiple benchmarks including Families-to-Persons, together with solutions using numerous bx tools are maintained in the benchmarx GitHub respository\footnote{\url{https://github.com/eMoflon/benchmarx}} together with documentation on how to add solutions to existing benchmarks as well as add entirely new benchmarks to the collection.

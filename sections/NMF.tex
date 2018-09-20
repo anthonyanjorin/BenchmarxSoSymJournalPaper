@@ -5,6 +5,10 @@
 
 \NOTE{\emph{Solution expert:} Georg, \emph{Interviewer:} Bernhard}
 
+\NOTE{TODO:  Integrate here as an overview (taken from previous Section 5)}
+
+\emph{NMF Synchronizations} \cite{SoSyM2017-Hinkel} is a bx language which has been realized as internal domain-specific language (DSL) in C\#. To specify a synchronization between a source and a target model, the transformation developer has to define a symmetric consistency relation between these models in terms of coupled consistency relations between their elements. The consistency relation is specified declaratively with the help of functions being free of side-effects. In addition, the transformation developer has to define consistency restoration with the help of procedures updating the model states in cases where there is no default restoration available. A transformation defined in NMF Synchronizations may be executed in different modes and direction. The transformation engine performs live synchronization; therefore, it requires o-deltas as input. A correspondence model is constructed at runtime, and may be accessed in the transformation definition; however, it is not stored permanently.
+
 \subsubsection{Approach}
 \label{sec:ApproachNMF}
 

@@ -3,7 +3,7 @@
 \section{The Families-to-Persons benchmark}
 \label{sec:FamiliesToPersons}
 
-\NOTE{\emph{Length:} 2 p., \emph{Resonsible:} Bernhard}
+\NOTE{\emph{Length:} 2 p., \emph{Responsible:} Bernhard}
 
 %\NOTE{Based on TTC 2017, Section~2, or ENASE 2018, Section~3. Metamodels, functionality of batch and incremental transformations, challenges. Presentation of test cases, classified according to the developed taxonomy.}
 
@@ -29,7 +29,7 @@ We adopt the following terminology~\cite{RodriguesdaSilva2015139}:
 A \emph{system} is a generic concept for designating a software application, software platform or any other software artifact.
 A \emph{model} is an abstraction of a system under study, which is more suitable for certain purposes.
 A \emph{metamodel} is a model that defines the structure of a set of models, i.e., a modeling language.
-When implementing the benchmark in a bx tool, the metamodels depicted in Figure~\ref{fig:metamodels} may be used directly, or may be represented in an equivalent manner (e.g., type definitions in a functional programming language (Haskell) as required for BiGUL).
+When implementing the benchmark in a bx tool, the metamodels depicted in figure~\ref{fig:metamodels} may be used directly, or may be represented in an equivalent manner (e.g., type definitions in a functional programming language (Haskell) as required for BiGUL).
 
 \begin{figure}[tb!]
 	\centering
@@ -59,7 +59,7 @@ A families model is \emph{consistent} with a persons model if a bijective mappin
 	\item  The name of every person $p$ is ``$f.name$,~$m.name$'', where $m$ is the member (in family $f$) paired with $p$.
 \end{enumerate}
 
-An example of mutually consistent models, conforming to the metamodels in Figure~\ref{fig:metamodels}, is depicted as an object diagram in Figure~\ref{fig:models}. 
+An example of mutually consistent models, conforming to the metamodels in figure~\ref{fig:metamodels}, is depicted as an object diagram in figure~\ref{fig:models}. 
 To simplify the diagram, all inverse links (e.g., \code{familiesInverse}) are omitted.
 
 The \emph{consistency relation} between families models and persons models is \emph{non-deterministic} in both directions: For a given families model, there are multiple consistent persons models (the birthdays may be chosen arbitrarily). Conversely, a given persons model is consistent with multiple families models (due to different groupings into families and different roles, e.g., mother or daughter).
@@ -91,7 +91,7 @@ In the Families-to-Persons benchmark, the approach to \emph{consistency restorat
 	\item[\textbf{No user interactions}] Consistency restoration operates automatically and does not involve any decisions to be performed interactively at runtime.
 \end{description}
 
-The properties listed above describe the way how the benchmark is designed. However, they do not prescribe the architecture of a bx tool executing the benchmark (see Section~\ref{sec:Foundations}). For example, it is possible to execute the benchmark with a tool supporting live propagation. Furthermore, rather than processing operational deltas, a bx tool may compare the old and the new state of the source model to infer the changes.
+The properties listed above describe the way how the benchmark is designed. However, they do not prescribe the architecture of a bx tool executing the benchmark (see section~\ref{sec:Foundations}). For example, it is possible to execute the benchmark with a tool supporting live propagation. Furthermore, rather than processing operational deltas, a bx tool may compare the old and the new state of the source model to infer the changes.
 
 \subsubsection{Bx laws}
 \label{sec:BxLaws}
@@ -99,11 +99,11 @@ The properties listed above describe the way how the benchmark is designed. Howe
 A variety of \emph{bx laws} have been proposed in the literature; see e.g.\ \cite{Cheney2015,Stevens2008c}. The Families-to-Persons benchmark takes the following laws into account:
 
 \begin{description}
-	\item[\textbf{Correctness}] Consistency restoration actually has to  produce consistent pairs of models, according to the definition given in Section~\ref{sec:MetamodelsAndConsistency}. All test cases check for consistency by requiring a target model which is consistent with the source model.
+	\item[\textbf{Correctness}] Consistency restoration actually has to  produce consistent pairs of models, according to the definition given in section~\ref{sec:MetamodelsAndConsistency}. All test cases check for consistency by requiring a target model which is consistent with the source model.
 	\item[\textbf{Hippocraticness}] Hippocraticness means that the target model is not updated if is already consistent with the source model. More precisely, we consider an operational variant of hippocraticness: Starting with a consistent pair of a source model and a target model, propagation of any delta being composed only of operations not affecting the target model leaves the target model unchanged. Several test cases are dedicated to check this property.
 \end{description}
 
-It should be noted that our definition of hippocraticness differs from the state-based definition introduced in \cite{SOSYM-Stevens2010}: It is not required that bx tools may deal with independently constructed models and then check for consistency before restoration. Rather, the concept of \emph{synchronization dialogue} to be introduced in Section~\ref{sec:Benchmarx} ensures that all synchronizations begin with a defined start state (consisting of a families model with an empty family register and a persons model with an empty person register, respectively). Bx tools may initialize internal data structures (e.g., correspondences) before the dialogue proceeds by propagating changes in forward or backward direction.
+It should be noted that our definition of hippocraticness differs from the state-based definition introduced in \cite{SOSYM-Stevens2010}: It is not required that bx tools may deal with independently constructed models and then check for consistency before restoration. Rather, the concept of \emph{synchronization dialogue} to be introduced in section~\ref{sec:Benchmarx} ensures that all synchronizations begin with a defined start state (consisting of a families model with an empty family register and a persons model with an empty person register, respectively). Bx tools may initialize internal data structures (e.g., correspondences) before the dialogue proceeds by propagating changes in forward or backward direction.
 
 \emph{Round-trip laws} have not been considered explicitly because they are implied: If forward and backward consistency restorers are correct and hippocratic, the forward (backward) consistency restorer produces a consistent pair of models. Furthermore, if the opposite restorer is invoked immediately, it will not change the original source model any more, due to its hippocraticness. Therefore, test cases for round-trip laws would not provide additional insights.
 
@@ -185,7 +185,7 @@ To provide for more flexibility, we decided to require a \emph{configurable} bac
 (i) \code{prefer\-Parent\-To\-Child} determining whether a person is to be mapped to a parent or a child (if both options are possible), and (ii) \code{prefer\-Existing\-To\-New\-Family} determining whether a person is to be mapped to a family member added to an existing family, or added to a newly created family containing only this single family member (again if both options are possible). 
 If both parameters are set to true, the second parameter should take precedence: If the only existing family with a matching family name has no unoccupied parent role, the member is inserted into the family as a child (thus respecting (ii) and ignoring (i)).
 
-It should be noted that the update policy does not resolve non-determinism completely. For example, let us assume that persons should be added to existing families as children. If we insert another person with family name \code{Smith} into the persons model, a corresponding member may be inserted either into family \code{f1} or into \code{f2} (Figure~\ref{fig:models}). Furthermore, the update behavior may depend on the \emph{order} of change operations. For example, if persons should be added to existing families as parents, and two male persons with family name \code{Miller} are added to the persons model, the first person will be added as a father and the second person as a son. 
+It should be noted that the update policy does not resolve non-determinism completely. For example, let us assume that persons should be added to existing families as children. If we insert another person with family name \code{Smith} into the persons model, a corresponding member may be inserted either into family \code{f1} or into \code{f2} (figure~\ref{fig:models}). Furthermore, the update behavior may depend on the \emph{order} of change operations. For example, if persons should be added to existing families as parents, and two male persons with family name \code{Miller} are added to the persons model, the first person will be added as a father and the second person as a son. 
 
 %Note that the update policy reduces non-determinism without eliminating it completely. 
 %If  both configuration parameters are set to true, the resulting families model depends on the order in which persons are processed. 
@@ -218,7 +218,7 @@ Let us now consider the change operations on \emph{persons} in detail:
     Persons cannot be moved because the persons model consists of a single, flat, and unordered collection. 
 \end{description}
 
-The update policy constitutes an example of \emph{ap\-pli\-ca\-tion-specific requirements}, as discussed at the end of Section~\ref{sec:BxLaws}. The rules for handling changes to family names are application-specific, as well. They are based on the underlying assumption that the person intends to leave its family (e.g., because of marriage). This kind of update propagation may (arguably) be considered reasonable; we simply take it for granted, being required by the (imaginative) customer. However, in certain circumstances it may violate principles such as least change (e.g., if the person was the single member of a family), which is used only as a general guideline, not as a strict law. 
+The update policy constitutes an example of \emph{ap\-pli\-ca\-tion-specific requirements}, as discussed at the end of section~\ref{sec:BxLaws}. The rules for handling changes to family names are application-specific, as well. They are based on the underlying assumption that the person intends to leave its family (e.g., because of marriage). This kind of update propagation may (arguably) be considered reasonable; we simply take it for granted, being required by the (imaginative) customer. However, in certain circumstances it may violate principles such as least change (e.g., if the person was the single member of a family), which is used only as a general guideline, not as a strict law. 
 
 
 \subsection{Challenges}

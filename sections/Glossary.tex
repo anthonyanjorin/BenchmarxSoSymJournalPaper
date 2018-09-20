@@ -1,0 +1,47 @@
+%\clearpage
+
+\appendix
+
+\section{Glossary}
+\label{sec:Glossary}
+
+\begin{description}
+	\item[\textbf{Architecture (of a bx tool)}] External interface, defined by required inputs and provided outputs, and internal processing, defined by processing steps and their organization.
+	\item[\textbf{Automatic synchronization}] \emph{Synchronization} that is not \emph{interactive}.
+	\item[\textbf{Backward synchronization}] \emph{Directed synchronization} in the direction of the \emph{source model}.
+	\item[\textbf{Batch synchronization}] \emph{Directed synchronization} that creates a new \emph{dependent model}.
+	\item[\textbf{Benchmark}] A standardized test that serves as a basis for comparison or evaluation.
+	\item[\textbf{Bidirectional transformation (bx)}] A \emph{transformation} that \emph{synchronizes} a \emph{source model} with a \emph{target model}.
+	\item[\textbf{bx law}] A condition that is satisfied by \emph{bidirectional transformations}.
+	\item[\textbf{bx tool}] A tool for executing \emph{bidirectional transformations}.
+	\item[\textbf{Change}] Any modification to the contents of a model.
+	\item[\textbf{Change propagation}] Application of a corresponding \emph{change} to the \emph{target model} (\emph{source model}) after the source model (target model) has been changed.
+	\item[\textbf{Consistency}] A condition on pairs of \emph{source} and \emph{target models} that ensures that both \emph{models} agree on shared information.
+	\item[\textbf{Correctness}] A \emph{bx law} that demands \emph{consistency} between the \emph{source model} and the \emph{target model}. 
+	\item[\textbf{Consistency relation}] A binary relation that includes all pairs of \emph{source} and \emph{target models} that are mutually \emph{consistent}.
+	\item[\textbf{Delta}] Difference between two \emph{versions} of the same \emph{model}.
+	\item[\textbf{Dependent model}] The \emph{model} that is created or changed in a directed synchronization.
+	\item[\textbf{Directed synchronization}] \emph{Synchronization} from a \emph{master model} to a \emph{dependent model}.
+	\item[\textbf{Forward synchronization}] \emph{Directed synchronization} in the direction of the \emph{target model}.
+	\item[\textbf{Hippocraticness}] A \emph{bx law} that excludes changes on \emph{source} and \emph{target models} that are already \emph{consistent} before the execution of a \emph{bidirectional transformation}.
+	\item[\textbf{Incremental synchronization}] \emph{Synchronization} that modifies an already existing \emph{model}
+	\item[\textbf{Interactive synchronization}] \emph{Synchronization} that is partially controlled by user interactions being performed during the synchronization.
+	\item[\textbf{Least change synchronization}] \emph{Synchronization} that performs a minimal change with respect to a suitable metric to reestablish \emph{consistency}.
+	\item[\textbf{Least surprise synchronization}] \emph{Synchronization} that minimizes the surprise of the user of a \emph{bx tool} and thus maximizes conformance to the user's expectations.
+	\item[\textbf{Live synchronization}] \emph{Synchronization} that is performed immediately after each elementary change. 
+	\item[\textbf{Master model}] The \emph{model} that is read but not changed in a \emph{directed synchronization}.
+	\item[\textbf{Metamodel}] Model that defines the structure of a set of \emph{models}.
+	\item[\textbf{Model}] Abstraction of a \emph{system} under study.
+	\item[\textbf{Operational delta}] A \emph{delta} which is defined by a sequence of change operations from an old version to a new \emph{version} of a \emph{model}.
+	\item[\textbf{Roundtrip law}] A \emph{bx law} that refers to a round trip of \emph{directed synchronizations} being performed in sequence. 
+	\item[\textbf{Source model}] A \emph{model} that may act as first component of a pair in the \emph{consistency relation} maintained by a \emph{bidirectional transformation}. 
+	\item[\textbf{Structural delta}] A \emph{delta} which is defined in terms of structural elements being contained in both or only one of two \emph{model versions}.
+	\item[\textbf{Symmetric synchronization}] \emph{Synchronization} in which both \emph{source} and \emph{target models} may be changed.
+	\item[\textbf{System}] Generic concept for designating a software application, software platform, or any other software artifact.
+	\item[\textbf{Synchronization}] Execution of a \emph{bidirectional transformation} with the intent to (re-)establish or restore \emph{consistency} between a \emph{source model} and a \emph{target model}.
+	\item[\textbf{Synchronization on demand}] \emph{Synchronization} that is performed only on explicit or implicit user request.
+	\item[\textbf{Target model}] A \emph{model} that may act as second component of a pair in the \emph{consistency relation} maintained by a \emph{bidirectional transformation}.
+	\item[\textbf{Transformation}] A procedure that reads, creates, or changes a set of \emph{models}.
+	\item[\textbf{Transformation definition}] The program that controls the transformation.
+	\item[\textbf{Version}] A state of an evolving model at a specific point in time, defined in terms of the model's contents at that time.
+\end{description}

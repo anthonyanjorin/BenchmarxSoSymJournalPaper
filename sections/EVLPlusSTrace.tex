@@ -1,11 +1,14 @@
-\clearpage
-
 \subsection{EVL+STrace}
 \label{sec:EVLPlusSTrace}
 
 \NOTE{\emph{Solution expert:} Leila , \emph{Interviewer:} Thomas}
 
 \NOTE{Preliminary text by Bernhard (by mistake)}
+
+\NOTE{TODO:  Integrate here as an overview (taken from previous Section 5)}
+
+\emph{EVL+STrace} \cite{IST2018-Samimi} is based on EMF and the Epsilon framework \cite{epsilon}. A transformation definition is composed of a trace metamodel, which depends on the source and target metamodels, a set of query and update operations defined in EOL, the Epsilon Object Language, and a set of constraints written in EVL, the Epsilon Validation Language. Each constraint is directed, checks for an inconsistency between one of the participating models and the trace model, and repairs this inconsistency by updating both the trace model and the opposite model. Thus, the consistency relation between source and target models is defined by unidirectional checks, and consistency restoration is defined procedurally by the fix parts of the constraints. EVL+STrace supports synchronization between source and target models on demand, making use of a persistently stored trace model. Neither s- nor o-deltas are required. Synchronization is performed interactively by propagating changes in both directions. Automatic synchronization is possible, but requires (mechanical) rewriting of EVL constraints. 
+
 
 \subsubsection{Approach}
 \label{sec:ApproachEVL}
