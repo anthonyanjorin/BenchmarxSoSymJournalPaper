@@ -24,7 +24,7 @@ The current solutions to the Families-to-Persons case show that it is indeed pos
 \subsection{Design of a Benchmarx Test Suite}
 
 Figure \ref{fig:featureModelBenchmarxTestCase} depicts a feature model for benchmarx test cases. 
-Every benchmarx test case must state the relevant application scenario (cf. figure~\ref{fig:featureModelBxTools}), its direction to be (exclusively) \emph{fwd} (forward), \emph{bwd} (backward) or a mix of both, i.e., a \emph{round trip}, and the combination of different change types applied in the test. 
+Every benchmarx test case must state the relevant application scenario (cf. figure~\ref{fig:featureModelBxTools}), its direction to be (exclusively) \emph{fwd} (forward), \emph{bwd} (backward) or a mix of both, i.e., a \emph{round trip}, if the test case requires \emph{runtime configuration} or not, and the combination of different change types applied in the test. 
 The set of possible change types can be extended in the future to accommodate more expressive frameworks. 
 
 Benchmarx is designed as a generic framework for benchmarking bx tools; we thus strive to minimize requirements regarding the typically tool-specific representation of deltas and corrs. 

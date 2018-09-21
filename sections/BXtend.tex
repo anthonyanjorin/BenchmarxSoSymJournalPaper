@@ -2,3 +2,32 @@
 \label{sec:BXtend}
 
 \NOTE{\emph{Solution expert:} Thomas, \emph{Interviewer:} Tony}
+
+Classification according to our feature model:
+
+style:  restoration-based
+application scenario:  initial-diag-based
+well-behavedness guarantees: none
+consistency relation: implicit
+synchronization: on-demand, explicit control
+
+Extra details concerning architecture:
+
+Applies restoration-based architecture depicted in figure~\ref{fig:initialDiagBased}.
+\emph{fCR/bCR} is decomposed into multiple ``rules'' consisting of restoration logic separated into forward and backward direction.
+Each rule defines flexibly, e.g., based on a certain type, if it is applicable or not.
+Similarly, each rule checks first by exploiting the supplied corr if existing structure in the dependent model can be reused, suitably changed, or deleted and created as required.
+To perform \emph{fCR/bCR} an orchestration component is supplied to decide the order in which individual rules are applied and combined to realize \emph{fCR/bCR}.
+This global component can also perform a final clean up if this is required.
+The delta created as output is mixed in the sense that each rule can already perform deletion and creation as required.
+
+Technical, language-related points:
+
+Xtend is used as implementation language to provide a compact, readable syntax.
+As Xtend integrates seamlessly with Java, Java can also be used in the implementation.
+
+Conclusion:
+
++ flexible, solutions can be made very efficient, full control over the synchronization process, low learning curve
+
+- no guarantees, solutions can be just as inefficient if preconditions of rules are costly to check (as this is checked for the entire model) => a bad programmer can produce unreadable, inefficient, and incompatible \emph{fCR/bCR}.

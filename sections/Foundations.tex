@@ -193,6 +193,8 @@ Consider, for example, an application scenario in which models are manipulated w
 If this is part of the requirements (perhaps due to an existing process workflow at a company) and cannot be influenced, then input deltas will not be available for consistency management.
 %
 To classify all possible application scenarios figure~\ref{fig:architectureLandscape} depicts a grid distinguishing horizontal and vertical input data to yield 11 possible combinations.
+At this stage, we consider \emph{all} possible combinations without judging how ``useful'' or ``sensible'' the combinations are.
+Such an evaluation of all scenarios is provided at the end of this section (figure~\ref{fig:evalOfApplicationScenarios}), based on the relative complexity of the architectures required to fully handle each scenario. 
 
 The possibilities for vertical input data range from just the changed source model $A'$ (initial-), to the old and changed source models $A$, $A'$ (state-), to the input delta $A \rightarrow A'$ (delta-).
 While the terms \emph{state} and \emph{delta} should be natural, \emph{initial} deserves some explanation.
@@ -384,7 +386,8 @@ Our goal in this paper is not to suggest a further exhaustive feature model for 
 Using standard feature model notation, features are denoted as rectangles; a grey fill denotes \emph{abstract} features that are only used to group other features.
 Circles with a black fill indicate mandatory children, circles without a fill optional children.
 Children connected with an angle without a fill are exclusively ored, while children connected with an angle with a black fill are ored.
-Features that exclude each other are connected with a dashed, double-headed (red) arrow.
+Features that exclude each other are connected with a dashed, double-headed (red) arrow; 
+A dashed, single-headed (green) arrow from a feature $f$ to another feature $g$ denotes that $f$ requires (implies) $g$.   
 
 %%%% Rewrite
 
@@ -396,15 +399,22 @@ In contrast, vertical input is a mandatory feature, forcing an exclusive choice 
 In practice, it is also informative to know if a bx tool expects an s-delta or o-delta.
 Finally, as explained previously, requiring a corr and only the input model (initial) is contradictory, hence the exclusion between these two features.
 
-The core feature of a bx tools is consistency maintenance and we have observed that this can be either \emph{implicit}, e.g., based on the underlying consistency relation and some governing laws the bx tool automatically derives \emph{fCR/bCR} or \emph{fUP/bUP} as required, or \emph{explicit}, e.g., the bx tool requires implementations of \emph{fCR/bCR} or \emph{fUP/bUP}, but performs for instance some checking for compatibility of these implementations.
-Some bx tools allow a mixture of implicit and explicit, e.g., requiring an implementation of \emph{fCR} (\emph{fUP}) and automatically deriving a compatible \emph{bCR} (\emph{bUP}), or vice-versa.
-
-A major goal of bx languages and tools is often to provide some added value compared to implementing consistency maintenance using standard unidirectional transformation languages.
+A major goal of bx languages and tools is often to provide some added value compared to implementing synchronization using standard unidirectional transformation languages.
 While this goal can be realized as an attempt to increase productivity, it is often also realized as an attempt to increase the \emph{quality} of implemented synchronization solutions.
 In figure~\ref{fig:featureModelBxTools}, therefore, we include an optional feature \emph{well-behavedness guarantees}, which can include a combination of correctness, hippocraticness, round-trip laws, and completeness (totality) guarantees.
 All mentioned guarantees apart from the last two have been informally introduced in section~\ref{sec:FamiliesToPersons}; termination is self explanatory.
+Correctness can only be guaranteed with respect to the underlying consistency relation, so this only makes sense as a feature if the relation is explicitly provided to the tool, hence the requirement between these features. 
 Consistency restoration (update propagation) is \emph{complete} if \emph{fCR} (\emph{fUP}) is total on a  (preferably statically) well-defined domain, i.e., for a well-defined subset of input deltas and corrs/diags in the triple space for consistency maintenance.
+This feature is of practical relevance as some bx tools apply a heuristic search (instead of a complete search, e.g., via backtracking) and might not be able to guarantee that an existing solution is found due to non-deterministic wrong choices made in the search space.
+Such ``incompleteness'' is obviously undesirable.
 
 % Mandatory:  Consistency relation
-The final, mandatory feature of a bx tool is its underlying \emph{consistency relation}.
+An important, hence mandatory feature of a bx tool is its underlying \emph{consistency relation}.
 This has to be specified in some manner, either \emph{implicitly}, e.g., by providing implementations of \emph{fCR/bCR} (\emph{fUP/bUP}) together with round-trip laws, or \emph{explicitly}, by specifying a set of constraints, providing a grammar (language membership as consistency check), implementing a consistency checker in some suitable (programming) language, or via a combination of these (partial) specifications, e.g., grammar-based for structural parts of the model and constraint-based for attribute values.
+
+A final, core feature of a bx tool is synchronization and we have observed that this can be either controlled \emph{implicitly}, e.g., based on the underlying consistency relation and some governing laws the bx tool automatically derives \emph{fCR/bCR} or \emph{fUP/bUP} as required, or \emph{explicitly}, e.g., the bx tool requires implementations of \emph{fCR/bCR} or \emph{fUP/bUP}, and perhaps performs some checking for compatibility of these implementations.
+Some bx tools allow a mixture of implicit and explicit, e.g., requiring an implementation of \emph{fCR} (\emph{fUP}) and automatically deriving a compatible \emph{bCR} (\emph{bUP}), or vice-versa.
+Although most bx tools are currently limited to directed synchronization, a few tools already attempt to address the more general task of \emph{concurrent} synchronization.
+A bx tool can support \emph{on-demand} synchronization, allowing a user (or arbitrary component) to decide exactly when to synchronize.
+If this is not supported, then the tool enforces \emph{live} synchronization deciding itself when ``atomic'' deltas must be propagated.
+Synchronization with a bx tool is \emph{interactive} if user interaction is allowed at runtime, i.e., during the synchronization process.
