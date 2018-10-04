@@ -21,7 +21,7 @@ While the general conceptual design of the Benchmarx framework can be transferre
 To ensure that non-EMF and even non-JVM-based bx tools can be integrated with no restrictions on the input data of the tools, we use a string representation of produced and expected models established by convention for each benchmark example.
 The current solutions to the Families-to-Persons case show that it is indeed possible to integrate diverse bx tools with reasonable effort.
 
-\subsection{Design of a Benchmarx Test Suite}
+\subsection{Design of a benchmarx test suite}
 
 Figure \ref{fig:featureModelBenchmarxTestCase} depicts a feature model for benchmarx test cases. 
 Every benchmarx test case must state the relevant application scenario (cf. figure~\ref{fig:featureModelBxTools}), its direction to be (exclusively) \emph{fwd} (forward), \emph{bwd} (backward) or a mix of both, i.e., a \emph{round trip}, if the test case requires \emph{runtime configuration} or not, and the combination of different change types applied in the test. 
@@ -73,16 +73,16 @@ In particular, renaming, deleting, and moving persons and family members are cur
 To keep the number of test cases manageable, only the batch category contains separate test cases for each combination of configuration parameters.
 In the alignment-based category, the parameters (preferences represented by the update policy) are changed dynamically during test case execution.
 
-\begin{figure}[tb!]
+\begin{figure}tb!]
 	\centering
 	\includegraphics[width=\columnwidth]{diagrams/BXTool}
 	\caption{The BXTool interface.}
 	\label{fig:refImplementation}
 \end{figure}
 
-\subsection{Implementing a Benchmark with a Bx Tool}
+\subsection{Implementing a benchmark with a bx tool}
 
-In order to use a specific bx tool with the benchmarx framework, a single interface \code{BXTool}, depicted and described in figure~\ref{fig:refImplementation}, needs to be implemented. 
+In order to use a specific bx tool with the benchmarx framework, a single interface \code{BXTool}, depicted and described in figure~\ref{fig:refImplementation}, needs to be implemented.
 For EMF-based tools, we provide an abstract class \code{BX\-Tool\-For\-EMF} that contains implementations for both \code{assert} methods and can be subclassed to simplify the integration in the benchmark.
 
 The method \code{initiate\-Synchronisation\-Dialogue} is invoked before each test case run and is used to establish the agreed upon common starting state for a given benchmark.

@@ -1,0 +1,100 @@
+\section{Terminology}
+\label{sec:Terminology}
+
+This section provides brief definitions for most of the notions to be used throughout this paper. 
+Further, more specific terms will be introduced in more detail in section~\ref{sec:Foundations}. 
+All notions are collected together in a glossary (appendix~\ref{sec:Glossary}). 
+For a more comprehensive terminology and taxonomy for the domain of bx, the reader is referred to, e.g., Hidaka et al.~\cite{SOSYM-Hidaka2016}.
+
+\subsection{Artifacts}
+\label{sec:Artifacts}
+
+Bidirectional transformations have been studied in a wide range of application domains. 
+The \emph{artifacts} manipulated by them include, e.g.,\ data stored in databases, program data, and models. Throughout this paper, we will adopt terminology from model-driven software engineering and refer to all artifacts as models. 
+%All tools for which solutions to the Families-to-Persons benchmark will be presented in section~\ref{sec:Solutions} are model-driven --- except for BiGUL, which is based on the functional programming language Haskell. Thus, we consider the program data maintained by BiGUL as models, as well. 
+
+According to da Silva~\cite{RodriguesdaSilva2015139}, a \emph{system} is a generic concept for designating a software application, software platform or any other software artifact. Furthermore, a \emph{model} is an abstraction of a system under study, which is more suitable for certain purposes. Finally, a \emph{metamodel} is a model that defines the structure of a set of models, i.e., a modeling language.
+
+For metamodeling, we employ \emph{Ecore} --- an implementation of Essential MOF, a subset of MOF~\cite{MOF-2.5.1}, provided by the Eclipse Modeling Framework (EMF)~\cite{steinberg09}. 
+Although we present the Families-to-Persons benchmark using Ecore (section~\ref{sec:FamiliesToPersons}), bx tools do not have to be EMF-based to be able to implement the benchmark.
+
+\subsection{Transformations} 
+\label{sec:Transformations}
+
+A \emph{transformation} reads, creates, or changes a set of $n \geq 1$ models. In this paper, we assume $n = 2$. 
+A \emph{transformation definition} is a program that controls the execution of a transformation.
+
+A \emph{bidirectional transformation (bx)} is a transformation which maintains consistency between a source model and a target model.\footnote{An extension to multidirectional transformations is possible, but not considered in this paper.} 
+The terms \emph{source model} and \emph{target model} are used to distinguish between the models involved in a bidirectional transformation; they do not imply a specific transformation direction.
+
+\subsection{Synchronization}
+\label{sec:Synchronization}
+
+The act of executing a bidirectional transformation with the intent of establishing or restoring consistency is denoted as \emph{synchronization}. 
+Synchronizations may be classified along different dimensions.
+
+A \emph{directed synchronization} is performed from a \emph{master model} to a \emph{dependent model}. The master model is read, and the dependent model is created or changed to make it consistent with the master model. A \emph{forward synchronization} is a directed synchronization in the direction of the target model; a \emph{backward synchronization} is performed in the opposite direction.
+
+In contrast to a directed synchronization, both participating models have equal rights in a \emph{concurrent synchronization}. Thus, both source and target models may be changed to establish or restore consistency.
+
+A \emph{batch synchronization} is a directed synchronization that creates the dependent model from scratch. In contrast, an \emph{incremental synchronization} --- which may be directed or concurrent --- modifies an existing model.
+
+A \emph{view-based synchronization} is performed between a model and a \emph{view} (an abstraction of the model that may be fully computed from the model). If neither model is a view of the other, the synchronization is \emph{symmetric}. 
+
+An \emph{interactive synchronization} is partially controlled by user interactions performed during the synchronization. An \emph{automatic synchronization} can be run without any user interaction.
+
+Finally, synchronization may be performed only \emph{on demand}, i.e., on explicit user request (e.g., via a dedicated synchronization command) or implicit user request (e.g., by saving a model to trigger synchronization implicitly).
+In contrast, \emph{live synchronization} is performed immediately after each elementary change.  
+
+\subsection{Consistency}
+\label{sec:Consistency}
+
+A pair of source and target models is \emph{consistent} if both models agree on shared information. Consistency may be defined formally by a \emph{consistency relation} --- a binary relation that includes all pairs of source and target models that satisfy some consistency condition. A consistency relation is \emph{deterministic} in the \emph{forward direction} if there is at most one consistent target model for a given source model; likewise for the \emph{backward direction}. 
+
+A \emph{bx law} is a condition that is to be satisfied by a bidirectional transformation. 
+A substantial number of bx laws have been proposed in the literature. 
+In the following, we mention a few that are particularly relevant in the context of this paper: 
+
+A bidirectional transformation is \emph{correct} if it produces consistent pairs of models, and \emph{hippocratic} if it does not change models which are already mutually consistent \cite{SOSYM-Stevens2010}. 
+If the consistency relation is \emph{non-deter\-min\-is\-tic}, correctness and hippocraticness do not fully determine the result of a bidirectional transformation. 
+In such cases, the principles of least change and least surprise aim at further determining desirable synchronization behaviour. 
+A \emph{least change} transformation \cite{SOSYM-Macedo2016} restores consistency such that the changed model has a minimal distance to the original model (with respect to a suitably defined metric). 
+A \emph{least surprise} transformation \cite{Cheney2015} intends to behave as closely as possible to the user's expectations.
+
+A \emph{round-trip law} states a property that refers to a round trip of directed synchronizations being performed in sequence. 
+For view-based synchronization, an immediate recreation of the view must have no effect after a view update has been propagated to the model, and writing back an unmodified view must not change the model \cite{TOPLAS2007-Foster}. 
+For symmetric synchronization, a forward (backward) synchronization, immediately followed by a backward (forward) synchronization, must not change the source (target) model.
+
+There are two more properties which are relevant for this paper: A bidirectional transformation \emph{terminates} if its execution halts after a finite number of steps. 
+Finally, a bidirectional transformation is \emph{complete} if it has a well-defined domain on which it may be successfully executed.
+Completeness is of practical relevance as some bx tools apply search-based heuristics that might not guarantee successful execution on all possible inputs.
+
+\subsection{Bx tools}
+\label{sec:BxTools}
+
+A \emph{bx tool} is a tool for managing bidirectional transformations. It may be based on a \emph{bx language}, a domain-specific language for representing (programming) bidirectional transformations. 
+
+The \emph{consistency relation} which a bx tool is supposed to maintain may be defined either explicitly or implicitly. An \emph{explicit} definition may be given, e.g., by a set of \emph{constraints} on pairs of models \cite{QVT-1.3}, or by a \emph{grammar} \cite{Schurr1994} generating all consistent pairs of models. 
+In contrast, an underlying consistency relation may be implied only \emph{implicitly} by the steps required to establish or restore consistency.
+
+A bx tool may support different kinds of synchronization, according to the taxonomy introduced in section~\ref{sec:Synchronization}. 
+Synchronization may be \emph{controlled} either \emph{explicitly}, by programming the steps to be executed for restoring consistency, or \emph{implicitly}, by deriving the steps automatically from other artifacts (e.g., forward (backward) synchronization may be derived from backward (forward) synchronization, or both directions may be derived from the explicit definition of the consistency relation).
+
+For model synchronization, a bx tool must in some way process changes between (old and new) model versions. Here, the term \emph{version} denotes a state of an evolving model at a specific point in time, defined by the model's contents. 
+The general term \emph{change} subsumes any modification of the state of a model. 
+A change may be represented by a \emph{delta}, i.e., a difference between two versions of the same model. 
+Deltas may be classified further into \emph{structural deltas}, which are defined in terms of structural elements contained in both or only one of two model versions, and \emph{operational deltas}, which are composed of sequences of change operations applied to transition from an old to a new version of some model.
+
+A bx tool may provide \emph{well-behavedness guarantees}, i.e., it may guarantee bx laws; see section~\ref{sec:Consistency}. 
+Here, the term ``guarantee'' must be used with caution: The respective bx law must hold for each execution of each transformation definition. 
+For example, a tool supporting view-based synchronization may guarantee round-trip laws, either by composing the transformation from well-behaved bidirectional primitives \cite{TOPLAS2007-Foster}, or by deriving one directed synchronization from its opposite \cite{PEPM2016-Ko}.
+
+Finally, bx tools may be classified according to their underlying architecture. 
+The \emph{architecture} of a \emph{bx tool} is composed of (i) its external interface, defined by required inputs and provided outputs, and (ii) its internal processing, defined by processing steps and their organization; this is handled in detail in section~\ref{sec:Foundations}.  
+
+\subsection{Benchmarks}
+\label{sec:Benchmarks}
+
+Generally speaking, a \emph{benchmark} is a standardized test that serves as a basis for comparison or evaluation.\footnote{Merriam-Webster 2013} 
+More specifically, a \emph{bx benchmark} is a benchmark tailored to the domain of bidirectional transformations. As mentioned already in the introduction (section~\ref{sec:Introduction}), our work targets comparison rather than evaluation, i.e., we are more interested in comparing bx tools and solutions implemented in these tools, rather than in an evaluation with the goal of identifying the ``best'' tool or solution. 
+We use three criteria for comparison: \emph{functionality} (measured in terms of failed and passed test cases), \emph{conciseness} (measured in terms of the size of a solution), and \emph{performance}, measured in the run time required for executing test cases.

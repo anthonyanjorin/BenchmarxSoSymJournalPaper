@@ -10,7 +10,7 @@ Based on this, we identify two \emph{basic operations} applied by bx tools to re
 This finally allows us to describe and discuss a series of possible bx tool architectures in section~\ref{sec:bx-tool-architectures}.
 For each solution and bx tool presented in section~\ref{sec:Solutions}, we assign the best fitting architecture as a means of abstracting from technical details and focusing on the conceptual core strategy applied by each tool.   
 
-\subsection{Input and Output Data}
+\subsection{Input and output data}
 \label{sec:io-data}
 
 We refer to the input and output data expected and produced by a bx tool as \emph{models} and \emph{deltas}, representing the data to be kept consistent, and changes applied to models, respectively.  
@@ -131,7 +131,7 @@ We use triple spaces to abstract from exactly how the underlying consistency rel
 To achieve a high-level but still useful abstraction for \emph{consistency management} strategies, we now discuss a few basic consistency management operations in the following. 
 
 
-\subsection{Basic Operations}
+\subsection{Basic operations}
 \label{sec:basicOperations}
 
 While we do not aim to describe and discuss in detail exactly how bx tools internally manage consistency, we claim that there is actually only a small set of basic operations, which are applied and combined in different ways to realize different bx tool \emph{architectures}.
@@ -184,7 +184,7 @@ For example, adding a new family member to $A'$ to yield $A''$ can be propagated
 Similar to consistency restoration, update propagation (backward update propagation ($bUP)$ is defined analogously) is also often non-deterministic.
 \end{description}
 
-\subsection{Input-Based Application Scenarios}
+\subsection{Input-based application scenarios}
 \label{sec:application-scenarios}
 
 In this section, we now discuss 11 different application scenarios according to the provided input data in each case.
@@ -227,7 +227,7 @@ Faced with this underfitting mismatch, users of such a bx tool tend to view the 
 
 As realizing which underlying architecture a bx tool implements is crucial for understanding its limitations and strengths/weaknesses (in comparison with other bx tools with different underlying architectures), we discuss in the following possible restoration-based and propagation-based tool architectures for each of our 11 identified application scenarios. 
 
-\subsection{BX Tool Architectures}
+\subsection{Bx tool architectures}
 \label{sec:bx-tool-architectures}
 
 Figure~\ref{fig:initialBatchBased} depicts bx tool architectures for the simplest application scenario, namely \emph{initial-batch-based}.
@@ -378,7 +378,7 @@ Plus symbols (green) indicate a simple, minus symbols (red) a complicated bx too
 	\label{fig:featureModelBxTools}
 \end{figure*}
 
-\subsection{Classifying BX Tools}
+\subsection{Classifying bx tools}
 \label{sec:classifying-bx-tools}
 Reflecting the 11 application scenarios and possible bx tool architectures discussed in detail in previous paragraphs, the variability of bx tool architectures is represented as a feature model in figure~\ref{fig:featureModelBxTools}, extended to cover some additional features of bx tools.
 Our goal in this paper is not to suggest a further exhaustive feature model for bx approaches such as Hidaka et al.~\cite{SOSYM-Hidaka2016}, but more to make intensive use of a minimal set of core features to classify the different bx tools used to solve our bx benchmark.

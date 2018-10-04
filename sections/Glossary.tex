@@ -12,9 +12,11 @@
 	\item[\textbf{Batch synchronization}] \emph{Directed synchronization} that creates a new \emph{dependent model}.
 	\item[\textbf{Benchmark}] A standardized test that serves as a basis for comparison or evaluation.
 	\item[\textbf{Bidirectional transformation (bx)}] A \emph{transformation} that \emph{synchronizes} a \emph{source model} with a \emph{target model}.
+	\item[\textbf{bx language}] A domain-specific language for defining bidirectional transformations.
 	\item[\textbf{bx law}] A condition that is satisfied by \emph{bidirectional transformations}.
 	\item[\textbf{bx tool}] A tool for executing \emph{bidirectional transformations}.
 	\item[\textbf{Change}] Any modification to the contents of a model.
+	\item[\textbf{Completeness}] The ability of a \emph{bidirectional transformation} to process all \emph{models} in the domain or range of the \emph{consistency relation}.
 	\item[\textbf{Concurrent synchronization}] \emph{Synchronization} in which\\ both \emph{source} and \emph{target models} may be changed.
 	\item[\textbf{Consistency}] A condition on pairs of \emph{source} and \emph{target models} that ensures that both \emph{models} agree on shared information.
 	\item[\textbf{Correctness}] A \emph{bx law} that demands \emph{consistency} between the \emph{source model} and the \emph{target model}. 
@@ -36,11 +38,15 @@
 	\item[\textbf{Roundtrip law}] A \emph{bx law} that refers to a round trip of \emph{directed synchronizations} being performed in sequence. 
 	\item[\textbf{Source model}] A \emph{model} that may act as first component of a pair in the \emph{consistency relation} maintained by a \emph{bidirectional transformation}. 
 	\item[\textbf{Structural delta}] A \emph{delta} which is defined in terms of structural elements being contained in both or only one of two \emph{model versions}.
-	\item[\textbf{System}] Generic concept for designating a software application, software platform, or any other software artifact.
-	\item[\textbf{Synchronization}] Execution of a \emph{bidirectional transformation} with the intent to (re-)establish or restore \emph{consistency} between a \emph{source model} and a \emph{target model}.
+	\item[\textbf{Symmetric synchronization}] \emph{Synchronization} between two models, where neither \emph{model} is a \emph{view} of its opposite.
+	\item[\textbf{Synchronization}] Execution of a \emph{bidirectional transformation} with the intent to establish or restore \emph{consistency} between a \emph{source model} and a \emph{target model}.
 	\item[\textbf{Synchronization on demand}] \emph{Synchronization} that is performed only on explicit or implicit user request.
+	\item[\textbf{System}] Generic concept for designating a software application, software platform, or any other software artifact.
 	\item[\textbf{Target model}] A \emph{model} that may act as second component of a pair in the \emph{consistency relation} maintained by a \emph{bidirectional transformation}.
 	\item[\textbf{Transformation}] A procedure that reads, creates, or changes a set of \emph{models}.
 	\item[\textbf{Transformation definition}] The program that controls the transformation.
+	\item[\textbf{Termination}] An execution of a \emph{transformation} which halts after a finite number of steps.
 	\item[\textbf{Version}] A state of an evolving model at a specific point in time, defined in terms of the model's contents at that time.
+	\item[\textbf{View}] An abstraction of a \emph{model} that may be computed automatically from the model's content.
+	\item[\textbf{View-based synchronization}] \emph{Synchronization} between a \emph{model} and a \emph{view} on this model.
 \end{description}

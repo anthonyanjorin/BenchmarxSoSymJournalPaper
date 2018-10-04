@@ -9,17 +9,17 @@ Bx have been studied in many areas, including model-driven software development,
 
 While bx problems may be solved using unidirectional languages and tools, maintaining a separate implementation of forward and backward synchronizers with mutually consistent behavior can be difficult, laborious, and error-prone. 
 In an attempt to better address bx-specific challenges, a variety of dedicated languages and tools for bx have been developed to assist software developers in solving bx problems more efficiently and reliably. 
-Indeed, a wide spectrum of bx approaches has been reported in the literature; for example, a detailed feature-based classification was provided by Hidaka et~al.~\cite{SOSYM-Hidaka2016}.
+Indeed, a wide spectrum of bx approaches has been reported in the literature, for example, by Hidaka et~al.~\cite{SOSYM-Hidaka2016}, who provide a detailed, feature-based classification of bx approaches and tools.
 
 Due to their substantial heterogeneity, however, bx tools are difficult to compare with the consequence that fundamental differences and commonalities are still not well understood.
 This situation hinders the development of better bx tools that combine the strengths and avoid the weaknesses of existing tools.
 To promote the understanding of bx languages and tools, therefore, the need for bx \emph{benchmarks} was identified early~\cite{ICMT2009-Czarnecki}. 
 
-As a first step towards this goal, a curated \emph{repository} of \emph{benchmark examples} was set up and is continuously being extended~\cite{Cheney2014}.
+As a first step towards this goal, a curated \emph{repository} of \emph{bx examples} was set up and is continuously being extended~\cite{Cheney2014}.
 Subsequently, a proposal for additional requirements that a bx example must fulfill to become a bx benchmark was made~\cite{AnjorinCG0RS14}. 
-
+%
 Contrary to expectations, however, these preparatory activities and proposal did not result in any actual bx benchmarks.
-We claim this is due to additional and substantial \emph{practical} challenges involved in setting up a bx benchmark that can be run for  diverse bx tools.
+We claim this is due to additional and substantial \emph{practical} challenges involved in setting up a bx benchmark that can be implemented with and run for  diverse bx tools.
 
 This paper, therefore, presents \emph{Benchmarx}~\cite{Anjorin2017}, a practical framework for bx benchmarks developed based on the conceptual work of Anjorin et al.~\cite{AnjorinCG0RS14}.
 Benchmarx provides an infrastructure on top of which bx benchmarks can be implemented. 
@@ -39,7 +39,7 @@ Finally, despite its simplicity, it still poses a number of relevant challenges 
 
 %The solutions in JTL and BXtend have not been published before. Preliminary versions of the solutions in eMoflon and BiGUL were sketched as proof-of-concept in  \cite{Anjorin2017}, but extended and revised afterwards, resulting in reference solutions for the TTC 2017 case. 
 To solicit a wide range of solutions, we submitted the Families-to-Persons benchmark as a case description to the Transformation Tool Contest 2017 (TTC 2017)~\cite{Anjorin2017a}.
-Based on a selection of the solutions from TTC 2017, therefore, this paper is able to not only present the Benchmarx framework in detail, but also to compare and evaluate seven solutions to the Families-to-Persons benchmarks developed with tools that differ considerably: 
+Based on a selection of the solutions from TTC 2017, therefore, this paper is able to not only present the Benchmarx framework in detail, but also to compare and evaluate seven solutions to the Families-to-Persons benchmark developed with tools that differ considerably: 
 \emph{BiGUL}~\cite{PEPM2016-Ko}, 
 \emph{BXtend}~\cite{MODELSWARD2018-Buchmann}, 
 \emph{eMoflon}~\cite{Leblebici2014a}, 
@@ -70,10 +70,13 @@ It is, therefore, problematic to compare tools that have been built for differen
 We strive instead to explore the relationships between features of bx tools and properties of solutions developed with these tools. 
 %
 To this end, this paper is written in a neutral style and, in contrast to the spirit of the Transformation Tool Contest series, is not meant to imply a ranking among the solutions. 
-%Readers who are nevertheless interested in the results of the TTC 2017 competition in  are referred to the TTC 2017 web page\footnote{\url{https://www.transformation-tool-contest.eu/2017/}}; it should be noted, however, that only three out of seven solutions presented in this paper participated in TTC 2017. 
+%Readers who are nevertheless interested in the results of the TTC 2017 competition in  are referred to the TTC 2017 web page\footnote{\url{https://www.transformation-tool-contest.eu/2017/}}; it should be noted, however, that only three out of seven solutions presented in this paper participated in TTC 2017.
 
-The rest of this paper is structured as follows: section~\ref{sec:FamiliesToPersons} introduces the Families-to-Persons case, which will be used as running example in all subsequent sections. 
-Section~\ref{sec:Foundations} provides the conceptual foundations upon which our work is built. 
+This paper also contributes a \emph{conceptual framework for bx} which significantly extends our prior work~\cite{Anjorin2017}. 
+This framework focuses primarily on \emph{architectures} of \emph{bx tools}, defined by their input and output data, the basic operations from which bx are composed, as well as their composition into different processing chains.  
+
+The rest of this paper is structured as follows: Section~\ref{sec:Terminology} defines the terminology used throughout this paper. Section~\ref{sec:FamiliesToPersons} introduces the Families-to-Persons case, used as running example in all subsequent sections. 
+Section~\ref{sec:Foundations} provides the conceptual foundations for our work. 
 Section~\ref{sec:Benchmarx} describes the design of the Benchmarx framework. 
 The solutions to the Families-to-Persons benchmark are presented in section~\ref{sec:Solutions}, together with an introduction and classification of the bx tool used to implement each solution. 
 A comparison and evaluation of these solutions follows in section~\ref{sec:Evaluation}. 
