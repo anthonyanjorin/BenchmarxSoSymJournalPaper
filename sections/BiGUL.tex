@@ -2,3 +2,78 @@
 \label{sec:BiGUL}
 
 \NOTE{\emph{Solution expert:} Josh, \emph{Interviewer:} Tony}
+
+% History, website, tutorial, community
+BiGUL~\cite{PEPM2016-Ko}, short for \emph{the Bidirectional Generic Update Language}, is the current result of a long line of research on \emph{bidirectional programming}~\cite{Foster2012} predominantly performed by the programming language community.
+Bidirectional programming languages typically share two main ideas in common:  (i)~the task of programming a bx can be reduced by automatically deriving one direction of synchronization from the other direction that is explicitly programmed, and (ii)~well-behavedness properties are guaranteed by providing a small set of well-behaved primitive functions, and combinators to allow bx programmers to compose complex, well-behaved bidirectional programs from these primitives.
+Most bidirectional programming languages address \emph{asymmetric} consistency relations, where one of the models (the \emph{view}) is fully determined by the other model (the \emph{source}).
+Instead of forward and backward synchronization, the terms \emph{put} (the source is dependent, view is master) and \emph{get} (the view is dependent, source is master) are used instead.
+In this asymmetric setting, \emph{get} simplifies to a function that takes a source and produces a view, i.e., the old view is not necessary. 
+
+As a bidirectional programming language, BiGUL is unique in the sense that it provides a programming language (primitives and combinators) for programming \emph{put} instead of \emph{get}.
+Such a \emph{putback-based} bidirectional programming language has the advantage that \emph{get} can be fully derived from \emph{put} (the inverse is not true in general), for the price that \emph{put} is often more complex (and thus requires more effort to program) than \emph{get}.
+
+
+\subsubsection{Classification}
+A summary of the features of BiGUL according to our common feature model for bx tools is provided in the first column of table~\ref{tab:features-all-tools}.
+These features will now be discussed in detail in the following.
+
+BiGUL's architecture clearly follows a \emph{restoration-based} style, i.e., the bx programmer has the job of programming \emph{put} as \emph{fCR}
+and thinks in terms of how to restore the consistency of both models by comparing them and making suitable changes to the dependent model.
+The exact delta between the previous and current master model is thus not of primary interest.
+The main application scenario addressed by BiGUL is \emph{initial-state-based}.
+Referring to figure~\ref{fig:initialStateBased}, the exact tool architecture of BiGUL is the top-left restoration-based combination of \emph{fCR} and $hAln$.
+Specific to BiGUL, \emph{put} programs tend to be a recursive, flexible mix of intertwined ``bits and pieces'' of \emph{fCR} and $hAln$, rather than clearly separated functions as figure~\ref{fig:initialStateBased} appears to suggest.
+A further point is that BiGUL is flexible enough to be used for other application scenarios, e.g., by encoding corrs, diags, and deltas as part of the models passed to the tool.
+When programming $hAln$, for example, one could then access this extra information and also update it if necessary.
+While this is indeed possible, it is also clear that the language was specifically designed for \emph{initial-state-based} scenarios, which is how it was also applied to solving the benchmark.
+
+BiGUL is formally founded and was originally developed in the dependently typed programming language Agda so as to formally verify its well-behavedness guarantees; for practical usage a Haskell port of BiGUL is provided.\footnote{\url{http://hackage.haskell.org/package/BiGUL}}
+BiGUL guarantees basic \emph{round-trip laws} for the programmed \emph{put} and automatically derived \emph{get} functions.
+These laws (\emph{putget} and \emph{getput}) are closely related to correctness and hippocraticness; we refer to Ko et al. for further details~\cite{PEPM2016-Ko}.
+
+The underlying consistency relation is never specified explicitly when working with BiGUL.
+It is \emph{implicitly} implied by the provided \emph{put} program together with the guaranteed round-trip laws, which fix the corresponding derived \emph{get} program.
+Synchronization is performed \emph{on-demand} by executing \emph{put} or \emph{get} as required.
+Finally, BiGUL represents an interesting mix of an \emph{explicit} and \emph{implicit} specification of synchronization:  \emph{put} is explicitly programmed, while \emph{get} is automatically derived, i.e., implicitly programmed.
+BiGUL guarantees that the derived \emph{get}, if it exists, is unique for the provided \emph{put}.
+
+\subsubsection{Benchmark solution with BiGUL}
+
+In this section we provide a top-down, high-level, and incomplete description of the solution to the Families-to-Persons benchmark with BiGUL.
+Our aim is not to explain all details, but rather to impart an intuition for the basic structure of the solution.
+
+As BiGUL only directly supports asymmetric bx, the first task when implementing the Families-to-Persons benchmark is to decompose the symmetric bx into two asymmetric bx.
+The decomposition applied in the proposed BiGUL solution is depicted in figure~\ref{fig:bigulSolnOverview}.
+Bold arrows represent functions that must be programmed by the bx developer, dashed arrows represent automatically derived functions.
+%
+\begin{figure}[!tbp]
+    \centering
+    \includegraphics[width=\columnwidth]{diagrams/solutions/bigulSolnOverview}
+    \caption{Handling a symmetric bx with BiGUL}
+    \label{fig:bigulSolnOverview}
+\end{figure}
+%
+In this decomposition, an additional data structure \texttt{MediumR} is introduced and can be thought of intuitively as the intersection of both data structures, i.e., it contains exactly the concepts that are present in both the source and target model spaces and that must be kept consistent.
+All the bx developer now has to do is program how \texttt{MediumR} models can be \emph{put} into \texttt{Person\-Regis\-ter} models via $put_{SyncR}$, and into \texttt{Family\-Regis\-ter} models via $put_{SyncL}$.
+The required \emph{fwd} and \emph{bwd} transformations can now be computed as depicted in figure~\ref{fig:bigulSolnOverview} by composing programmed \emph{put} and derived \emph{get} arrows as required.\footnote{The actual solution is a bit more complex as \emph{SyncL} is further decomposed into two arrows.}
+
+To provide some details for actual BiGUL code, figure~\ref{fig:bigulSolnDetails} depicts the BiGUL program for $put_{SyncR}$.
+Recall that the architecture for this solution is restoration-based (with $hAln$) for an initial-state-based scenario.
+So this code conceptually represents \emph{fCR} and $hAln$ (see figure~\ref{fig:initialStateBased}).
+The parts of the code representing $hAln$ are in black with a white background, while parts representing \emph{fCR} are in white with a black background.
+
+\begin{figure}[tbp]
+    \centering
+    \includegraphics[width=\columnwidth]{diagrams/solutions/bigulSolnDetails}
+    \caption{Structure of a BiGUL program}
+    \label{fig:bigulSolnDetails}
+\end{figure}
+
+As both models are essentially lists (of persons and $(name, gender)$ pairs) $hAln$ can be implemented with the auxiliary function \texttt{align} that takes a matching condition and uses it to lift a BiGUL program on elements to lists (marked with label 1 in figure~\ref{fig:bigulSolnDetails}).
+The simple strategy is to traverse the list of view elements and to search for the first source element that matches according to the condition (here simply a comparison of name and gender).
+If a match is found then the first part of the \emph{fCR} code (label 2) is executed (it does nothing as the elements are already consistent), if no match can be found then a new source element is created using the second part of the \emph{fCR} code (label 3).
+If unmatched source elements remain after all view elements have been matched, they are simply deleted by \texttt{align}.
+
+Finally, although the code might appear cryptic without looking up all details, the used BiGUL primitives are highlighted red in figure~\ref{fig:bigulSolnDetails}.
+The point here is that the entire program is a composition of primitives, designed in a way that this resembles programming in a standard (imperative) programming language.

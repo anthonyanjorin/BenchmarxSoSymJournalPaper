@@ -5,6 +5,25 @@
 
 \NOTE{One subsection (2 p.) for each tool. Presentation of (fragments of) the solution. Underyling concepts and paradigms are more important than technical details of the solutions. Code fragments serve as illustration and must be explained thoroughly.}
 
+This section presents seven diverse bx tools all used to implement the Families-to-Persons benchmark.
+A summary of a classification of these seven tools based on our feature model for bx tools is provided in table~\ref{tab:features-all-tools}.
+In the following subsections, one for each tool/solution in alphabetical order, we shall refer to this table and explain each tool's classification in detail.
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\begin{table*}[!tbp]
+\begin{tabular}{M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}}
+\textit{} & \textbf{BiGUL} & \textbf{BXtend} & \textbf{eMoflon} & \textbf{EVL + STrace} & \textbf{JTL} & \textbf{NMF Sync.} & \textbf{SDMLib} \\ \hline
+\textit{Style} & CR (hAln) & CR &  &  &  &  &  \\ \hline
+\textit{Scenario} & initial-state-based & initial-diag-based &  &  &  &  &  \\ \hline
+\textit{Guarantees} & round-trip laws & none &  &  &  &  &  \\ \hline
+\textit{Consistency} & implicit & implicit &  &  &  &  &  \\ \hline
+\textit{Sync.} & on-demand, explicit and implicit & on-demand, explicit &  &  &  &  &  \\ 
+\end{tabular}
+\caption{Summary of classification of all tools and solutions}
+\label{tab:features-all-tools}
+\end{table*}
+
 \input{sections/BiGUL}
 
 \input{sections/BXtend}
@@ -18,3 +37,8 @@
 \input{sections/NMF}
 
 \input{sections/SDMLib}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
