@@ -46,17 +46,17 @@ An \emph{interactive synchronization} is partially controlled by user interactio
 Finally, synchronization may be performed only \emph{on demand}, i.e., on explicit user request (e.g., via a dedicated synchronization command) or implicit user request (e.g., by saving a model to trigger synchronization implicitly).
 In contrast, \emph{live synchronization} is performed immediately after each elementary change.  
 
-\subsection{Consistency}
+\subsection{Consistency and bx laws}
 \label{sec:Consistency}
 
 A pair of source and target models is \emph{consistent} if both models agree on shared information. Consistency may be defined formally by a \emph{consistency relation} --- a binary relation that includes all pairs of source and target models that satisfy some consistency condition. A consistency relation is \emph{deterministic} in the \emph{forward direction} if there is at most one consistent target model for a given source model; likewise for the \emph{backward direction}. 
 
-A \emph{bx law} is a condition that is to be satisfied by a bidirectional transformation. 
-A substantial number of bx laws have been proposed in the literature. 
-In the following, we mention a few that are particularly relevant in the context of this paper: 
+A \emph{bx law} is a condition on the behavior of bidirectional transformations. The notion of bx law is very strong: A bx language/tool satisfies a bx law only if the law is \underline{guaranteed} to hold for every bidirectional transformation written in the respective language and executed in the respective tool. A substantial number of bx laws have been proposed in the literature. 
+In the following, we mention a few that are particularly relevant in the context of this paper. The reader should note that bx laws may be specific to certain classes of bx approaches and cannot be sensibly applied to other approaches.
 
-A bidirectional transformation is \emph{correct} if it produces consistent pairs of models, and \emph{hippocratic} if it does not change models which are already mutually consistent \cite{SOSYM-Stevens2010}. 
-If the consistency relation is \emph{non-deter\-min\-is\-tic}, correctness and hippocraticness do not fully determine the result of a bidirectional transformation. 
+A bidirectional transformation is \emph{correct} if it produces consistent pairs of models, and \emph{hippocratic} if it does not change models which are already mutually consistent \cite{SOSYM-Stevens2010}. Furthermore, a bidirectional transformation is \emph{stable} \cite{DBLP:journals/corr/PachecoMCV13} if the following condition holds: Assume a pair of mutually consistent models. If the master model is changed such that the consistency relation is not affected, the dependent model will remain untouched by a directed synchronization.
+ 
+If the consistency relation is \emph{non-deter\-min\-is\-tic}, the correctness property does not determine the result of a bidirectional transformation in a unique way. 
 In such cases, the principles of least change and least surprise aim at further determining desirable synchronization behaviour. 
 A \emph{least change} transformation \cite{SOSYM-Macedo2016} restores consistency such that the changed model has a minimal distance to the original model (with respect to a suitably defined metric). 
 A \emph{least surprise} transformation \cite{Cheney2015} intends to behave as closely as possible to the user's expectations.

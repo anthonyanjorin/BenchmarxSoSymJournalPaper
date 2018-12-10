@@ -154,7 +154,7 @@ These operations are now explained in the following by providing concrete exampl
 % Explanation
 \begin{description}
 \item[\emph{Horizontal Alignment (hAln)}] takes two models $A$ and $B$ in different model spaces and determines a corr $A \leftrightarrow B$ between them. 
-It is in general impossible to recover unique corrs and $hAln$ is often heuristic-based.
+It is in general impossible to recover unique corrs and $\mathit{hAln}$ is often heuristic-based.
 For the Families-to-Persons case, a simple strategy would be to pair female(male) persons and family members with the right gender and same family name and name according to convention.
 The pair of models depicted in figure~\ref{fig:models}, however, shows that this is not sufficient to obtain \emph{the} unique correspondence when there are multiple persons with the same name in the person register.
 
@@ -175,13 +175,13 @@ For simplicity, we shall also refer to these operations as re-alignment, indicat
 This operation obviously requires some knowledge of the underlying consistency relation.
 The input diag is typically not yet consistent and some strategy of how to restore consistency by changing $B$ in some appropriate manner must be implemented.
 For example, if an unmapped family member in $A'$ and an unmapped person in $B$ are found, a strategy to restore consistency would be to rename the person in $B'$ so that a consistent corr can be reestablished.
-Consistency restoration (backward consistency restoration ($bCR)$ is defined analogously) is often non-deterministic, hence the need for laws to characterize ``desirable'' behaviour.
+Consistency restoration (backward consistency restoration ($\mathit{bCR})$ is defined analogously) is often non-deterministic, hence the need for laws to characterize ``desirable'' behaviour.
 
-\item[\emph{Forward Update Propagation (fUP)}] takes a different approach to consistency maintenance than $fCR$.
-Instead of restoring consistency to an already inconsistent diag, $fUP$ takes as input a (typically consistent) corr $A' \leftrightarrow B'$ and a delta $A' \rightarrow A''$.
-To decide how to maintain consistency, $fUP$ inspects the input delta $A' \rightarrow A''$ and \emph{propagates} the delta to $B'$, yielding an output delta $B' \rightarrow B''$ as well as a consistent corr $A'' \leftrightarrow B''$.
+\item[\emph{Forward Update Propagation (fUP)}] takes a different approach to consistency maintenance than $\mathit{fCR}$.
+Instead of restoring consistency to an already inconsistent diag, $\mathit{fUP}$ takes as input a (typically consistent) corr $A' \leftrightarrow B'$ and a delta $A' \rightarrow A''$.
+To decide how to maintain consistency, $\mathit{fUP}$ inspects the input delta $A' \rightarrow A''$ and \emph{propagates} the delta to $B'$, yielding an output delta $B' \rightarrow B''$ as well as a consistent corr $A'' \leftrightarrow B''$.
 For example, adding a new family member to $A'$ to yield $A''$ can be propagated to adding a suitably named new person to $B'$ to yield $B''$, and adding a mapping between the new family member and person in $A'' \leftrightarrow B''$.  
-Similar to consistency restoration, update propagation (backward update propagation ($bUP)$ is defined analogously) is also often non-deterministic.
+Similar to consistency restoration, update propagation (backward update propagation ($\mathit{bUP})$ is defined analogously) is also often non-deterministic.
 \end{description}
 
 \subsection{Input-based application scenarios}
@@ -250,7 +250,7 @@ In this scenario, only $B'$ is typically required as output, although a bx tool 
 Similarly, \emph{fUP} can be applied by assuming and providing the empty corr $\emptyset \leftrightarrow \emptyset$ and $\emptyset \rightarrow A'$.
 %
 Note that both architectures do not require any auxiliary operations as the implied empty diag, corr, and delta are typically trivial to compute.
-In practice, however, (mis)using a bx tool for this simple application scenario can be much more inefficient than a standard transformation, and we are thus not aware of any dedicated bx tool that addresses solely this applications scenario. 
+In practice, however, (mis)using a bx tool for this simple application scenario can be much more inefficient than a standard transformation, and we are thus not aware of any dedicated bx tool that addresses solely this application scenario. 
 
 Figure~\ref{fig:initialStateBased} depicts three architectures addressing the much more common bx application scenario \emph{initial-state-based}.
 In this scenario, the previous output model $B$ is additionally provided as input, so that the bx tool has the chance of preserving as much information as possible in $B$ while reestablishing consistency.
@@ -283,16 +283,16 @@ Note that the typical output for this scenario is the updated, consistent corr $
 	\label{fig:initialDiagBased}
 \end{figure}
 %
-While it is theoretically possible to address initial-diag-based scenarios with a propagation-based architecture, figure~\ref{fig:initialDiagBased} indicates why this is never implemented: to apply $fUP$, one would have to determine $A \rightarrow B$ and $A \rightarrow A'$ from the diag, a task  comparable in complexity to \emph{fCR/bCR}.
+While it is theoretically possible to address initial-diag-based scenarios with a propagation-based architecture, figure~\ref{fig:initialDiagBased} indicates why this is never implemented: to apply $\mathit{fUP}$, one would have to determine $A \rightarrow B$ and $A \rightarrow A'$ from the diag, a task  comparable in complexity to \emph{fCR/bCR}.
 
 Figure~\ref{fig:stateBatchBased} depicts architectures addressing the state-batch-based application scenario.
 In all cases, $A$ has to be extended to $A \leftrightarrow B$.
 \emph{fCR} can then be used either by combining \emph{vAln} and $\ast$, or by using \emph{hAln} to directly determine $A' \leftrightarrow B$.
-The propagation-based architecture uses \emph{vAln} to determine the missing input delta for $fUP$.
+The propagation-based architecture uses \emph{vAln} to determine the missing input delta for $\mathit{fUP}$.
 %
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[width=\columnwidth]{diagrams/foundations//state-batch-based}
+	\includegraphics[width=\columnwidth]{diagrams/foundations/state-batch-based}
 	\caption{State-batch-based Architectures}
 	\label{fig:stateBatchBased}
 \end{figure}
@@ -305,7 +305,7 @@ While this already constitutes the input for \emph{fUP}, the restoration-based a
 %
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[width=\columnwidth]{diagrams/foundations//state-state-based}
+	\includegraphics[width=\columnwidth]{diagrams/foundations/state-state-based}
 	\caption{State-state-based Architectures}
 	\label{fig:stateStateBased}
 \end{figure}
@@ -314,7 +314,7 @@ The architectures depicted in figure~\ref{fig:stateCorrBased} for the state-corr
 The only difference and simplification is that the required corr is supplied as input and \emph{vAln} is therefore not needed.
 \begin{figure}[tb!]
 	\centering
-	\includegraphics[width=\columnwidth]{diagrams/foundations//state-corr-based}
+	\includegraphics[width=\columnwidth]{diagrams/foundations/state-corr-based}
 	\caption{State-corr-based Architectures}
 	\label{fig:stateCorrBased}
 \end{figure}
@@ -351,7 +351,7 @@ As the previous target model $B$ is provided in this scenario, the architectures
 \end{figure}
 
 Finally, figure~\ref{fig:deltaCorrBased} depicts the architectures for the delta-corr-based application scenario.
-The diagrams indicate that this is the ideal case for applying $fUP$ as exactly what is required is available as input.
+The diagrams indicate that this is the ideal case for applying $\mathit{fUP}$ as exactly what is required is available as input.
 The restoration-based architecture only requires realignment via $\ast$, which is usually a simple operation in this case.
 \begin{figure}[tb!]
 	\centering

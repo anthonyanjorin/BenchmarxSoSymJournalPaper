@@ -88,12 +88,15 @@ For example, it is possible to execute the benchmark with a tool supporting live
 \subsubsection{Bx laws}
 \label{sec:BxLaws}
 
+For the purpose of benchmarking, all bx laws are considered as \emph{properties} which may be satisfied or not. Thus, it should be tested whether these laws hold for two reasons: First, a specific bx tool may not be designed to guarantee a certain bx tool. Second, even if the tool has been designed to guarantee some law, its implementation may still contain faults, resulting in failed test cases.
+
 From the bx  laws introduced in section~\ref{sec:Consistency}, the benchmark takes \emph{correctness} into account by the design of the test cases: All test cases check for consistency by requiring a dependent model which is consistent with the master model. Similarly, \emph{termination} and \emph{completeness} are considered implicitly since violation of these properties would result in failed test cases.
 
-Several test cases address \emph{hippocraticness} explicitly. In the benchmark, we consider the following type of hippocraticness: Starting with a consistent pair of a master model and a dependent model which have been synchronized before, the dependent model must not be changed if the changes to the master model do not affect the consistency relation. 
+Several test cases address \emph{stability}. Certain changes should not affect the opposite model (e.g., changes of birthdays in the persons model or changing the role of a family member while preserving the gender). So far, \emph{hippocraticness} has not been considered, due to the design of the Benchmarx framework: Since the concept of synchronization dialog (to be introduced in section~\ref{sec:DesignOfABenchmarxTestSuite}) requires to propagate updates to the opposite model, test cases check whether updates have been propagated correctly. Thus, the Benchmarx framework may be classified as \emph{change-based}, while hippocraticness is defined as a state-based property \cite{SOSYM-Stevens2010}.
 
-Although \emph{round-trip laws} are not considered explicitly in the benchmark, some are implied: If forward and backward synchronizers are correct and hippocratic, the forward (backward) synchronizer produces a consistent pair of models.
-Furthermore, if the opposite synchronizer is invoked immediately, it will have no effect, due to its hippocraticness.
+%Several test cases address \emph{hippocraticness} explicitly. In the benchmark, we consider the following type of hippocraticness: Starting with a consistent pair of a master model and a dependent model which have been synchronized before, the dependent model must not be changed if the changes to the master model do not affect the consistency relation. 
+
+Several variants of \emph{round-trip laws} have been proposed in the literature. In the symmetric bx case considered in the Families to Persons benchmark, two round-trip laws are required to hold: If the backward (forward) transformation is executed immediately after the forward (backward) transformation, the source model (target model) must not be changed. These laws are not tested explicitly because they are implied in the case of correct and stable synchronizers.
 Additional tests for other round-trip laws such as \emph{putput} (well-behaved composition of forward (backward) synchronization) can be added in the future.
 
 As mentioned earlier, the consistency relation between families models and persons models is non-de\-ter\-min\-istic in both directions.
@@ -145,7 +148,7 @@ The actual test cases of course combine different changes and are more involved.
 In the forward direction, the persons model must be manipulated to be consistent with the changed families model.
 Defining the expected synchronization behavior is straightforward because the families model is determined uniquely, with the exception of birthday attributes.
 To resolve non-determinism, we require that a default value be assigned as the birthday of a newly created person.
-With this resolution, forward synchronization is determinist.
+With this resolution, forward synchronization is deterministic.
 
 \noindent Changes to \emph{families} should be processed as follows:
 
