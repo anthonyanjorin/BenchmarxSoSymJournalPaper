@@ -39,31 +39,45 @@ The respective \emph{graph metamodel} is depicted in figure \ref{fig:SDMLibModel
 
 
 
-\begin{lstlisting}[label={lst:sdmlib}, float=*t, language=java, caption={Forward transformation in SDMLib}]
+\begin{lstlisting}[label={lst:sdmlib}, float=hbt!, language=java, caption={Forward transformation in SDMLib}]
 private void transformForward() {
-    familyRegisterPO = new FamilyRegisterPO().withPatternObjectName("fr");
-    PersonRegisterPO personRegisterPO = familyRegisterPO.createPersonRegisterPO()
-        .withPatternObjectName("pr");
-    FamilyMemberPO memberPO = familyRegisterPO.createCPO().withPatternObjectName("fm");
+ familyRegisterPO = new FamilyRegisterPO()
+   .withPatternObjectName("fr");
+ PersonRegisterPO personRegisterPO = 
+  familyRegisterPO.createPersonRegisterPO()
+                  .withPatternObjectName("pr");
+ FamilyMemberPO memberPO = familyRegisterPO
+   .createCPO()
+   .withPatternObjectName("fm");
 
-    // there is an old corresponding person
-    memberPO.startSubPattern();
-    PersonPO oldPersonPO = memberPO.createCpPO().withName("oldP");
-    oldPersonPO.createCondition(p -> ensureNameAndGender(p));
-    memberPO.endSubPattern();
+ // there is an old corresponding person
+ memberPO.startSubPattern();
+ PersonPO oldPersonPO = memberPO.createCpPO()
+   .withName("oldP");
+ oldPersonPO.createCondition(p -> 
+   ensureNameAndGender(p));
+ memberPO.endSubPattern();
 
-    // no corresponding person
-    memberPO.startNAC();
-    memberPO.createCpPO().withPatternObjectName("noOldP");
-    memberPO.endNAC();
-    MalePO personPO = memberPO.createCpMalePO(Pattern.CREATE).withPatternObjectName("newP");
-    personPO.createRegisterLink(personRegisterPO, Pattern.CREATE);
-    personPO.createCondition(p -> ensureNameAndGender(p));
+ // no corresponding person
+ memberPO.startNAC();
+ memberPO.createCpPO()
+   .withPatternObjectName("noOldP");
+ memberPO.endNAC();
+ MalePO personPO = memberPO
+   .createCpMalePO(Pattern.CREATE)
+   .withPatternObjectName("newP");
+ personPO.createRegisterLink(
+   personRegisterPO, 
+   Pattern.CREATE);
+ personPO.createCondition(p -> 
+   ensureNameAndGender(p));
     
-    familyRegisterPO.createLink(memberPO, Pattern.DESTROY);
+ familyRegisterPO.createLink(
+   memberPO, 
+   Pattern.DESTROY);
 
-    familyRegisterPO.rebind(familyRegister);
-    familyRegisterPO.doAllMatches();	    
+ familyRegisterPO.rebind(familyRegister);
+ familyRegisterPO.doAllMatches();	    
 }
 \end{lstlisting}
 

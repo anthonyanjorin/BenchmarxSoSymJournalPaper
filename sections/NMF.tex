@@ -55,42 +55,52 @@ The following description is based on the solution in NMF Synchronizations submi
 }
 
 
-\begin{lstlisting}[label={lst:nmf}, float=*t, language=cs, caption={Solution in NMF Synchronizations}]
-namespace TTC2017.FamiliesToPersons.NMF {
-    public class FamiliesToPersonsSynchronization : ReflectiveSynchronization {
-        public class FamilyRegisterToPersonRegister : SynchronizationRule<FamilyRegister, PersonRegister> {
-            public override void DeclareSynchronization() {
-                SynchronizeMany(SyncRule<MemberToMember>(),
-                    fam => new FamilyMemberCollection(fam),
-                    persons => persons.Persons);
-            }
-        }
+\begin{lstlisting}[label={lst:nmf}, float=hbt!, language=cs, caption={Solution in NMF Synchronizations}]
+namespace TTC2017.FamiliesToPersons.NMF{
+ public class FamiliesToPersonsSynchronization 
+  : ReflectiveSynchronization{
+  public class FamilyRegisterToPersonRegister 
+   : SynchronizationRule<
+       FamilyRegister, PersonRegister>{
+   public override void DeclareSynchronization(){
+    SynchronizeMany(SyncRule<MemberToMember>(),
+     fam=>new FamilyMemberCollection(fam),
+     persons=>persons.Persons);
+   }
+  }
 
-        public class MemberToMember : SynchronizationRule<IFamilyMember, IPerson> {
-            public override void DeclareSynchronization() {
-                Synchronize(m => m.GetFullName(), p => p.Name);
-            }
-        }
+  public class MemberToMember 
+   : SynchronizationRule<IFamilyMember, IPerson>{
+   public override void DeclareSynchronization(){
+    Synchronize(m=>m.GetFullName(), p=>p.Name);
+   }
+  }
         
-        public class MemberToFemale : SynchronizationRule<IFamilyMember, IFemale> {
-            public override void DeclareSynchronization() {
-                MarkInstantiatingFor(SyncRule<MemberToMember>(), 
-                    leftPredicate: m => m.MotherInverse != null || m.DaughtersInverse != null);
-            }
-            ...
-        }
+  public class MemberToFemale 
+   : SynchronizationRule<IFamilyMember, IFemale>{
+   public override void DeclareSynchronization(){
+    MarkInstantiatingFor(
+     SyncRule<MemberToMember>(), 
+     leftPredicate: m=>m.MotherInverse != null ||
+     m.DaughtersInverse != null);
+   }
+   ...
+  }
         
-        private class FamilyMemberCollection : CustomCollection<IFamilyMember> {
-            ...
-            public override void Add(IFamilyMember item) {
-                var temp = item.GetExtension<TemporaryStereotype>();
-                item.AddToFamily(Register, temp.IsMale, temp.LastName);
-                item.Extensions.Remove(temp);
-            }
-            ...
-        }
-        ...
-    }
+  private class FamilyMemberCollection 
+   : CustomCollection<IFamilyMember> {
+   ...
+   public override void Add(IFamilyMember item){
+    var temp 
+     = item.GetExtension<TemporaryStereotype>();
+    item.AddToFamily(
+     Register, temp.IsMale, temp.LastName);
+    item.Extensions.Remove(temp);
+   }
+   ...
+  }
+  ...
+ }
 }
 \end{lstlisting} 
 

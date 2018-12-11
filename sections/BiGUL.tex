@@ -63,12 +63,44 @@ Recall that the architecture for this solution is restoration-based (with $\math
 So this code conceptually represents \emph{fCR} and $\mathit{hAln}$ (see figure~\ref{fig:initialStateBased}).
 The parts of the code representing $\mathit{hAln}$ are in black with a white background, while parts representing \emph{fCR} are in white with a black background.
 
-\begin{figure}[tbp]
-    \centering
-    \includegraphics[width=\columnwidth]{diagrams/solutions/bigulSolnDetails}
-    \caption{Structure of a BiGUL program}
-    \label{fig:bigulSolnDetails}
-\end{figure}
+\lstdefinelanguage{bigul}{
+	morekeywords = {rearrS, Case, Skip},
+	morecomment=[l]{--},
+}
+
+\begin{lstlisting}[label={lst:bigulSolnDetails}, float=htb!, language=bigul, caption={Structure of a BiGUL program}]
+syncR :: BiGUL PersonRegister MediumR
+syncR =
+  $(rearrS [| \(PersonRegister ps) -> ps |])$
+    align (const True)
+      (\p (name, gender) -> 
+        splitFullName 
+          (getFullName p) == name &&
+          isMale p == gender)
+      (Case [ 
+        $(normalSV 
+          [p| Male _ _ |] 
+          [p| _ |] 
+          [p| Male _ _ |])
+            ==> $(update 
+                [p| Male name _ |] 
+                [p| (name, True) |] 
+                [d| name = Skip splitFullName |]),
+        $(normalSV 
+          [p| Female _ _ |] 
+          [p| _ |] 
+          [p| Female _ _ |])
+            ==> $(update 
+                [p| Female name _ |] 
+                [p| (name, False) |] 
+                [d| name = Skip splitFullName |])
+        ])
+      (\((familyName, firstName), gender) ->
+          (if gender then Male else Female) 
+          (familyName ++ ", " ++ firstName) 
+          defaultDate)
+      (const Nothing)
+\end{lstlisting}
 
 As both models are essentially lists (of persons and $(name,\- gender)$ pairs) $\mathit{hAln}$ can be implemented with the auxiliary function \texttt{align} that takes a matching condition and uses it to lift a BiGUL program on elements to lists (marked with label 1 in figure~\ref{fig:bigulSolnDetails}).
 The simple strategy is to traverse the list of view elements and to search for the first source element that matches according to the condition (here simply a comparison of name and gender).

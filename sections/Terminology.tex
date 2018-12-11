@@ -1,8 +1,8 @@
-\section{Terminology}
+\section{Preliminaries:  Basic Terminology}
 \label{sec:Terminology}
 
-This section provides brief definitions for most of the notions to be used throughout this paper. 
-Further, more specific terms will be introduced in more detail in section~\ref{sec:Foundations}. 
+This section provides brief definitions for basic notions to be used throughout this paper. 
+Additional, more specific terms will be introduced in more detail in section~\ref{sec:Foundations}. 
 All notions are collected together in a glossary (appendix~\ref{sec:Glossary}). 
 For a more comprehensive terminology and taxonomy for the domain of bx, the reader is referred to, e.g., Hidaka et al.~\cite{SOSYM-Hidaka2016}.
 
@@ -10,10 +10,10 @@ For a more comprehensive terminology and taxonomy for the domain of bx, the read
 \label{sec:Artifacts}
 
 Bidirectional transformations have been studied in a wide range of application domains. 
-The \emph{artifacts} manipulated by them include, e.g.,\ data stored in databases, program data, and models. Throughout this paper, we will adopt terminology from model-driven software engineering and refer to all artifacts as models. 
-%All tools for which solutions to the Families-to-Persons benchmark will be presented in section~\ref{sec:Solutions} are model-driven --- except for BiGUL, which is based on the functional programming language Haskell. Thus, we consider the program data maintained by BiGUL as models, as well. 
+The \emph{artifacts} manipulated by them include, e.g.,\ data stored in databases, program data, and models. Throughout this paper, we will adopt terminology from model-driven software engineering~\cite{RodriguesdaSilva2015139} and refer to all artifacts as models. 
 
-According to da Silva~\cite{RodriguesdaSilva2015139}, a \emph{system} is a generic concept for designating a software application, software platform or any other software artifact. Furthermore, a \emph{model} is an abstraction of a system under study, which is more suitable for certain purposes. Finally, a \emph{metamodel} is a model that defines the structure of a set of models, i.e., a modeling language.
+A \emph{model} is an abstraction of a system under study, which is more suitable than the system itself for certain purposes. 
+A \emph{metamodel} is a model that defines the structure of a set of models, i.e., a modeling language.
 
 For metamodeling, we employ \emph{Ecore} --- an implementation of Essential MOF, a subset of MOF~\cite{MOF-2.5.1}, provided by the Eclipse Modeling Framework (EMF)~\cite{steinberg09}. 
 Although we present the Families-to-Persons benchmark using Ecore (section~\ref{sec:FamiliesToPersons}), bx tools do not have to be EMF-based to be able to implement the benchmark.
@@ -21,10 +21,10 @@ Although we present the Families-to-Persons benchmark using Ecore (section~\ref{
 \subsection{Transformations} 
 \label{sec:Transformations}
 
-A \emph{transformation} reads, creates, or changes a set of $n \geq 1$ models. In this paper, we assume $n = 2$. 
+A \emph{transformation} reads, creates, or changes a set of $n \geq 1$ models.
 A \emph{transformation definition} is a program that controls the execution of a transformation.
 
-A \emph{bidirectional transformation (bx)} is a transformation which maintains consistency between a source model and a target model.\footnote{An extension to multidirectional transformations is possible, but not considered in this paper.} 
+A \emph{bidirectional transformation (bx)} is a transformation that maintains consistency between a source model and a target model. 
 The terms \emph{source model} and \emph{target model} are used to distinguish between the models involved in a bidirectional transformation; they do not imply a specific transformation direction.
 
 \subsection{Synchronization}

@@ -13,12 +13,65 @@ BXtend~\cite{MODELSWARD2018-Buchmann}, an acronym for \emph{Bidirectional Xtend}
 %While BXtend does not give any formal guarantees or support automated inference of parts of required programs, it provides a framework in which developers can structure their bx solutions in a straightforward manner.
 %Typical auxiliary tasks are supported via a growing library of helper functions and numerous conventions can be followed to simplify the conceptual task of implementing a consistent pair of synchronizers.
 
-\begin{figure*}[tb!]
-	\centering
-	\includegraphics[width=0.75\textwidth]{diagrams/solutions/bxtendSoln}
-	\caption{Rule orchestration and a specific rule with BXtend}
-	\label{fig:bxtendSoln}
-\end{figure*}
+\lstdefinelanguage{bxtend}{
+	morekeywords = {class, override, extends, new, null, as, typeof, val, if, else, def},
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/}
+}
+
+\begin{lstlisting}[label={lst:bxtendSoln}, float=htb!, language=bxtend, caption={Rule orchestration and a specific rule with BXtend}]
+class Family2PersonTransformation {
+  ...
+  def private void addRules() {
+    ...
+    rules.add(new Register2Register(
+      sourceModel, targetModel, 
+      corrModel, decision))
+    rules.add(new MotherDaughter2Female(
+      sourceModel, targetModel, 
+      corrModel, decision))
+    rules.add(new FatherSon2Male(
+      sourceModel, targetModel, 
+      corrModel, decision))
+  }
+  ...
+}
+
+class MotherDaughter2Female 
+  extends FamilyMember2Person {
+  ...
+  override sourceToTarget(String s) {  
+    sourceModel.allContents
+      .filter(typeof(Family))
+      .forEach [ family |
+        val corr = family.eContainer
+                         .getCorrModelElem
+        val females = ECollections.newBasicEList
+        females.addAll(family.daughters)
+        if (family.mother != null) 
+          females.add(family.mother)
+        females.forEach [ member |
+          val corrFemale = 
+            member.getOrCreateCorrModelElement(s)
+          val female = getOrCreatePersonElement(
+	        family.name + ", " + member.name, 
+	        corrFemale, ...)
+          (corr.personElement as PersonRegister)
+            .getPersons().add(female)
+        ]
+      ]
+  }
+
+  override targetToSource(String s) {
+    targetModel.allContents
+               .filter(typeof(Female))
+               .forEach [ p | ...]
+  }
+}
+\end{lstlisting}
+
+
+
 
 \subsubsection{Classification}
 

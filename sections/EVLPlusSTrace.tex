@@ -73,30 +73,44 @@ Figure~\ref{fig:evltracemetamodel} displays the \emph{trace metamodel} for the F
 }
 
 
-\begin{lstlisting}[label={lst:evl}, float=*t, language=evl, caption={Example of an EVL constraint}]
+\begin{lstlisting}[label={lst:evl}, float=htb!, language=evl, caption={Example of an EVL constraint}]
 context Source!FamilyMember{
-   constraint isNewMale{
-      guard: self.isMale()
-      check: not self.isNew()
-      message:self+' is a new inserted element in the source model'
-      fix{
-         title:'Insert its corresponding elements in the trace and target models'
-         do{
-            var familyMemberSourceEnd = addFamilyMemberSourceEnd(self);
-            var family;
-            if(self.isFather()) family = self.fatherInverse;
-            else family = self.sonsInverse;
-            family.satisfies("isNew");
-            var familySourceEnd = family.getTraceLinkEnd(); 
-            if(self.isFather()) familyMemberSourceEnd.setFatherInverse(familySourceEnd);			
-            else familyMemberSourceEnd.setSonsInverse(familySourceEnd);			
-            var person = insertMale(family,self);
-            var personTargetEnd = addPersonTargetEnd(person);
-            addFamilyMember2PersonsTraceLink(familySourceEnd, familyMemberSourceEnd, personTargetEnd);
-            copySrc2Trg();
-         }
+  constraint isNewMale{
+    guard: self.isMale()
+    check: not self.isNew()
+    message:self+' is a new inserted element 
+      in the source model'
+    fix{
+      title:'Insert its corresponding elements 
+        in the trace and target models'
+      do {
+        var familyMemberSourceEnd 
+          = addFamilyMemberSourceEnd(self);
+        var family;
+        if(self.isFather()) 
+          family = self.fatherInverse;
+        else 
+          family = self.sonsInverse;
+        family.satisfies("isNew");
+        var familySourceEnd 
+          = family.getTraceLinkEnd(); 
+        if(self.isFather()) 
+          familyMemberSourceEnd
+            .setFatherInverse(familySourceEnd);			
+        else 
+          familyMemberSourceEnd
+            .setSonsInverse(familySourceEnd);			
+        var person = insertMale(family,self);
+        var personTargetEnd 
+          = addPersonTargetEnd(person);
+        addFamilyMember2PersonsTraceLink(
+          familySourceEnd, 
+          familyMemberSourceEnd, 
+          personTargetEnd);
+        copySrc2Trg();
       }
-   }
+    }
+  }
 }
 \end{lstlisting}
 

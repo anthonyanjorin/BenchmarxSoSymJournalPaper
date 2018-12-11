@@ -60,45 +60,60 @@ elements of the two involved domains. In particular, on Line~\ref{lst:transf}, v
 	morecomment=[l]{//},
 	morecomment=[s]{/*}{*/}
 }
-\begin{lstlisting}[label={lst:jtl}, float=*t, language=jtl, escapechar=|, caption={The Families-to-Persons bidirectional transformation in JTL}]
-transformation Families2Persons(family: Families, person: Persons) {|\label{lst:transf}|
-	top relation FamilyRegister2PersonRegister {|\label{lst:FR2PR}|
-		enforce domain family fr : Families::FamilyRegister { };
-		enforce domain person pr : Persons::PersonRegister{ };
-		where {
-			Father2Male(fr,pr);
-			Mother2Female(fr,pr);
-			Son2Male(fr,pr);
-			Daughter2Female(fr,pr); }
-	}|\label{lst:FR2PR_end}|	
-	relation Father2Male {|\label{lst:F2M}|
-		n: String;
-		sn: String;
-		enforce domain family fr : Families::FamilyRegister {
-			families = f : Families::Family {
-				name = sn,
-				father = m : Families::FamilyMember { name = n }
-			}
-		};
-		enforce domain person pr : Persons::PersonRegister {
-			persons = m : Persons::Male { name = n + sn	}
-		};
-	}|\label{lst:F2M_end}|	
-	relation Mother2Female {|\label{lst:M2F}|
-		n: String;
-		sn: String;
-		enforce domain family fr : Families::FamilyRegister {
-			families = f : Families::Family {
-				name = sn,
-				mother = m : Families::FamilyMember { name = n }
-			}
-		};
-		enforce domain person pr : Persons::PersonRegister {
-			persons = m : Persons::Female {	name = n + sn }
-		};
-	}|\label{lst:M2F_end}| 	
-	relation Son2Male { ... } |\label{lst:S2M}| 
-	relation Daughter2Female { ... } |\label{lst:D2F}| 
+\begin{lstlisting}[label={lst:jtl}, float=hbt!, language=jtl, escapechar=|, caption={The Families-to-Persons bidirectional transformation in JTL}]
+transformation Families2Persons(
+  family: Families, person: Persons) {|\label{lst:transf}|
+  top relation FamilyRegister2PersonRegister {|\label{lst:FR2PR}|
+    enforce domain family 
+      fr : Families::FamilyRegister { };
+    enforce domain person 
+      pr : Persons::PersonRegister { };
+    where {
+      Father2Male(fr,pr);
+      Mother2Female(fr,pr);
+      Son2Male(fr,pr);
+      Daughter2Female(fr,pr); }
+  }|\label{lst:FR2PR_end}|	
+  relation Father2Male {|\label{lst:F2M}|
+    n: String;
+    sn: String;
+    enforce domain family 
+      fr : Families::FamilyRegister {
+        families = f : Families::Family {
+          name = sn,
+          father = m : Families::FamilyMember { 
+            name = n 
+          }
+        }
+      };
+    enforce domain person 
+      pr : Persons::PersonRegister {
+        persons = m : Persons::Male {
+          name = n + sn
+        }
+      };
+  }|\label{lst:F2M_end}|	
+  relation Mother2Female {|\label{lst:M2F}|
+    n: String;
+    sn: String;
+    enforce domain family 
+      fr : Families::FamilyRegister {
+        families = f : Families::Family {
+          name = sn,
+          mother = m : Families::FamilyMember {
+            name = n
+          }
+        }
+      };
+    enforce domain person 
+      pr : Persons::PersonRegister {
+        persons = m : Persons::Female {
+          name = n + sn
+        }
+      };
+  }|\label{lst:M2F_end}| 	
+  relation Son2Male { ... } |\label{lst:S2M}| 
+  relation Daughter2Female { ... } |\label{lst:D2F}| 
 }
 \end{lstlisting}
 
