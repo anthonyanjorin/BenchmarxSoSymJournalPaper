@@ -30,12 +30,15 @@ The terms \emph{source model} and \emph{target model} are used to distinguish be
 \subsection{Synchronization}
 \label{sec:Synchronization}
 
-The act of executing a bidirectional transformation with the intent of establishing or restoring consistency is denoted as \emph{synchronization}. 
+The act of executing a bidirectional transformation with the intent of establishing or maintaining consistency is denoted as \emph{synchronization}. 
 Synchronizations may be classified along different dimensions.
 
-A \emph{directed synchronization} is performed from a \emph{master model} to a \emph{dependent model}. The master model is read, and the dependent model is created or changed to make it consistent with the master model. A \emph{forward synchronization} is a directed synchronization in the direction of the target model; a \emph{backward synchronization} is performed in the opposite direction.
+A \emph{directed synchronization} operates on a \emph{master model} and a \emph{dependent model}, and is said to maintain consistency \emph{in the direction} of the dependent model. 
+The master model is read, and the dependent model is created or changed to make it consistent with the master model. 
+Required input for the synchronization can include the old master model, the exact changes applied to the master model, as well as preferences for making decisions during the synchronization process.  
+A \emph{forward synchronization} is a directed synchronization in the direction of the target model; a \emph{backward synchronization} is performed in the opposite direction.
 
-In contrast to a directed synchronization, both participating models have equal rights in a \emph{concurrent synchronization}. Thus, both source and target models may be changed to establish or restore consistency.
+In contrast to a directed synchronization, both participating models have equal rights in a \emph{concurrent synchronization}. Thus, both source and target models may be changed to establish or maintain consistency.
 
 A \emph{batch synchronization} is a directed synchronization that creates the dependent model from scratch. In contrast, an \emph{incremental synchronization} --- which may be directed or concurrent --- modifies an existing model.
 
@@ -49,21 +52,25 @@ In contrast, \emph{live synchronization} is performed immediately after each ele
 \subsection{Consistency and bx laws}
 \label{sec:Consistency}
 
-A pair of source and target models is \emph{consistent} if both models agree on shared information. Consistency may be defined formally by a \emph{consistency relation} --- a binary relation that includes all pairs of source and target models that satisfy some consistency condition. A consistency relation is \emph{deterministic} in the \emph{forward direction} if there is at most one consistent target model for a given source model; likewise for the \emph{backward direction}. 
+A pair of source and target models is \emph{consistent} if both models agree on shared information. 
+Consistency may be defined formally by a \emph{consistency relation} --- a relation that includes all pairs of related source and target models that satisfy some consistency condition. 
+A consistency relation is \emph{deterministic} in the \emph{forward direction} if there is at most one consistent target model for a given source model; likewise for the \emph{backward direction}. 
 
-A \emph{bx law} is a condition on the behavior of bidirectional transformations. The notion of bx law is very strong: A bx language/tool satisfies a bx law only if the law is \underline{guaranteed} to hold for every bidirectional transformation written in the respective language and executed in the respective tool. A substantial number of bx laws have been proposed in the literature. 
-In the following, we mention a few that are particularly relevant in the context of this paper. The reader should note that bx laws may be specific to certain classes of bx approaches and cannot be sensibly applied to other approaches.
+A \emph{bx law} is a condition on the behavior of bidirectional transformations. 
+The notion of a bx law is very strong: A bx language/tool satisfies a bx law only if the law is guaranteed to hold for every bidirectional transformation written in the respective language and executed in the respective tool. 
+A number of bx laws have been proposed in the literature. 
+In the following, we mention a few that are particularly relevant in the context of this paper. 
+The reader should note that bx laws may be specific to certain classes of bx approaches and cannot be sensibly applied to all other approaches.
 
-A bidirectional transformation is \emph{correct} if it produces consistent pairs of models, and \emph{hippocratic} if it does not change models which are already mutually consistent \cite{SOSYM-Stevens2010}. Furthermore, a bidirectional transformation is \emph{stable} \cite{DBLP:journals/corr/PachecoMCV13} if the following condition holds: Assume a pair of mutually consistent models. If the master model is changed such that the consistency relation is not affected, the dependent model will remain untouched by a directed synchronization.
+A bidirectional transformation is \emph{correct} if it produces consistent pairs of related models, and \emph{hippocratic} if it does not change models which are already mutually consistent \cite{SOSYM-Stevens2010}. Furthermore, a bidirectional transformation is \emph{stable} \cite{DBLP:journals/corr/PachecoMCV13}, if idle updates (no changes) to the master model always result in idle updates to the dependent model.
  
 If the consistency relation is \emph{non-deter\-min\-is\-tic}, the correctness property does not determine the result of a bidirectional transformation in a unique way. 
 In such cases, the principles of least change and least surprise aim at further determining desirable synchronization behaviour. 
 A \emph{least change} transformation \cite{SOSYM-Macedo2016} restores consistency such that the changed model has a minimal distance to the original model (with respect to a suitably defined metric). 
-A \emph{least surprise} transformation \cite{Cheney2015} intends to behave as closely as possible to the user's expectations.
+A \emph{least surprise} transformation \cite{Cheney2015} behaves as closely as possible to users' expectations.
 
-A \emph{round-trip law} states a property that refers to a round trip of directed synchronizations being performed in sequence. 
-For view-based synchronization, an immediate recreation of the view must have no effect after a view update has been propagated to the model, and writing back an unmodified view must not change the model \cite{TOPLAS2007-Foster}. 
-For symmetric synchronization, a forward (backward) synchronization, immediately followed by a backward (forward) synchronization, must not change the source (target) model.
+A \emph{round-trip law} states a property that refers to a round trip of directed synchronizations performed in sequence. 
+For view-based synchronization, for example, an immediate recreation of the view must have no effect after a view update has been propagated to the model, and writing back an unmodified view must not change the model~\cite{TOPLAS2007-Foster}.
 
 There are two more properties which are relevant for this paper: A bidirectional transformation \emph{terminates} if its execution halts after a finite number of steps. 
 Finally, a bidirectional transformation is \emph{complete} if it has a well-defined domain on which it may be successfully executed.
@@ -72,13 +79,13 @@ Completeness is of practical relevance as some bx tools apply search-based heuri
 \subsection{Bx tools}
 \label{sec:BxTools}
 
-A \emph{bx tool} is a tool for managing bidirectional transformations. It may be based on a \emph{bx language}, a domain-specific language for representing (programming) bidirectional transformations. 
+A \emph{bx tool} is a tool for managing bidirectional transformations. It may be based on a \emph{bx language}, a domain-specific language for defining (programming) bidirectional transformations. 
 
-The \emph{consistency relation} which a bx tool is supposed to maintain may be defined either explicitly or implicitly. An \emph{explicit} definition may be given, e.g., by a set of \emph{constraints} on pairs of models \cite{QVT-1.3}, or by a \emph{grammar} \cite{Schurr1994} generating all consistent pairs of models. 
-In contrast, an underlying consistency relation may be implied only \emph{implicitly} by the steps required to establish or restore consistency.
+The \emph{consistency relation} which a bx tool is supposed to maintain may be defined either explicitly or implicitly. An \emph{explicit} definition may be given, e.g., by a set of \emph{constraints} on pairs of related models \cite{QVT-1.3}, or by a \emph{grammar} \cite{Schurr1994} generating all consistent pairs of related models. 
+In contrast, an underlying consistency relation may be implied only \emph{implicitly} by the steps required to establish or maintain consistency.
 
 A bx tool may support different kinds of synchronization, according to the taxonomy introduced in section~\ref{sec:Synchronization}. 
-Synchronization may be \emph{controlled} either \emph{explicitly}, by programming the steps to be executed for restoring consistency, or \emph{implicitly}, by deriving the steps automatically from other artifacts (e.g., forward (backward) synchronization may be derived from backward (forward) synchronization, or both directions may be derived from the explicit definition of the consistency relation).
+Synchronization may be \emph{controlled} either \emph{explicitly}, by programming the steps to be executed for restoring consistency, or \emph{implicitly}, by deriving the steps automatically from other artifacts; forward (backward) synchronization may be derived from backward (forward) synchronization, or both directions may be derived from an explicit  consistency relation.
 
 For model synchronization, a bx tool must in some way process changes between (old and new) model versions. Here, the term \emph{version} denotes a state of an evolving model at a specific point in time, defined by the model's contents. 
 The general term \emph{change} subsumes any modification of the state of a model. 

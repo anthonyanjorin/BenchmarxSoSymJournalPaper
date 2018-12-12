@@ -13,9 +13,9 @@ Using the terminology introduced in the previous section, we present in this sec
 \subsection{Metamodels and consistency}
 \label{sec:MetamodelsAndConsistency}
 
-Figure~\ref{fig:metamodels} displays Ecore-based \emph{metamodels} for families and persons models, respectively.
+Figure~\ref{fig:metamodels} depicts Ecore-based \emph{metamodels} for families and persons models, respectively.
 Ecore-based bx tools implementing the benchmark may use these metamodels directly.
-As the Benchmarx framework hides models behind data abstraction interfaces, any equivalent definition which is suitable for an implementing tool may be used instead (e.g., type definitions in a functional programming language (Haskell) for BiGUL).
+As the Benchmarx framework hides models behind data abstraction interfaces, any equivalent definition which is suitable for an implementing tool may be used instead (e.g., algebraic data types in Haskell as required for BiGUL).
 
 \begin{figure}[tb!]
 	\centering
@@ -46,55 +46,33 @@ A families model is \emph{consistent} with a persons model if a bijective mappin
 \end{enumerate}
 
 An example of mutually consistent models, conforming to the metamodels in figure~\ref{fig:metamodels}, is depicted as an object diagram in figure~\ref{fig:models}. 
-To simplify the diagram, all inverse links (e.g., \code{familiesInverse}) are omitted.
+%
+The \emph{consistency relation} between families models and persons models is \emph{non-deterministic} in both directions: For a given families model, there are multiple consistent persons models (birthdays may be chosen arbitrarily). 
+Conversely, a given persons model is consistent with multiple families models (due to different groupings into families and different roles, e.g., a female person can correspond to either a mother or daughter).
 
-The \emph{consistency relation} between families models and persons models is \emph{non-deterministic} in both directions: For a given families model, there are multiple consistent persons models (the birthdays may be chosen arbitrarily). Conversely, a given persons model is consistent with multiple families models (due to different groupings into families and different roles, e.g., mother or daughter).
-
-%\subsection{Consistency Restoration According to Bx Laws}
 \subsection{Synchronization}
 \label{sec:ConsistencyRestoration}
 
-%The family-to-persons benchmark is currently restricted to forward and backward consistency restoration.
-%A forward (backward) consistency restorer can only change the target (source) model to restore consistency and is not allowed to change the current source (target) model.
-%The exact details of the possible range of further input and output artifacts is discussed later in Section~\ref{sec:Foundations}. 
-%
-
 \subsubsection{Properties of synchronization}
 
-The Families-to-Persons case is \emph{symmetric}~\cite{Diskin2014}, i.e., neither model is a strict view of the other and information loss may occur in both transformation directions. We consider only \emph{directed synchronization}, assuming that changes have been applied to the master model, while the dependent model has not been changed at all or the changes do not affect the consistency relation (e.g., changes of birthdays in the persons model are allowed). We cover both \emph{batch synchronization}, where the dependent model is created from scratch, and \emph{incremental synchronization}, where the dependent model is changed to restore consistency with the master model. Synchronization is performed  \emph{on demand} and \emph{automatically}.
+The Families-to-Persons case is \emph{symmetric}~\cite{Diskin2014}, i.e., neither model is a strict view of the other and information loss may occur in both transformation directions. We consider only \emph{directed synchronization}, assuming that changes have been applied to the master model, while the dependent model has not been changed at all or the changes do not affect the consistency relation (e.g., changes of birthdays in the persons model are allowed). 
+
+We cover both \emph{batch synchronization}, where the dependent model is created from scratch, and \emph{incremental synchronization}, where the dependent model is changed to maintain consistency with the master model. 
 Finally, changes are provided to the tools indirectly via an ordered\footnote{The results of some test cases depend on the order of elementary change operations.} sequence of change operations referred to as \emph{edits}.
 %
-%In the following, we classify synchronization properties 
-%
-%In the Families-to-Persons benchmark, the approach to \emph{consistency restoration} is characterized by the following properties:
-%
-%\begin{description}
-%	\item[\textbf{Unidirectional consistency restoration}] Starting\\ from a consistent pair of source and target models, the source model is modified, and updates are propagated to the target model. Consistency restoration does not modify the source model; rather it reestablishes consistency by updating the target model.
-%	
-%	\item[\textbf{Operation-based update propagation}] Bx tools are provided with operational deltas, i.e., sequences of changes operations, which they need to propagate from the source to the target model.
-%	
-%	\item[\textbf{Propagation on demand}] Updates need to be propagated on demand only; bx tools are not required to perform live propagation, i.e., immediate propagation of each elementary change.
-%		
-%	\item[\textbf{Alternating updates}] It is assumed that the target model has not been modified at all while updating the source model, or the changes do not affect the consistency relation (e.g., changes of birthdays in the persons model are allowed).
-%	
-%	\item[\textbf{Batch and incremental transformations}] Con\-sist-\\ency restoration operates incrementally as it modifies an existing target model. Batch transformations are treated as a special case: Empty source and target models are taken as starting point; then, updates constructing the source model are propagated to the target model.
-%	
-%	\item[\textbf{No user interactions}] Consistency restoration operates automatically and does not involve any decisions to be performed interactively at runtime.
-%\end{description}
-%
 These properties describe how the benchmark is designed but do not, however, prescribe the architecture of a bx tool that can be used to implement the benchmark (see section~\ref{sec:Foundations}).
-For example, it is possible to execute the benchmark with a tool supporting live synchronization. Furthermore, a bx tool can apply the provided edits and decide either to record operational deltas, structural deltas, or just to use the old and new versions of the model.
+For example, a bx tool can apply the provided edits and decide either to record operational deltas, structural deltas, or just to use only the old and new versions of the model.
 
 \subsubsection{Bx laws}
 \label{sec:BxLaws}
 
-For the purpose of benchmarking, all bx laws are considered as \emph{properties} which may be satisfied or not. Thus, it should be tested whether these laws hold for two reasons: First, a specific bx tool may not be designed to guarantee a certain bx tool. Second, even if the tool has been designed to guarantee some law, its implementation may still contain faults, resulting in failed test cases.
+For the purpose of benchmarking, all bx laws are considered as \emph{properties} which may be satisfied or not. 
+We test whether these laws hold for two reasons: First, a specific bx tool may not be designed to guarantee a certain bx law. 
+Second, even if the tool has been designed to guarantee some law, its implementation may still contain faults, resulting in failing test cases.
 
-From the bx  laws introduced in section~\ref{sec:Consistency}, the benchmark takes \emph{correctness} into account by the design of the test cases: All test cases check for consistency by requiring a dependent model which is consistent with the master model. Similarly, \emph{termination} and \emph{completeness} are considered implicitly since violation of these properties would result in failed test cases.
+From the bx  laws introduced in section~\ref{sec:Consistency}, the benchmark takes \emph{correctness} into account by the design of the test cases: All test cases check for consistency by requiring a dependent model which is consistent with the master model. Similarly, \emph{termination} and \emph{completeness} are considered implicitly as a violation of these properties would result in failing test cases.
 
-Several test cases address \emph{stability}. Certain changes should not affect the opposite model (e.g., changes of birthdays in the persons model or changing the role of a family member while preserving the gender). So far, \emph{hippocraticness} has not been considered, due to the design of the Benchmarx framework: Since the concept of synchronization dialog (to be introduced in section~\ref{sec:DesignOfABenchmarxTestSuite}) requires to propagate updates to the opposite model, test cases check whether updates have been propagated correctly. Thus, the Benchmarx framework may be classified as \emph{change-based}, while hippocraticness is defined as a state-based property \cite{SOSYM-Stevens2010}.
-
-%Several test cases address \emph{hippocraticness} explicitly. In the benchmark, we consider the following type of hippocraticness: Starting with a consistent pair of a master model and a dependent model which have been synchronized before, the dependent model must not be changed if the changes to the master model do not affect the consistency relation. 
+Stability and hippocraticness are addressed by performing idle updates and updates that do not affect consistency, respectively, to the master model.
 
 Several variants of \emph{round-trip laws} have been proposed in the literature. In the symmetric bx case considered in the Families to Persons benchmark, two round-trip laws are required to hold: If the backward (forward) transformation is executed immediately after the forward (backward) transformation, the source model (target model) must not be changed. These laws are not tested explicitly because they are implied in the case of correct and stable synchronizers.
 Additional tests for other round-trip laws such as \emph{putput} (well-behaved composition of forward (backward) synchronization) can be added in the future.
@@ -102,40 +80,10 @@ Additional tests for other round-trip laws such as \emph{putput} (well-behaved c
 As mentioned earlier, the consistency relation between families models and persons models is non-de\-ter\-min\-istic in both directions.
 In addition to bx laws such as correctness and hippocraticness, further guidance is needed to confine the possible choices in restoring consistency.
 \emph{Least change} and \emph{least surprise} are useful principles to determine how the dependent model should be changed in a synchronization.
-While we did take these principles into account, we came to the conclusion that they are not sufficient to derive the synchronization behavior in a unique way. 
-
-We therefore describe the synchronization behavior explicitly, taking correctness, hippocraticness, but also the principles of least change and/or least surprise (as informal guidelines) into account. Furthermore, we refrain from a formal specification and provide an informal --- yet (hopefully) precise --- description of the expected behavior.
-All test cases conform to and assert this description.
+As they are, however, in general insufficient to derive synchronization behavior in a unique way, we state the desired behavior explicitly, taking correctness, hippocraticness, but also the principles of least change and/or least surprise (as informal guidelines) into account. 
+We refrain from a formal specification and provide an informal --- yet (hopefully) precise --- description of the expected behavior.
 Formalizing these requirements is a task which we intentionally leave to the developers who implement the benchmark in a specific bx tool. 
-
-
-
-%A variety of \emph{bx laws} have been proposed in the literature; see e.g.\ \cite{Cheney2015,Stevens2008c}. The Families-to-Persons benchmark takes the following laws into account:
-%
-%\begin{description}
-%	\item[\textbf{Correctness}] Consistency restoration actually has to  produce consistent pairs of models, according to the definition given in section~\ref{sec:MetamodelsAndConsistency}. All test cases check for consistency by requiring a target model which is consistent with the source model.
-%	\item[\textbf{Hippocraticness}] Hippocraticness means that the target model is not updated if is already consistent with the source model. More precisely, we consider an operational variant of hippocraticness: Starting with a consistent pair of a source model and a target model, propagation of any delta being composed only of operations not affecting the target model leaves the target model unchanged. Several test cases are dedicated to check this property.
-%\end{description}
-%
-%It should be noted that our definition of hippocraticness differs from the state-based definition introduced in \cite{SOSYM-Stevens2010}: It is not required that bx tools may deal with independently constructed models and then check for consistency before restoration. Rather, the concept of \emph{synchronization dialogue} to be introduced in section~\ref{sec:Benchmarx} ensures that all synchronizations begin with a defined start state (consisting of a families model with an empty family register and a persons model with an empty person register, respectively). Bx tools may initialize internal data structures (e.g., correspondences) before the dialogue proceeds by propagating changes in forward or backward direction.
-%
-%\emph{Round-trip laws} have not been considered explicitly because they are implied: If forward and backward consistency restorers are correct and hippocratic, the forward (backward) consistency restorer produces a consistent pair of models. Furthermore, if the opposite restorer is invoked immediately, it will not change the original source model any more, due to its hippocraticness. Therefore, test cases for round-trip laws would not provide additional insights.
-%
-%As mentioned earlier, the consistency relation between families models and persons models is non-de\-ter\-min\-istic in both directions. Correctness and hippocraticness are not sufficient to determine the behavior of consistency restoration uniquely. Intuitively, we assume that changes are propagated as precisely as possible from the source to the target model, with minimal impact on the target model. However, there is no formalization of this property which is accepted generally and may be applied in all circumstances. Some authors view consistency restoration as an optimization problem, frequently referred to as \emph{least change} \cite{SOSYM-Macedo2016}. Others prefer a more relaxed approach, denoted as principle of \emph{least surprise} \cite{Cheney2015}.
-%
-%Without delving deeply into this issue, we observe that neither of these principles is sufficient to derive the behavior of consistency restoration in a unique way. In some way, however, consistency restoration has to be defined as precisely as possible. Unresolved non-determinism would not only make implementation of test cases much more difficult, it would also result in unpredictable behavior, which, as we believe, would violate the principle of least surprise.
-%
-%Therefore, we decided to specify consistency restoration explicitly, taking correctness, hippocraticness, but also the principles of least change and/or least surprise (as informal guidelines) into account. Furthermore, we refrain from a formal specification and provide an informal --- yet (hopefully) precise --- description of the expected behavior. All test cases conform to this description. Formalizing these requirements is a task which we intentionally leave to the bx tool users who implement the benchmark.
-%
-%Altogether, the behavior of consistency restoration is fixed through a requirements specification, which is constrained, but not totally fixed by the bx laws mentioned above. Thus, in general bx tools have to provide for \emph{flexibility}: Users of bx tools must be able to realize \emph{application-specific requirements}.
-%
-%
-%%We now provide an informal description of how consistency is to be restored in both these directions, starting with an overview of basic well-behavedness ``bx laws'' proposed by Cheney et al. and Stevens~\cite{Cheney2015,Stevens2008c}, which were used to guide the choice of the desired synchronization behavior manifested in the benchmark as a test suite.
-%
-%%We require forward (backward) consistency restoration to be \emph{correct}, i.e., that the resulting source and target models be consistent.
-%%In addition, we require \emph{hippocraticness}, i.e., that forward consistency restoration only change the target model if this is indeed necessary (consistency has not already been established).
-%%In some cases, we also have to invoke the principle of least surprise as discussed by Cheney et al.~\cite{Cheney2015}.
-%%There currently exists no formal characterization of ``least surprise'' that is applicable to all scenarios, and the test cases that rely on least surprise were defined by collaborating with multiple case and solution authors until a consensus was achieved.
+All test cases conform to and assert this informal description.
 
 \subsubsection{Synchronization behavior}      
 
@@ -150,6 +98,7 @@ Defining the expected synchronization behavior is straightforward because the fa
 To resolve non-determinism, we require that a default value be assigned as the birthday of a newly created person.
 With this resolution, forward synchronization is deterministic.
 
+\medskip
 \noindent Changes to \emph{families} should be processed as follows:
 
 \begin{description}
@@ -174,7 +123,7 @@ With this resolution, forward synchronization is deterministic.
     \item[\textbf{Creation:}]
     New family members can be created and must be immediately added to a family.
     A new person of the same gender as the family member should be created and added to the person register.
-    The person's name should be appropriately composed from the family member's family name and surname.
+    The person's name should be appropriately composed from the family member's name and surname.
     The birthday of the person should have a default value (arbitrarily fixed by the benchmark). 
     
     \item[\textbf{Deletion:}]
@@ -184,8 +133,9 @@ With this resolution, forward synchronization is deterministic.
     A family member can be renamed.  The corresponding person should be renamed accordingly.
     
     \item[\textbf{Move:}]
-    If a member is moved, different cases have to be distinguished.
-    If the gender is retained, the corresponding person object should be preserved; otherwise, the person should be deleted, and a new person with a different gender is created whose attributes are copied from the old person. 
+    If a member is moved (defined as the combined deletion and creation of the link connecting the family member to a family), different cases have to be distinguished.
+    If the gender of the family member is retained, the corresponding person object should be preserved; otherwise, the person should be deleted, and a new person with a different gender is created whose attributes are copied from the old person. 
+    
     A move within a family does not affect the corresponding person's name; a move to another family results in a potential update of the person's name.
 \end{description}
 
@@ -193,9 +143,6 @@ With this resolution, forward synchronization is deterministic.
 \paragraph{Backward synchronization:}
 
 In the backward direction, a person may be mapped either to a parent or a child, and persons may be grouped into families in different ways. As argued earlier, non-determinism should be resolved as far as possible. This may be achieved in different ways. A \emph{default transformation} would fix specific mapping options (e.g., all persons may be mapped to children and grouped into the same family if their family names agree). 
-
-
-%Without configuration, backward consistency would be \emph{non-deterministic}: For a given persons model, there are multiple families models that would all be in line with correctness, hippocraticness and even least surprise. 
 
 To provide for more flexibility, we decided to require a \emph{configurable} backward synchronization, to be controlled by an \emph{update policy}\footnote{In practice this could either represent run time user interaction or compile time design preferences.} that must set two Boolean parameters:
 (i) \code{prefer\-Parent\-To\-Child} controls whether a person is to be mapped to a parent or a child (if both options are possible), and (ii) \code{prefer\-Existing\-To\-New\-Family} determines whether a person is to be mapped to a family member added to an existing family, or added to a newly created family containing only this single family member (again if both options are possible). 
@@ -206,10 +153,7 @@ For example, let us assume that persons should be added to existing families as 
 If we insert another person with family name \code{Smith} into the persons model depicted in figure~\ref{fig:models}, a corresponding member may be inserted either into family \code{f1} or into \code{f2}.
 Furthermore, the update behavior may depend on the \emph{order} of change operations. For example, if persons should be added to existing families as parents, and two male persons with family name \code{Miller} are added to the persons model, the first person will be added as a father and the second person as a son. 
 
-%Note that the update policy reduces non-determinism without eliminating it completely. 
-%If  both configuration parameters are set to true, the resulting families model depends on the order in which persons are processed. 
-%For example, in Figure~\ref{fig:models}, there are three candidates for the father role in the Smith family (recall that the collection of persons is unordered). 
-
+\medskip
 \noindent Let us now consider change operations on \emph{persons}:
 %
 \begin{description}
@@ -231,7 +175,7 @@ Furthermore, the update behavior may depend on the \emph{order} of change operat
     The family name of a person can be changed; 
     this change should not affect the current family and its members.
     The family preserves its name even if it does not contain any other members.
-    The corresponding family member should instead be moved to another family, which may have to be created as required; the precise update behavior, if there are multiple possibilities, depends on the update policy.
+    The corresponding family member should instead be moved to another family, which may have to be created as required; the precise update behavior, if there are multiple possibilities, depends on the specified update policy for the particular test case.
     
     \item[\textbf{Move:}]
     Persons cannot be moved because the persons model consists of a single, flat, unordered collection. 
@@ -263,7 +207,7 @@ The Families-to-Persons case includes a number of diverse \emph{challenges} summ
 	
 	\item[\textbf{Configurability:}] 
 	The behavior of backward synchronization is controlled by an update policy determining roles of members and groupings of members into families. 
-	The update policy may be changed at run time and should take effect only for future updates (no global reshuffling of the families model after the update policy has been changed).
+	The update policy may be changed at run time and should take effect only for future updates (there is to be no global reshuffling of the families model after the update policy has been changed).
 	
 	\item[\textbf{Renaming and movement:}] 
 	Changes to be synchronized include not only creations and deletions, but also renamings and moves, which must not be reduced to deletions and creations so that changes can be synchronized in a minimally invasive way. 
@@ -273,7 +217,7 @@ The Families-to-Persons case includes a number of diverse \emph{challenges} summ
 	For example, if two persons of the same gender are to be inserted into the same family as parents, only the first person can be inserted as a parent; the second person must be added as a child.
 	
 	\item[\textbf{Specific least surprise requirements:}]~
-	The bench\-mark requires adherence to a case-specific definition of what ``least surprise'' is to mean.
+	The bench\-mark requires adherence to an application-specific definition of what ``least surprise'' is to mean.
 	For example, if the family name of a person is changed, the corresponding family member should be moved to another family (rather than having the family name updated, with possible side effects on other members).
 	This definition of which change is ``better'' or ``smaller'' than another is arguably arbitrary and must be treated as an additional requirement.
 \end{description}
