@@ -1,14 +1,14 @@
 \section{Foundations for Classifying Bx Tools}
 \label{sec:Foundations}
 
-\NOTE{\emph{Length:} 2 p., \emph{Responsible:} Tony}
-\NOTE{Based on BX 2017 paper, Section~3.1. Should include the taxonomy of Figure~3.}
+In this section, we introduce the most important terms and notation required in the rest of the paper to describe and discuss the different bx approaches and solutions to our benchmark.
 
-In this section, we introduce the most important terms required in the rest of the paper to describe and discuss the different bx approaches and solutions to our benchmark.
 We first of all define the \emph{input and output data} for bx tools in section~\ref{sec:io-data}.
-Based on this, we identify \emph{basic operations} applied by bx tools to maintain consistency in section~\ref{sec:basicOperations}.
-This finally allows us to describe and discuss a series of possible bx tool architectures in section~\ref{sec:bx-tool-architectures}.
-For each solution and bx tool presented in section~\ref{sec:Solutions}, we assign the best fitting architecture as a means of abstracting from technical details and focusing on the conceptual core strategy applied by each tool.   
+Based on this, we identify \emph{basic operations} applied by bx tools to maintain consistency in section~\ref{sec:basicOperations}, and discuss how different combinations of expected input and produced output lead to a number of different \emph{bx application scenarios}. 
+This finally allows us to describe and discuss a series of possible \emph{bx tool architectures} in section~\ref{sec:bx-tool-architectures}.
+
+This overview of the complete range of possible architectures is used in section~\ref{sec:Solutions} to assign the best fitting architecture to each solution and bx tool used to solve our benchmark.
+This helps to abstract from technical details and focus on the conceptual core strategy realized by each tool.   
 
 \subsection{Input and output data}
 \label{sec:io-data}
@@ -20,12 +20,12 @@ We refer to the input and output data expected and produced by a bx tool as \emp
 \emph{A model, denoted by capital (primed) letters $A$, $A'$, $B$, $B'$, is a generic term used to refer to the data to be kept consistent by a bx tool.}
 \end{definition}
 %
-We view the concrete representation of a model, e.g., as a graph, a tree, a set, as being \emph{internal} to a bx tool and is not of primary relevance (for the goals and scope of this paper).
-Note that (double, triple) primed letters such as $A$, $A'$ indicate that these models are somehow related.
+We view the concrete representation of a model, e.g., a graph, a tree, a set, as being \emph{internal} to a bx tool and thus not of primary relevance (for the goals and scope of this paper).
+Note that (double, triple) primed letters such as $A$, $A'$ indicate that these models are related in some way (e.g., are versions of the same original model derived by applying a sequence of changes).
 
 \begin{example}[Models]~\\
 An example of two models from the Families-to-Persons case is depicted in figure~\ref{fig:models}.
-The internal structure of these models is represented using typed, attributed graphs.
+These models are represented using typed, attributed graphs.
 \end{example}
 
 \begin{definition}[Delta]
@@ -33,7 +33,7 @@ The internal structure of these models is represented using typed, attributed gr
 \emph{A delta, denoted by an arrow $\delta: A \rightarrow A'$ going from a ``before'' to an ``after'' model, is a generic term used to refer to the relation between two models, where these models are to be interpreted as being two versions (before and after) of the same model.}
 \end{definition}
 %
-Again the concrete representation of a delta, e.g., as a span of mappings or as a change log, is internal to a bx tool and is not of primary relevance.
+Again the concrete representation of a delta, e.g., a span of mappings or a change log, is internal to a bx tool and not of primary relevance.
 In order to precisely classify our tests in the benchmark, however, we distinguish between delta representations that record the \emph{order} in which changes were made, and delta representations that only provide a structural mapping between two versions of a model:  
 
 \begin{definition}[Operational Delta, o-delta]
@@ -110,20 +110,18 @@ This is summarized together with all previous definitions in the following:
 A corr $c \in R$ is said to be consistent if and only if $c \in C$.}
 \end{definition}
 
-\begin{remark}[Formalization]~\\
 Model spaces can be formalized as \emph{categories} with models as objects and deltas as arrows.
 If deltas are formalized as spans of structure-preserving mappings, then delta composition can be formalized as a pullback of spans.
 Similarly to deltas, corrs and diags can also be formalized as spans of structure-preserving mappings.
-The interested reader is referred to e.g., Anjorin~\cite{DBLP:conf/ac/Anjorin16}, or Diskin et al.~\cite{JOT:issue_2011_01/article6} for further details.
-\end{remark}
+The reader interested in a more rigourous handling of these terms is referred to e.g., Diskin et al.~\cite{JOT:issue_2011_01/article6} and Anjorin~\cite{DBLP:conf/ac/Anjorin16} for further details.
 
 \begin{example}[Model Spaces, Corrs, and Triple Space]~\\
-The source (target) model space for the Families-to-Persons case consists of all models that are valid instances of the families (persons) metamodel depicted to the left (right) of figure~\ref{fig:metamodels}, and all deltas between the models in each model space representing all possible combinations of the basic change operations (add/delete elements, attribute changes, object movements).
+The source (target) model space for the Families-to-Persons case consists of all models that are valid instances of the families (persons) metamodel depicted to the left (right) of figure~\ref{fig:metamodels}, and all deltas between the models in each model space representing all possible combinations of the basic change operations (add/ delete elements, attribute changes, object movements).
 
 For the Families-to-Persons case, corrs can be represented by bijective mappings between family members and persons.
 Consistent corrs additionally satisfy the two constraints given in section~\ref{sec:MetamodelsAndConsistency}.  
 For the pair of models depicted in figure~\ref{fig:models}, for example, a \emph{consistent} corr would consist of mappings $fm\langle n \rangle \leftrightarrow p\langle n \rangle$ for $n \in \{1, ..., 6 \}$.
-
+%
 The resulting triple space for the benchmark consists of these two model spaces, the set $R$ of all possible corrs (bijections between family members and persons), and the consistent subset $C \in R$ of corrs that satisfy the two additional constraints. 
 \end{example}
 
@@ -139,16 +137,16 @@ These architectures can be used to classify bx tools and characterize fundamenta
 
 % Groups of operations
 % Notation in Fig. 3
-Figure~\ref{fig:basicOperationsOverview} provides an overview of five basic operations showing their arity and indicating input and output parameters.
+Figure~\ref{fig:auxOperationsOverview} provides an overview of three auxiliary operations showing their arity and indicating input and output parameters.
 Using the same notation as for definitions~\ref{def: model}, \ref{def: delta}, and \ref{def: corr}, models are depicted as (primed) capital letters, deltas as vertical single-headed arrows, and corrs (diags) as horizontal (diagonal) double-headed arrows.
-The five operations are depicted as rectangles, connected to their input via incoming, and to their output via outgoing dotted single-headed arrows. 
+The three auxiliary operations are depicted as rectangles, connected to their input via incoming, and to their output via outgoing dotted single-headed arrows. 
 These operations are now explained in the following by providing concrete examples taken from our Families-to-Persons benchmark:
 
 \begin{figure}[bt!]
 	\centering
-	\includegraphics[width=0.55\columnwidth]{diagrams/foundations//BasicOperationsOverview}
-	\caption{Overview of basic operations}
-	\label{fig:basicOperationsOverview}
+	\includegraphics[width=0.65\columnwidth]{diagrams/foundations/AuxOperations}
+	\caption{Overview of auxiliary operations}
+	\label{fig:auxOperationsOverview}
 \end{figure}
 
 % Explanation
@@ -170,7 +168,20 @@ The task of $\ast$ is now to ``re-align'' the new $A'$ with $B$.
 Re-alignment is often a straightforward task of updating the corr, removing obsolete (invalid) mappings due to deleted (changed) elements in $A$, as well as adding any new mappings from added (changed) elements in $A$ to existing elements in $B$.
 Although we introduce $\ast$ as depicted in figure~\ref{fig:basicOperationsOverview}, we shall also use variants of $\ast$ with different input/output roles for the parameters, e.g., taking the diag as input and producing corr and delta as output.
 For simplicity, we shall also refer to these operations as re-alignment, indicating clearly in the diagrams which parameters are taken as input and which are produced as output.
+\end{description}
 
+Figure~\ref{fig:basicOperationsOverview} depicts two basic operations that can be used to maintain consistency:
+either by restoring consistency by suitably manipulating the dependent model, or by \emph{propagating} deltas from the master to the dependent model.
+Appropriately combined with the auxiliary operations discussed previously, a wide range of different application scenarios can be addressed by these two basic operations that are discussed in the following:
+
+\begin{figure}[tb!]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{diagrams/foundations/BasicOperations}
+	\caption{Overview of basic operations}
+	\label{fig:basicOperationsOverview}
+\end{figure}
+
+\begin{description}
 \item[\emph{Forward Consistency Restoration (fCR)}] takes as input a diag $A' \leftrightarrow B$ and determines a delta $B \rightarrow B'$ and a \emph{consistent} corr $A' \leftrightarrow B'$.
 This operation obviously requires some knowledge of the underlying consistency relation.
 The input diag is typically not yet consistent and some strategy of how to restore consistency by changing $B$ in some appropriate manner must be implemented.
@@ -178,9 +189,9 @@ For example, if an unmapped family member in $A'$ and an unmapped person in $B$ 
 Consistency restoration (backward consistency restoration ($\mathit{bCR})$ is defined analogously) is often non-deterministic, hence the need for laws to characterize ``desirable'' behaviour.
 
 \item[\emph{Forward Update Propagation (fUP)}] takes a different approach to consistency maintenance than $\mathit{fCR}$.
-Instead of restoring consistency to an already inconsistent diag, $\mathit{fUP}$ takes as input a (typically consistent) corr $A' \leftrightarrow B'$ and a delta $A' \rightarrow A''$.
-To decide how to maintain consistency, $\mathit{fUP}$ inspects the input delta $A' \rightarrow A''$ and \emph{propagates} the delta to $B'$, yielding an output delta $B' \rightarrow B''$ as well as a consistent corr $A'' \leftrightarrow B''$.
-For example, adding a new family member to $A'$ to yield $A''$ can be propagated to adding a suitably named new person to $B'$ to yield $B''$, and adding a mapping between the new family member and person in $A'' \leftrightarrow B''$.  
+Instead of restoring consistency to an already inconsistent diag, $\mathit{fUP}$ takes as input a (typically consistent) corr $A \leftrightarrow B$ and a delta $A \rightarrow A'$.
+To decide how to maintain consistency, $\mathit{fUP}$ inspects the input delta $A \rightarrow A'$ and \emph{propagates} the delta to $B$, yielding an output delta $B \rightarrow B'$ as well as a consistent corr $A' \leftrightarrow B'$.
+For example, adding a new family member to $A$ to yield $A'$ can be propagated to adding a suitably named new person to $B$ to yield $B'$, and adding a mapping between the new family member and person in $A' \leftrightarrow B'$.  
 Similar to consistency restoration, update propagation (backward update propagation ($\mathit{bUP})$ is defined analogously) is also often non-deterministic.
 \end{description}
 
@@ -189,12 +200,12 @@ Similar to consistency restoration, update propagation (backward update propagat
 
 In this section, we now discuss 11 different application scenarios according to the provided input data in each case.
 If certain input data, e.g., the input delta, is available or not is often an intrinsic part of an application scenario.
-Consider, for example, an application scenario in which models are manipulated without any means of tracking exactly what changes were made.
+Consider, for example, an application scenario in which models are manipulated without any means of tracking exactly which changes were made.
 If this is part of the requirements (perhaps due to an existing process workflow at a company) and cannot be influenced, then input deltas will not be available for consistency management.
 %
-To classify all possible application scenarios figure~\ref{fig:architectureLandscape} depicts a grid distinguishing horizontal and vertical input data to yield 11 possible combinations.
-At this stage, we consider \emph{all} possible combinations without judging how ``useful'' or ``sensible'' the combinations are.
-Such an evaluation of all scenarios is provided at the end of this section (figure~\ref{fig:evalOfApplicationScenarios}), based on the relative complexity of the architectures required to fully handle each scenario. 
+To classify all possible application scenarios, figure~\ref{fig:architectureLandscape} depicts a grid distinguishing horizontal and vertical input data to yield 11 possible combinations.
+%At this stage, we consider \emph{all} possible combinations without judging how ``useful'' or ``sensible'' the combinations are.
+%Such an evaluation of all scenarios is provided at the end of this section (figure~\ref{fig:evalOfApplicationScenarios}), based on the relative complexity of the architectures required to fully handle each scenario. 
 
 The possibilities for vertical input data range from just the changed source model $A'$ (initial-), to the old and changed source models $A$, $A'$ (state-), to the input delta $A \rightarrow A'$ (delta-).
 While the terms \emph{state} and \emph{delta} should be natural, \emph{initial} deserves some explanation.
@@ -214,11 +225,11 @@ Compared to the commonly used but imprecise terms \emph{state-based} or \emph{de
 
 From an inspection of all bx tools we are aware of, it is our observation that tool architectures tend to be either restoration-based (i.e., using basic operations \emph{fCR}, \emph{bCR}) or propagation-based (i.e., using basic operations \emph{fUP} and \emph{bUP}), but not both.
 A plausible explanation is that implementing both \emph{fCR} and \emph{fUP} would be redundant as both serve the same purpose of consistency maintenance.
-All other basic operations are more auxiliary in nature and help compensate a mismatch between application scenario and tool architecture.
+All other basic operations are auxiliary in nature and help compensate a mismatch between application scenario and tool architecture.
 
 Such a mismatch stems from the fact that bx tool developers choose a certain bx tool architecture corresponding to one of the 11 application scenarios, i.e., to their expectations concerning what input data is available and what not.
 If a bx tool expects more input data than is available, it can only be used in combination with external alignment operations, which are required to recover the missing data.
-This situation can be problematic as a priori alignment can be imprecise, inefficient, and difficult to implement.
+This situation can be problematic as alignment can be imprecise, inefficient, and difficult to implement.
 Faced with this overfitting mismatch, users of such a bx tool tend to view the tool as being heavy-weight, having unrealistic (utopic) expectations, and thus not being worth the effort if one has to implement all required additional auxiliary alignment operations.
 
 If a bx tool requires less input data than is available, the additional input data is simply ignored.
@@ -231,8 +242,8 @@ As realizing which underlying architecture a bx tool implements is crucial for u
 \label{sec:bx-tool-architectures}
 
 Figure~\ref{fig:initialBatchBased} depicts bx tool architectures for the simplest application scenario, namely \emph{initial-batch-based}.
-As this application scenario can actually be handled with a standard unidirectional model transformation, the architectures are not necessarily practical, but simply show how a bx tool can easily handle simple cases as degenerate versions of the more general case of consistency maintenance.
-First some words on the notation used in all architecture diagrams: the same notation for models, deltas, corrs, diags, and basic operations is used as in figure~\ref{fig:basicOperationsOverview}.
+As this application scenario can actually be handled with a standard unidirectional model transformation, the architectures are not necessarily practical, but show how a bx tool can handle simple cases as degenerate versions of the more general case of consistency maintenance.
+First some words on the notation used in all architecture diagrams: the same notation for models, deltas, corrs, diags, and basic operations is used as in figures~\ref{fig:auxOperationsOverview} and \ref{fig:basicOperationsOverview}.
 In addition, all objects that are internally computed by the bx tool and typically not presented to the user are greyed out.
 Finally, output data is distinguished from input data via a dotted border.
 To improve readability, the restoration-based architectures for every application scenario are depicted to the left of the diagrams, while the propagation-based architectures are depicted to the right.
@@ -243,33 +254,32 @@ To improve readability, the restoration-based architectures for every applicatio
 	\caption{Initial-batch-based Architectures}
 	\label{fig:initialBatchBased}
 \end{figure}
-%
+
 To apply \emph{fCR} in an initial-batch-based application scenario, the empty diag is assumed and provided as additional input to produce $\emptyset \rightarrow B'$ and $A' \leftrightarrow B'$.
-In this scenario, only $B'$ is typically required as output, although a bx tool would produce a corr as well.
+In this scenario, only $B'$ is typically required as output, although a bx tool would (internally) compute a corr as well.
 %
 Similarly, \emph{fUP} can be applied by assuming and providing the empty corr $\emptyset \leftrightarrow \emptyset$ and $\emptyset \rightarrow A'$.
 %
 Note that both architectures do not require any auxiliary operations as the implied empty diag, corr, and delta are typically trivial to compute.
 In practice, however, (mis)using a bx tool for this simple application scenario can be much more inefficient than a standard transformation, and we are thus not aware of any dedicated bx tool that addresses solely this application scenario. 
 
-Figure~\ref{fig:initialStateBased} depicts three architectures addressing the much more common bx application scenario \emph{initial-state-based}.
-In this scenario, the previous output model $B$ is additionally provided as input, so that the bx tool has the chance of preserving as much information as possible in $B$ while reestablishing consistency.
-%
-\begin{figure}[tb!]
+\begin{figure}[b!]
 	\centering
-	\includegraphics[width=\columnwidth]{diagrams/foundations//initial-state-based}
+	\includegraphics[width=\columnwidth]{diagrams/foundations/initial-state-based}
 	\caption{Initial-state-based Architectures}
 	\label{fig:initialStateBased}
 \end{figure}
 %
+Figure~\ref{fig:initialStateBased} depicts three architectures addressing the more common bx application scenario \emph{initial-state-based}.
+In this scenario, the previous output model $B$ is additionally provided as input, so that the bx tool has the chance of preserving as much information as possible in $B$ while maintaining consistency.
+%
 The conceptually simplest architecture makes use of \emph{fCR} by computing a diag between $A'$ and $B$ using \emph{hAln}.
 %
 If both \emph{bCR} and \emph{fCR} are available, \emph{vAln} can be used in place of \emph{hAln}, by first determining $A \leftrightarrow B$, then $A \rightarrow A'$ via \emph{vAln}, and then the required diag $A' \leftrightarrow B$ with $\ast$.
-While this might sound much more complex, it can make sense if all necessary operations are available, while \emph{hAln} is not.
+While this might sound more complex, it can make sense if all necessary operations are available, while \emph{hAln} is not.
 %
-The propagation-based architecture for this scenario is also rather complex, requiring \emph{bUP} to determine $A \leftrightarrow B$ and \emph{vAln} to establish the require input delta $A \rightarrow A'$ for \emph{fUP}.
-%
-From this discussion it is clear that initial-state-based bx tools tend to favour the simpler restoration-based architecture.
+A propagation-based architecture for this scenario (depicted to the right of figure~\ref{fig:initialStateBased}) can use \emph{bUP} to determine $A \leftrightarrow B$ and \emph{vAln} to establish the required input delta $A \rightarrow A'$ for \emph{fUP}.
+If \emph{bUP} or \emph{vAln} is unavailable, an alternative propagation-based architecture (not shown explicitly as a diagram) can use \emph{hAlgn} to compute the diag $A' \leftrightarrow B$, then the inverse of $\ast$ to determine the corr $A \leftrightarrow B$ and delta $A \rightarrow A'$ for \emph{fUP}. 
 
 Figure~\ref{fig:initialDiagBased} depicts architectures addressing the initial-diag-based application scenario.
 This represents a perfect fit for a restoration-based architecture, as \emph{fCR} can be directly applied without requiring any auxiliary operations.
@@ -283,24 +293,24 @@ Note that the typical output for this scenario is the updated, consistent corr $
 	\label{fig:initialDiagBased}
 \end{figure}
 %
-While it is theoretically possible to address initial-diag-based scenarios with a propagation-based architecture, figure~\ref{fig:initialDiagBased} indicates why this is never implemented: to apply $\mathit{fUP}$, one would have to determine $A \rightarrow B$ and $A \rightarrow A'$ from the diag, a task  comparable in complexity to \emph{fCR/bCR}.
+While it is theoretically possible to address initial-diag-based scenarios with a propagation-based architecture, figure~\ref{fig:initialDiagBased} indicates why this is awkward in comparison: to apply $\mathit{fUP}$, one would have to determine $A \rightarrow B$ and $A \rightarrow A'$ from the diag, a task in itself already comparable in complexity to \emph{fCR/bCR}.
 
 Figure~\ref{fig:stateBatchBased} depicts architectures addressing the state-batch-based application scenario.
 In all cases, $A$ has to be extended to $A \leftrightarrow B$.
 \emph{fCR} can then be used either by combining \emph{vAln} and $\ast$, or by using \emph{hAln} to directly determine $A' \leftrightarrow B$.
 The propagation-based architecture uses \emph{vAln} to determine the missing input delta for $\mathit{fUP}$.
 %
-\begin{figure}[tb!]
+\begin{figure}[b!]
 	\centering
 	\includegraphics[width=\columnwidth]{diagrams/foundations/state-batch-based}
 	\caption{State-batch-based Architectures}
 	\label{fig:stateBatchBased}
 \end{figure}
 %
-The complexity of all three architectures indicate that a state-batch-based application scenario is relatively unfavourable compared to the initial-state-based case.
+The complexity of all three architectures indicate that a state-batch-based application scenario can be considered relatively unfavourable compared to the initial-state-based case.
 
 Figure~\ref{fig:stateStateBased} depicts two architectures addressing the state-state-based application scenario.
-In both cases both \emph{hAln} and \emph{vAln} are required to recover the corr $A \leftrightarrow B$ and input delta $A \rightarrow A'$.
+In both cases, \emph{hAln} and \emph{vAln} are required to recover the corr $A \leftrightarrow B$ and input delta $A \rightarrow A'$.
 While this already constitutes the input for \emph{fUP}, the restoration-based architecture additionally requires $\ast$ to determine the diag for \emph{fCR}.
 %
 \begin{figure}[tb!]
@@ -312,11 +322,17 @@ While this already constitutes the input for \emph{fUP}, the restoration-based a
 
 The architectures depicted in figure~\ref{fig:stateCorrBased} for the state-corr-based application scenario are fairly analogous to the state-state-based case.
 The only difference and simplification is that the required corr is supplied as input and \emph{vAln} is therefore not needed.
-\begin{figure}[tb!]
+\begin{figure}[b!]
 	\centering
 	\includegraphics[width=\columnwidth]{diagrams/foundations/state-corr-based}
 	\caption{State-corr-based Architectures}
 	\label{fig:stateCorrBased}
+\end{figure}
+\begin{figure}[b!]
+	\centering
+	\includegraphics[width=0.82\columnwidth]{diagrams/foundations/state-and-delta-diag-based}
+	\caption{State and delta-diag-based Architectures}
+	\label{fig:stateAndDeltaBasedDiag}
 \end{figure}
 
 Figure~\ref{fig:stateAndDeltaBasedDiag} depicts architectures for state-diag-based and for delta-diag-based application scenarios.
@@ -324,16 +340,7 @@ As the required input diag for \emph{fCR} is directly supplied, providing extra 
 Even the propagation-based architectures appear awkward:  To make use of all provided input in the state-diag-based case, either the delta $A \rightarrow A'$ must be determined with \emph{vAln} (depicted to the left of figure~\ref{fig:stateAndDeltaBasedDiag}), or the corr $A \leftrightarrow B$ with \emph{hAln} (not depicted in the figure).  
 Taking this delta (or corr) and the supplied diag as input, $\ast$ can then be used to compute the required corr (or delta), so that \emph{fUP} can be used.
 The propagation-based architecture for the delta-diag-based case is analogous, only simplified as the input delta is supplied and does not need to be computed with \emph{vAln}.
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[width=0.82\columnwidth]{diagrams/foundations/state-and-delta-diag-based}
-	\caption{State and delta-diag-based Architectures}
-	\label{fig:stateAndDeltaBasedDiag}
-\end{figure}
 
-Figure~\ref{fig:deltaBatchBased} depicts the architectures for the delta-batch-based application scenario.
-These are simplified versions of architectures for the state-batch-based case, as the required input delta is now provided and does not need to be computed via \emph{vAln}.
-Note that both architecture neither require auxiliary alignment, nor \emph{bCR} (\emph{bUP}) for consistency restoration (update propagation).  
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[width=0.73\columnwidth]{diagrams/foundations/delta-batch-based}
@@ -341,8 +348,6 @@ Note that both architecture neither require auxiliary alignment, nor \emph{bCR} 
 	\label{fig:deltaBatchBased}
 \end{figure}
 
-The architectures depicted in figure~\ref{fig:deltaStateBased} are for the delta-state-based application scenario.
-As the previous target model $B$ is provided in this scenario, the architectures can use \emph{hAln} to determine the corr $A \leftrightarrow B$ and can make do without a second application of \emph{fCR} (\emph{fUP}) as in the delta-batch-based case.  
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[width=0.75\columnwidth]{diagrams/foundations/delta-state-based}
@@ -350,9 +355,6 @@ As the previous target model $B$ is provided in this scenario, the architectures
 	\label{fig:deltaStateBased}
 \end{figure}
 
-Finally, figure~\ref{fig:deltaCorrBased} depicts the architectures for the delta-corr-based application scenario.
-The diagrams indicate that this is the ideal case for applying $\mathit{fUP}$ as exactly what is required is available as input.
-The restoration-based architecture only requires realignment via $\ast$, which is usually a simple operation in this case.
 \begin{figure}[tb!]
 	\centering
 	\includegraphics[width=0.75\columnwidth]{diagrams/foundations/delta-corr-based}
@@ -360,16 +362,16 @@ The restoration-based architecture only requires realignment via $\ast$, which i
 	\label{fig:deltaCorrBased}
 \end{figure}
 
-% Summary?
-As a summary based on the discussion of all architectures, figure~\ref{fig:evalOfApplicationScenarios} depicts the grid of all 11 feasible application scenarios, now color-coded to indicate the simplicity of the corresponding bx tool architectures required to address each case.
-Each cell in the grid is additionally divided with a vertical line ($~|~$), with labels to the left (restoration-based architectures) and to the right (propagation-based architectures) consisting of plus and minus symbols corresponding to the color.
-\begin{figure}[tb!]
-	\centering
-	\includegraphics[width=0.9\columnwidth]{diagrams/foundations/EvalOfApplicationScenarios.pdf}
-	\caption{Architecture-based evaluation of scenarios}
-	\label{fig:evalOfApplicationScenarios}
-\end{figure}
-Plus symbols (green) indicate a simple, minus symbols (red) a complicated bx tool architecture.  
+Figure~\ref{fig:deltaBatchBased} depicts the architectures for the delta-batch-based application scenario.
+These are simplified versions of architectures for the state-batch-based case, as the required input delta is now provided and does not need to be computed via \emph{vAln}.
+Note that both architecture neither require auxiliary alignment, nor \emph{bCR} (\emph{bUP}) for consistency restoration (update propagation).  
+
+The architectures depicted in figure~\ref{fig:deltaStateBased} are for the delta-state-based application scenario.
+As the previous target model $B$ is provided in this scenario, the architectures can use \emph{hAln} to determine the corr $A \leftrightarrow B$ and can make do without a second application of \emph{fCR} (\emph{fUP}) as in the delta-batch-based case.  
+
+Finally, figure~\ref{fig:deltaCorrBased} depicts the architectures for the delta-corr-based application scenario.
+The diagrams indicate that this is the ideal case for applying $\mathit{fUP}$ as exactly what is required is available as input.
+While the restoration-based architecture requires realignment via $\ast$, this is usually a simple operation in this case.
 
 \begin{figure*}[tb!]
 	\centering
@@ -389,11 +391,10 @@ Children connected with an angle without a fill are exclusively ored, while chil
 Features that exclude each other are connected with a dashed, double-headed (red) arrow; 
 A dashed, single-headed (green) arrow from a feature $f$ to another feature $g$ denotes that $f$ requires (implies) $g$.   
 
-%%%% Rewrite
 
-A bx tool must have a bx tool architecture, developed in a specific style (either restoration-based using \emph{fCR/bCR} or propagation-based using \emph{fUP/bUP}), and addressing a specific application scenario according to expected input. 
+A bx tool must have a bx tool architecture, developed in a specific style (either restoration-based using \emph{fCR/bCR} or propagation-based using \emph{fUP/bUP}), and addressing a specific application scenario according to expected input and provided output.
 %
-Concerning horizontal input, a scenario can exclusively require no input at all (batch), the previous output model (state-based), a diag (diag-based), or a corr (corr-based) as input.
+Concerning horizontal input, a scenario can exclusively require no input at all, the previous output model (state-based), a diag (diag-based), or a corr (corr-based) as input.
 %
 In contrast, vertical input is a mandatory feature, forcing an exclusive choice between requiring just the input model (initial-based), the previous and changed input models (state-based), and an input delta  (delta-based).
 In practice, it is also informative to know if a bx tool expects an s-delta or o-delta.
@@ -401,20 +402,19 @@ Finally, as explained previously, requiring a corr and only the input model (ini
 
 A major goal of bx languages and tools is often to provide some added value compared to implementing synchronization using standard unidirectional transformation languages.
 While this goal can be realized as an attempt to increase productivity, it is often also realized as an attempt to increase the \emph{quality} of implemented synchronization solutions.
-In figure~\ref{fig:featureModelBxTools}, therefore, we include an optional feature \emph{well-behavedness guarantees}, which can include a combination of correctness, hippocraticness, round-trip laws, and completeness (totality) guarantees.
+In figure~\ref{fig:featureModelBxTools}, therefore, we include an optional feature \emph{well-behavedness guarantees}, which can include a combination of correctness, hippocraticness, round-trip laws, termination, and completeness (totality) guarantees.
 All mentioned guarantees apart from the last two have been informally introduced in section~\ref{sec:FamiliesToPersons}; termination is self explanatory.
-Correctness can only be guaranteed with respect to the underlying consistency relation, so this only makes sense as a feature if the relation is explicitly provided to the tool, hence the requirement between these features. 
 Consistency restoration (update propagation) is \emph{complete} if \emph{fCR} (\emph{fUP}) is total on a  (preferably statically) well-defined domain, i.e., for a well-defined subset of input deltas and corrs/diags in the triple space for consistency maintenance.
 This feature is of practical relevance as some bx tools apply a heuristic search (instead of a complete search, e.g., via backtracking) and might not be able to guarantee that an existing solution is found due to non-deterministic wrong choices made in the search space.
 Such ``incompleteness'' is obviously undesirable.
+Correctness can only be guaranteed with respect to the underlying consistency relation, so this only makes sense as a feature if the relation is explicitly provided to the tool, hence the requirement between these features. 
 
 % Mandatory:  Consistency relation
 An important, hence mandatory feature of a bx tool is its underlying \emph{consistency relation}.
-This has to be specified in some manner, either \emph{implicitly}, e.g., by providing implementations of \emph{fCR/bCR} (\emph{fUP/bUP}) together with round-trip laws, or \emph{explicitly}, by specifying a set of constraints, providing a grammar (language membership as consistency check), implementing a consistency checker in some suitable (programming) language, or via a combination of these (partial) specifications, e.g., grammar-based for structural parts of the model and constraint-based for attribute values.
+This has to be specified in some manner, either \emph{implicitly}, e.g., by providing implementations of \emph{fCR/bCR} (\emph{fUP/bUP}) combined with round-trip laws, or \emph{explicitly}, by specifying a set of constraints, providing a grammar (language membership as consistency check), implementing a consistency checker in some suitable (programming) language, or via a combination of these (partial) specifications, e.g., grammar-based for structural parts of the model and constraint-based for attribute values.
 
 A final, core feature of a bx tool is synchronization and we have observed that this can be either controlled \emph{implicitly}, e.g., based on the underlying consistency relation and some governing laws the bx tool automatically derives \emph{fCR/bCR} or \emph{fUP/bUP} as required, or \emph{explicitly}, e.g., the bx tool requires implementations of \emph{fCR/bCR} or \emph{fUP/bUP}, and perhaps performs some checking for compatibility of these implementations.
 Some bx tools allow a mixture of implicit and explicit, e.g., requiring an implementation of \emph{fCR} (\emph{fUP}) and automatically deriving a compatible \emph{bCR} (\emph{bUP}), or vice-versa.
 Although most bx tools are currently limited to directed synchronization, a few tools already attempt to address the more general task of \emph{concurrent} synchronization.
-A bx tool can support \emph{on-demand} synchronization, allowing a user (or arbitrary component) to decide exactly when to synchronize.
-If this is not supported, then the tool enforces \emph{live} synchronization deciding itself when ``atomic'' deltas must be propagated.
-Synchronization with a bx tool is \emph{interactive} if user interaction is allowed at runtime, i.e., during the synchronization process.
+A bx tool can be designed for \emph{on-demand} synchronization, allowing a user (or arbitrary component) to decide exactly when to synchronize, or for \emph{live} synchronization deciding itself when ``atomic'' deltas must be propagated.
+Synchronization with a bx tool is \emph{interactive} (\emph{automatic}) if the tool is (not) specially designed to incorporate user interaction at runtime.
