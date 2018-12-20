@@ -3,15 +3,14 @@
 
 \NOTE{\emph{Solution expert:} Thomas, \emph{Interviewer:} Tony}
 
-% Intro
+BXtend~\cite{MODELSWARD2018-Buchmann}, an acronym for \emph{Bidirectional Xtend}, is a pragmatic approach to programming bx, developed to address problems encountered in the practical application of existing bx languages and tools~\cite{DBLP:conf/icsoft/BuchmannG16}.
 
-BXtend~\cite{MODELSWARD2018-Buchmann}, an acronym for \emph{Bidirectional Xtend}, is a pragmatic approach to programming bidirectional transformations which has been developed in the light of problems having been encountered in the application of existing bx languages and tools~\cite{DBLP:conf/icsoft/BuchmannG16}. BXtend provides an \emph{internal DSL} which is based on Xtend, a multi-paradigm language supporting object-oriented, procedural and functional programming which provides for a seamless integration with the Eclipse IDE and the mainstream programming language Java. For realizing a bidirectional transformation, the transformation developer defines a \emph{correspondence model} which resembles the correspondence graph of a \emph{triple graph grammar} \cite{Schurr1994}. In contrast to triple graph grammars, however, transformation rules are defined in a procedural rather than in a declarative way. Transformation rules are attached to correspondences. Both transformation directions are programmed separately; the transformation developer is responsible for programming both directions in a mutually consistent way. Altogether, BXtend provides a light-weight framework in which developers can structure their bx solutions in a straightforward manner.
-%While bx languages might be theoretically more productive due to their formal guarantees (e.g., correctness), or because one only needs to specify one synchronization direction and gets the other for free, any possible gain in productivity might be substantially outweighed in practice by other, more mundane concerns: bx language are often \emph{exotic} in the sense that they are unfamiliar and thus difficult to learn for the average programmer; bx languages are also often (severely) limited in expressiveness -- while chosen simple examples might work beautifully with the language, realistic problems require a considerable amount of pre- and postprocessing effectively nullifying any other advantages of the language.
-%
-%BXtend focuses on supporting bx \emph{best practices}, i.e., effective techniques with which synchronization problems can be solved in a standard programming language.
-%Xtend\footnote{\url{www.eclipse.org/xtend}} is used as a modern language as it provides a concise syntax, modern features, and a seamless integration with the Eclipse IDE and the mainstream programming language Java.
-%While BXtend does not give any formal guarantees or support automated inference of parts of required programs, it provides a framework in which developers can structure their bx solutions in a straightforward manner.
-%Typical auxiliary tasks are supported via a growing library of helper functions and numerous conventions can be followed to simplify the conceptual task of implementing a consistent pair of synchronizers.
+BXtend provides an \emph{internal DSL} based on Xtend, a multi-paradigm language supporting object-oriented, procedural and functional programming, as well as a seamless integration with the Eclipse IDE and the mainstream programming language Java.
+
+To realize a bidirectional transformation, the transformation developer defines a \emph{correspondence model}, resembling the correspondence graph of a \emph{triple graph grammar} \cite{Schurr1994}.
+In contrast to triple graph grammars, however, transformation rules are defined in a procedural rather than declarative way and are attached to correspondences.
+Both transformation directions are programmed separately; the transformation developer is responsible for programming both directions in a mutually consistent way.
+Altogether, BXtend provides a light-weight framework in which developers can structure their bx solutions in a straightforward manner.
 
 \lstdefinelanguage{bxtend}{
 	morekeywords = {class, override, extends, new, null, as, typeof, val, if, else, def},
@@ -84,25 +83,32 @@ Each rule defines flexibly, e.g., based on a certain type, if it is applicable a
 Similarly, each rule checks first by exploiting the supplied diag if existing structure in the dependent model can be reused, suitably changed, or must be deleted and created as required.
 To perform \emph{fCR/bCR} on the top-most level, an orchestration component is implemented to decide the order in which individual rules are applied and combined to realize \emph{fCR/bCR}.
 This global component can also perform a final clean up if required.
-The delta implicitly induced as output (see figure~\ref{fig:initialDiagBased}) is mixed in the sense that each rule can already perform deletion and creation as required.
+The delta implicitly induced as output (see figure~\ref{fig:initialDiagBased}) is mixed in the sense that each rule can freely perform deletion and creation as required in no fixed order.
 
 BXtend provides no formal guarantees: both synchronization directions are implemented separately and are free to contradict each other.
 This can be viewed positively: the bx programmer is free to do whatever is required to solve the current task.
 %
 There is no explicitly specified notion of consistency, i.e., this is \emph{implicitly} given by the implemented pair of \emph{fCR/bCR}.
 %
-Synchronization is performed \emph{on-demand}, and is completely explicit, i.e., the bx developer implements both \emph{fCR} and \emph{bCR} explicitly in Xtend.
+The transformation developer has full \emph{explicit} control over consistency restoration, i.e., implements both \emph{fCR} and \emph{bCR} explicitly in Xtend.
+%
+BXtend is currently designed to support \emph{directed} synchronization, performed \emph{on-demand}, in an \emph{automatic} manner.
 
 \subsubsection{Benchmark solution with BXtend}
 
-To provide an impression of the benchmark solution with BXtend, figure~\ref{fig:bxtendSoln} depicts two classes:  \texttt{Family\-2\-Person\-Transforma\-tion} representing the orchestrating component, and \texttt{Mother\-Daughter\-2\-Female} representing a BXtend rule.
-For the Families-to-Persons benchmark, the same ordering of rules can be used in both directions (see label~1).
-This order is specified in \texttt{addRules()}; three rules are created and added following the composition hierarchy of the metamodels (first containers then containees).
+To provide an impression of the benchmark solution with BXtend, listing~\ref{lst:bxtendSoln} depicts two classes:  \texttt{Family\-2\-Person\-Transforma\-tion} representing the orchestrating component, and \texttt{Mother\-Daughter\-2\-Female} representing a BXtend rule.
+For the Families-to-Persons benchmark, the same ordering of rules can be used in both directions (lines 5--13).
+This order is specified in \texttt{addRules()}; three rules are created and added following the composition hierarchy of the metamodels (containers first).
 While the bx developer is free to program arbitrarily complex rule orchestration, current experience indicates that such a fixed order along the composition hierarchy is sufficient in most cases.
 
 
-The specific rule \texttt{Mother\-Daughter\-2\-Female} depicted in figure~\ref{fig:bxtendSoln} checks for and handles, as its name suggests, inconsistencies between mothers/daughters in the source model and females in the target model.
-The two methods in this class \texttt{source\-To\-Target} and \texttt{target\-To\-Source} indicate that both synchronization directions (here \emph{fCR} and \emph{bCR}) are explicitly specified.
+The specific rule \texttt{Mother\-Daughter\-2\-Female} checks for and handles, as its name suggests, inconsistencies between mothers/daughters in the source model and females in the target model.
+The two methods in this class \texttt{source\-To\-Target} and \texttt{target\-To\-Source} indicate that both synchronization directions (\emph{fCR} and \emph{bCR}) are explicitly specified.
 The first step in \texttt{source\-To\-Target} is to filter for all families, and to accumulate all ``female'' family members, i.e., a mother if present, and all daughters.
-In the code fragment marked with label 2, the provided diag is accessed and used to retrieve the person connected to each female family member.
+On line 32--33, the provided diag is accessed and used to retrieve the person connected to each female family member.
 With a helper method \texttt{get\-Or\-Create\-Person\-Element}, this person is either created if necessary, or updated as required.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

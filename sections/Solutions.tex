@@ -1,13 +1,12 @@
 \section{Solutions}
 \label{sec:Solutions}
 
-\NOTE{\emph{Length:} 15 p., \emph{Responsible:} Bernhard for introductory paragraph, solution experts for the subsections}
+This section presents solutions to the Families-to-Per\-sons benchmark submitted to the Transformation Tool Contest 2017 \cite{Anjorin2017a}.
+The solutions have been selected to cover a wide spectrum of bx approaches, implemented in different tools and languages.
+Some of them (BiGUL, BXtend, and eMoflon) were provided as reference solutions to the TTC 2017 participants. The solutions in EVL+STrace, NMF Synchronizations, and SDMLib were submitted to TTC 2017 and were published in the TTC proceedings \cite{Hinkel2017,Samimi-Dehkordi2017,Zundorf2017}.
+The JTL solution was prepared after the TTC. 
 
-\NOTE{One subsection (2 p.) for each tool. Presentation of (fragments of) the solution. Underyling concepts and paradigms are more important than technical details of the solutions. Code fragments serve as illustration and must be explained thoroughly.}
-
-This section presents solutions to the Families-to-Persons benchmark submitted to the Transformation Tool Contest 2017 \cite{Anjorin2017a}. The solutions have been selected to cover a wide spectrum of bx approaches, implemented in different tools and languages. Some of them (in BiGUL, BXtend, and eMoflon) were provided as reference solutions to the TTC 2017 participants. The solutions in EVL+STrace, NMF Synchronizations, and SDMLib were submitted to TTC 2017 and were published in the TTC proceedings \cite{Samimi-Dehkordi2017,Hinkel2017,Zundorf2017}. The JTL solution was prepared after the TTC and has not been published to date. 
-
-A summary of a classification of these seven tools based on our feature model for bx tools is provided in table~\ref{tab:features-all-tools}.
+A summary of a classification of these seven solutions based on our feature model is provided in table~\ref{tab:features-all-tools}.
 In the following subsections, one for each tool/solution in alphabetical order, we shall refer to this table and explain each tool's classification in detail.
 
 \renewcommand{\arraystretch}{1.2}
@@ -15,16 +14,16 @@ In the following subsections, one for each tool/solution in alphabetical order, 
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \begin{table*}[!tbp]
-\begin{tabular}{M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}}
+\begin{tabular}{M{1.55cm}|M{1.7cm}|M{1.7cm}|M{1.9cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.65cm}}
 \textit{} & \textbf{BiGUL} & \textbf{BXtend} & \textbf{eMoflon} & \textbf{EVL + STrace} & \textbf{JTL} & \textbf{NMF Sync.} & \textbf{SDMLib} \\ \hline
-\textit{Style} & restoration-based (hAln) & restoration-based & propagation-based & restoration-based & restoration-based & propagation-based &  restoration-based \\ \hline
-\textit{Scenario} & initial-state-based & initial-diag-based & delta-corr-based & initial-diag-based & initial-diag-based & delta-state-based &  initial-diag-based \\ \hline
-\textit{Guarantees} & round-trip laws & none & correctness, stability & stability & correctness, hippocraticness & correctness, hippocraticness &  none \\ \hline
+\textit{Style} & restoration-based & restoration-based & propagation-based & restoration-based & restoration-based & propagation-based &  restoration-based \\ \hline
+\textit{Scenario} & initial-state-based (with~hAln) & initial-diag-based & s-delta-corr-based & initial-diag-based & initial-diag-based & s-delta-state-based &  initial-diag-based \\ \hline
+\textit{Guarantees} & round-trip laws & none & correctness, stability, completeness & stability & correctness, hippocraticness & correctness, hippocraticness &  none \\ \hline
 \textit{Consistency} & implicit & implicit & explicit (grammar-based) & explicit (constraint-based) & explicit (constraint-based) & explicit (functional) &  implicit \\ \hline 
 \textit{Control} & explicit and implicit & explicit & implicit & explicit & implicit & explicit & explicit \\ \hline
 \textit{Direction} & directed & directed & directed & concurrent & directed & concurrent or directed & directed \\ \hline
 \textit{Time} & on-demand & on-demand & on-demand & on-demand & on-demand & live or on-demand & on-demand \\ \hline
-\textit{Automation} & automatic & automatic & automatic or interactive & interactive & automatic & automatic & automatic \\
+\textit{Automation} & automatic & automatic & automatic & interactive & automatic & automatic & automatic \\
 \end{tabular}
 \caption{Summary of classification of all tools and solutions}
 \label{tab:features-all-tools}
