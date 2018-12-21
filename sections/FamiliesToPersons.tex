@@ -72,9 +72,11 @@ Second, even if the tool has been designed to guarantee some law, its implementa
 
 From the bx  laws introduced in section~\ref{sec:Consistency}, the benchmark takes \emph{correctness} into account by the design of the test cases: All test cases check for consistency by requiring a dependent model which is consistent with the master model. Similarly, \emph{termination} and \emph{completeness} are considered implicitly as a violation of these properties would result in failing test cases.
 
-Stability and hippocraticness are addressed by performing null updates and updates that do not affect consistency, respectively, to the master model.
-
-Several variants of \emph{round-trip laws} have been proposed in the literature. In the symmetric bx case considered in the Families to Persons benchmark, two round-trip laws are required to hold: If the backward (forward) transformation is executed immediately after the forward (backward) transformation, the source model (target model) must not be changed. These laws are not tested explicitly because they are implied in the case of correct and stable synchronizers.
+Hippocraticness is addressed by performing updates that do not affect consistency, respectively, to the master model.
+%
+Several variants of \emph{round-trip laws} have been proposed in the literature.
+In the symmetric bx case considered in the Families to Persons benchmark, two round-trip laws are required to hold: If the backward (forward) transformation is executed immediately after the forward (backward) transformation, the source model (target model) must not be changed.
+These laws are not tested explicitly because they are implied in the case of correct and hippocratic synchronizers.
 Additional tests for other round-trip laws such as \emph{putput} (well-behaved composition of forward (backward) synchronization) can be added in the future.
 
 As mentioned earlier, the consistency relation between families models and persons models is non-de\-ter\-min\-istic in both directions.
