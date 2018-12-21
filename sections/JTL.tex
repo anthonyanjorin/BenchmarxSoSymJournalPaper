@@ -3,7 +3,6 @@
 
 \NOTE{\emph{Solution expert:} Romina, \emph{Interviewer:} Tony}
 
-
 JTL (Janus Transformation Language)~\cite{CDEP10} is a constraint-based model transformation language specifically tailored to support bidirectionality and non-determinism. The implementation relies on the Answer Set Programming (ASP)~\cite{GL88}, which is a form of declarative programming oriented towards difficult (primarily NP-hard) search problems and based on the stable model (answer set) semantics of logic programming. 
 JTL adopts a QVT-R~\cite{QVT-1.3} like syntax and allows a declarative specification of relationships between MOF models. The mechanism of transformation is rule-based; the language supports object pattern matching, and automatically generates trace links instances (i.e., traceability models) to record what occurred during a transformation execution~\cite{EPT18}. %A transformation between candidate models is specified as a set of \emph{relation}s that must hold for the transformation to be successful: in particular, it is defined by two \emph{domain}s and includes a pair of \emph{when} and \emph{where} predicates that specify the pre- and post- conditions that must be satisfied by the elements of the candidate models.  
 %A transformation can be invoked for \emph{enforce}ment or as \emph{checkonly}. When invoked for enforcement, it is executed in a particular direction by selecting one of the candidate models as the target. A transformation can also be invoked in bidirectional mode by marking as enforcement both domain directions. 
@@ -11,7 +10,7 @@ JTL adopts a QVT-R~\cite{QVT-1.3} like syntax and allows a declarative specifica
 The semantics is given in terms of ASP: an ASP transformation consists of a set of rules, which describe correspondences among element types of the source and target metamodels, and a set of constraints, which specify restrictions on the given correspondences.  Whereas, the transformation engine, also written in the ASP, is able to interpret the correspondences among elements and execute the transformation. Then, the ASP solver finds and generates, by a deductive process and in a single execution, all the possible models which are consistent with the transformation rules. 
  
 
-The JTL framework~\cite{EPT18}
+The JTL framework~\cite{ErPT18}
 %~\footnote{JTL Tool: https://jtl.di.univaq.it} 
 has been implemented within the Eclipse framework and mainly exploits Eclipse EMF. Moreover, it makes use of the DLV
 %~\footnote{DLV-complex: https://www.mat.unical.it/dlv-complex/} 
@@ -25,7 +24,7 @@ The consistency can be restored both in forward and target directions by running
 %
 With respect to horizontal and vertical inputs, JTL realizes a \emph{state-state-based} architecture.
 
-JTL requires to specify a consistency relation in \emph{explicit} way by defining bidirectional relations/rules and constraints. The same consistency relations are then used to perform a \emph{controlled} synchronization. It is a non-deterministic approach in which programmers need only to specify the consistency relation, allowing the engine to resolve the specification non-deterministically~\cite{monads}. This corresponds to generating all valid choices and letting the designer to identify the right one. In this respect, the bx notation has been generalized by adopting multivalued functions~\cite{EPR15} to capture the multiplicity of the solution space. In~\cite{EPR15}, also the definition of correctness and hippocraticness have been postulates according to the multiplicity of the solution space. In particular, JTL guarantees
+JTL requires to specify a consistency relation in \emph{explicit} way by defining bidirectional relations/rules and constraints. The same consistency relations are then used to perform a \emph{controlled} synchronization. It is a non-deterministic approach in which programmers need only to specify the consistency relation, allowing the engine to resolve the specification non-deterministically~\cite{AbouSaleh:2015de}. This corresponds to generating all valid choices and letting the designer to identify the right one. In this respect, the bx notation has been generalized by adopting multivalued functions~\cite{EPR15} to capture the multiplicity of the solution space. In~\cite{EPR15}, also the definition of correctness and hippocraticness have been postulates according to the multiplicity of the solution space. In particular, JTL guarantees
 \emph{correctness}: all the generated target solutions are consistent to the source model. Also, it guarantees \emph{hippocraticness}: the transformation not modify models if they are already in the specified consistency relation. 
 
 JTL performs a \emph{directed} synchronization in both forward or backward direction and the approach is not incremental so that the direct synchronization creases the updated model from \emph{scratch}. Moreover, the synchronization is run in \emph{automatic} way without any user interaction and it is performed \emph{on-demand}.  
