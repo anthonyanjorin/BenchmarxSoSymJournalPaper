@@ -1,0 +1,10 @@
+
+*.log
+*.out
+*.blg
+*.bbl
+*.gz
+*.aux
+main.pdf
+diagrams/solutions/jtl_fw-eps-converted-to.pdf
+diagrams/solutions/jtl_bw-eps-converted-to.pdf
