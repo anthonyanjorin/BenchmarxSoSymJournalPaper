@@ -1,117 +1,140 @@
-%\clearpage
-
 \subsection{NMF Synchronizations}
 \label{sec:NMF}
 
-\NOTE{\emph{Solution expert:} Georg, \emph{Interviewer:} Bernhard}
+\emph{NMF Synchronizations}~\cite{SoSyM2017-Hinkel} is a bx language realized as an internal domain-specific language with C\# as a host language.
+To program a bx with NMF Synchronizations, a transformation developer specifies a set of consistency relations between the elements of the source and target models.
+Starting with a top-most relation, representing the consistency of the entire models, each relation can ``invoke'' other relations, which must hold for this relation to be satisfied.
+Leaf relations can be, for example, identity of primitive types such as strings.
 
-\NOTE{TODO:  Integrate here as an overview (taken from previous Section 5)}
+This coupling of relations is specified with so called \emph{synchronization blocks},  one of which is depicted schematically in figure~\ref{fig:SynchronizationBlock}.
+The relations are represented by horizontal arrows: $\varPhi_{A-C}$ between source elements of type $A$ and target elements of type $C$, and $\varPhi_{B-D}$ between source elements of type $B$ and target elements of type $D$.
+The \emph{base relation}  $\varPhi_{A-C}$ holds only if the \emph{target relation} $\varPhi_{B-D}$ holds for certain pairs of $(B,D)$ elements, determined by the \emph{intra-model lenses} $f$ and $g$ (depicted as vertical arrows in figure~\ref{fig:SynchronizationBlock}).
 
-%\emph{NMF Synchronizations} \cite{SoSyM2017-Hinkel} is a bx language which has been realized as internal domain-specific language (DSL) in C\#. To specify a synchronization between a source and a target model, the transformation developer has to define a symmetric consistency relation between these models in terms of coupled consistency relations between their elements. The consistency relation is specified declaratively with the help of functions being free of side-effects. In addition, the transformation developer has to define consistency restoration with the help of procedures updating the model states in cases where there is no default restoration available. A transformation defined in NMF Synchronizations may be executed in different modes and direction. The transformation engine performs live synchronization; therefore, it requires o-deltas as input. A correspondence model is constructed at runtime, and may be accessed in the transformation definition; however, it is not stored permanently.
+A target relation may occur as base relation in another synchronization block, resulting in nested synchronization blocks.
+Furthermore, a relation may play the role of a base relation in multiple synchronization blocks, meaning that multiple consistency relations are required for making a pair of elements in the base relation consistent.
 
-
-
-\emph{NMF Synchronizations} \cite{SoSyM2017-Hinkel} is a bx language which has been realized as internal domain-specific language (DSL) in C\# and is formally based on category theory. Consistency between two models is defined in terms of \emph{consistency relations} between their elements. In the case of mutual consistency, an element-level consistency relation is an \emph{isomorphism} between typed source and target elements, i.e., a bijective mapping between elements of some type $A$ in the source model and elements of some type $C$ in the target model satisfying specified consistency constraints. Consistency relations are coupled: For an $A$-element to be consistent with a $C$-element, an isomorphism between dependent source and target elements (of types $B$ and $D$) may be required. In addition to defining element-level consistency relations, consistency restoration has to be specified, provided that no default restoration is available.
-
-\begin{figure}[tb!]
+\begin{figure}[b!]
 	\centering
 	\includegraphics[width=0.35\columnwidth]{diagrams/solutions/NMFSynchronizationBlock}
 	\caption{Schematic view of a synchronization block}
 	\label{fig:SynchronizationBlock}
 \end{figure}
 
-The overall synchronization is specified in terms of \emph{synchronization blocks}, which are illustrated schematically in figure~\ref{fig:SynchronizationBlock}. The isomorphisms mentioned above are represented by horizontal arrows. The isomorphism $\varPhi_{A-C}$ on the top is called \emph{base isomorphism}, while $\varPhi_{B-D}$ at the bottom plays the role of the \emph{target isomorphism}. A target isomorphism may occur as base isomorphism in another synchronization block, resulting in nested synchronization blocks. Furthermore, an isomorphism may play the role of a base isomorphism in multiple synchronization blocks, meaning that multiple consistency relations are required for making a pair of elements in the base isomorphism consistent.
+The intra-model lenses $f$ and $g$ are each composed of a \emph{get} and a \emph{put} function:  $f.get: A \rightarrow B, g.get: C \rightarrow D$, and $f.put: A \times B \rightarrow A, g.put:  C \times D \rightarrow D$.
 
-The vertical arrows labeled with $f$ and $g$ denote \emph{intra-model lenses}. An intra-model lens is composed of a pair of functions called \emph{get} and \emph{put}. \emph{get} and \emph{put} are queries and updates on models --- in the simplest case getters and setters of element properties --- which have to satisfy round-trip laws: (1) Putting the result returned from a \emph{get} does not change the state of the model; (2) Getting a value after a \emph{put} returns the argument passed to the \emph{put} operation.
+As described above, the \emph{get} function is a simple model query indicating how the base and target relations are coupled, i.e., for which elements the target relation must hold with respect to a given pair of elements in the base relation.
+In the simplest cases, this can be a getter navigating to the properties or contained children of an object.
 
-Depending on the results returned from \emph{get} operations, synchronization blocks may be classified into single-and multi-valued blocks. In the case of a \emph{single-valued block}, the \emph{get} functions return single values which have to be consistent (e.g., the values are required to be equal). For a \emph{multi-valued block}, the \emph{get} functions return collections. In this case, an isomorphism between these collections must be established.
-
-The consistency relation between two models is defined by the synchronization blocks, using only the \emph{get} operations. For consistency restoration, the \emph{put} operations, are required, as well. For example, in a forward transformation the \emph{get} operations on the source model are needed to retrieve the master model elements with which consistency has to be established in the dependent model. For updating the target model, the corresponding \emph{put} operations are required. In simple situations, a \emph{put} operation may be derived from the \emph{get} operation. Otherwise, the transformation developer has to provide an explicit specification of \emph{put} satisfying the round-trip laws of intra-model lenses. 
-
-Altogether, the transformation developer defines the consistency relation in a functional style with the help of synchronization blocks and their \emph{get} operations. This specification is complemented with the provision of \emph{put} operations, which are written in a procedural style. A single specification suffices to define mutual consistency; in this regard, NMF Synchronizations is a bidirectional language. This specification is complemented with unidirectional procedural parts defining how consistency is restored in forward and backward direction, respectively.
+The \emph{put} functions implement updates, i.e., a way of propagating changes of elements in the target relation back to elements in the base relation.
+As synchronization blocks pair such updates, they can be viewed as an implementation of update propagation (\emph{fUP} and \emph{bUP}).
 
 \subsubsection{Classification}
 \label{sec:ClassificationNMF}
 
-NMF Synchronizations propagates updates from the master to the dependent model (\emph{propagation-based} synchronization). A trace model is constructed during the execution of a synchronization, but it is not persisted. Altogether, NMF Synchronizations realizes the \emph{delta-state-based} architecture displayed on the right-hand side of figure~\ref{fig:deltaStateBased}. For update propagation, o-deltas are required as vertical inputs.
+As synchronization blocks can be viewed as pairs of updates (and queries), the style of specification is probably closest to \emph{propagataion-based}.
+%
+The addressed application scenario is \emph{o-delta-corr-based}: the NMF solution accepts o-deltas and a corr as vertical and horizontal input, respectively.
+%
+Hinkel et al.~\cite{SoSyM2017-Hinkel} provide a proof for \emph{correctness} and \emph{hippocraticness} under the assumption that the transformation developer ensures that \emph{get-put} and \emph{put-get} laws are actually satisfied for all intra-model lenses.
+%
+The consistency relation between two models is specified \emph{explicitly} by a set of coupled synchronization blocks, using only the \emph{get} operations.
+This combination of relations coupled by queries is similar to a JTL program and can be best viewed as a \emph{constraint-based} specification of consistency. 
 
-In \cite{SoSyM2017-Hinkel}, it is proved that NMF-based synchronizations satisfy \emph{correctness} and \emph{hippocraticness}. The proof assumes intra-model lenses in synchronization blocks. The transformation developer has to ensure that \emph{get-put} and \emph{put-get} laws are actually satisfied.
+Consistency restoration is implemented by providing corresponding \emph{put} operations for each synchronization block.
+An \emph{explicit} specification of \emph{put} satisfying the round-trip laws of intra-model lenses must be provided by the transformation developer in the general case.
+In simple situations, however, a \emph{put} operation may be automatically derived from the \emph{get} operation.
+The transformation developer can also reuse \emph{put} implementations from a library of intra-model lenses.
+Furthermore, many details such as the order in which synchronization blocks are inspected and used to propagate parts of an update are fully automated by the framework and in this sense \emph{implicit}.
 
-The \emph{consistency relation} is defined \emph{explicitly} by synchronization blocks in a functional style. If \emph{put} operations may be derived from \emph{get} operations, consistency restoration is defined \emph{implicitly}; otherwise, an \emph{explicit} specification of \emph{put} operations is required. 
-
-Synchronization is performed \emph{automatically}, without user interactions. A transformation definition may be executed in different modes, including \emph{directed} and \emph{concurrent}, as well as \emph{live} and \emph{on-demand} synchronization. For the Families to Persons benchmark, synchronization is executed in live mode, either in forward or backward direction. 
+While NMF Synchronization can be used to support many other cases~\cite{SoSyM2017-Hinkel}, its sweet spot is for \emph{directed}, \emph{live} and \emph{automatic} synchronization.
+This is also how the solution to the Families-to-Persons case is implemented. 
 
 \subsubsection{Benchmark solution with NMF}
 \label{sec:solutionNMF}
 
-%NMF Synchronization is an \emph{internal DSL} based on the host language C\#. The following description is based on the solution in NMF Synchronizations submitted to TTC 2017 \cite{Hinkel2017}. Listing~\ref{lst:nmf} shows fragments of this solution, to be explained below. Since NMF Synchronization is a part of \emph{NMF} \cite{Hinkel2016}, the .NET Modeling Framework, the solution to the Families to Persons benchmark runs in a separate process which communicates with the EMF-based Benchmarx process via data streams. Below, we will not explain how this coupling is implemented; rather, we will focus on the actual core solution.
-
-The following description is based on the solution in NMF Synchronizations submitted to TTC 2017 \cite{Hinkel2017}. Listing~\ref{lst:nmf} shows fragments of this solution, to be explained below.
+\begin{figure}[b!]
+  \centering
+  \includegraphics[width=\columnwidth]{diagrams/solutions/NMFSynchronizationBlockBenchmark}
+  \caption{Synchronization blocks for benchmark solution}
+  \label{fig:NMFSynchronizationBlockBenchmark}
+\end{figure}
 
 \lstdefinelanguage{cs}{
-	morekeywords = {using,namespace,class,override,void,null,public,protected,private,static,out,bool,string,return,var,new,true,false,if,else,as},
-	morecomment=[l]{--},
-	morecomment=[s]{/*}{*/}
+  morekeywords = {using,namespace,class,override,void,null,public,protected,private,static,out,bool,string,return,var,new,true,false,if,else,as},
+  morecomment=[l]{--},
+  morecomment=[s]{/*}{*/}
 }
 
-
-\begin{lstlisting}[label={lst:nmf}, float=hbt!, language=cs, caption={Solution in NMF Synchronizations}]
-namespace TTC2017.FamiliesToPersons.NMF{
- public class FamiliesToPersonsSynchronization 
-  : ReflectiveSynchronization{
-  public class FamilyRegisterToPersonRegister 
-   : SynchronizationRule<
-       FamilyRegister, PersonRegister>{
-   public override void DeclareSynchronization(){
-    SynchronizeMany(SyncRule<MemberToMember>(),
-     fam=>new FamilyMemberCollection(fam),
-     persons=>persons.Persons);
-   }
-  }
-
-  public class MemberToMember 
-   : SynchronizationRule<IFamilyMember, IPerson>{
-   public override void DeclareSynchronization(){
-    Synchronize(m=>m.GetFullName(), p=>p.Name);
-   }
-  }
-        
-  public class MemberToFemale 
-   : SynchronizationRule<IFamilyMember, IFemale>{
-   public override void DeclareSynchronization(){
-    MarkInstantiatingFor(
-     SyncRule<MemberToMember>(), 
-     leftPredicate: m=>m.MotherInverse != null ||
-     m.DaughtersInverse != null);
-   }
-   ...
-  }
-        
-  private class FamilyMemberCollection 
-   : CustomCollection<IFamilyMember> {
-   ...
-   public override void Add(IFamilyMember item){
-    var temp 
-     = item.GetExtension<TemporaryStereotype>();
-    item.AddToFamily(
-     Register, temp.IsMale, temp.LastName);
-    item.Extensions.Remove(temp);
-   }
-   ...
-  }
-  ...
+\begin{lstlisting}[label={lst:nmf}, float=b!, language=cs, caption={Solution in NMF Synchronizations}]
+...
+public class Reg2Reg:SynchronizationRule<
+ FamilyRegister, PersonRegister>{
+ public override void DeclareSynchronization(){
+  SynchronizeMany(SyncRule<Mem2Mem>(),
+   fam=>new FamilyMemberCollection(fam),
+   persons=>persons.Persons);
  }
 }
+public class Mem2Mem:SynchronizationRule<
+ IFamilyMember, IPerson>{
+ public override void DeclareSynchronization(){
+  Synchronize(m=>m.GetFullName(), p=>p.Name);
+ }
+}
+...
+
+private class FamilyMemberCollection 
+ :CustomCollection<IFamilyMember>{
+ ...
+ public override void Add(IFamilyMember item){
+  ...
+ }
+ ...
+}
+
+[LensPut(typeof(Helpers),"SetFullName")]
+[ObservableProxy(typeof(Helpers),"GetFNameInc")]
+public static string
+ GetFullName(this IFamilyMember  member){
+  return fullName.Evaluate(member);
+}
+public static INotifyValue<string>
+ GetFNameInc(this IFamilyMember member){
+  return fullName.Observe(member);
+}
+public static void SetFullName(
+ this IFamilyMember member,
+ string newName){
+ ...
+}
+private static ObservingFunc<
+ IFamilyMember,string> fullName =
+  new ObservingFunc<IFamilyMember,string>
+   (m=>m.Name == null ? null:
+    ((IFamily)m.Parent).Name + ", " + m.Name);
+...
 \end{lstlisting} 
 
-In NMF Synchronizations, a transformation is defined by extending classes from a library. In listing~\ref{lst:nmf}, the overall transformation is defined by a single top-level class (starting at line~2) containing further nested classes.
+The following description of the NMF Synchronizations solution to the Families-to-Persons benchmark is based on the corresponding TTC 2017 paper~\cite{Hinkel2017}.
+Two synchronization blocks are required for the transformation and are depicted in figure~\ref{fig:NMFSynchronizationBlockBenchmark}:  (i) a block with the top-level relation \emph{Reg2Reg} as base, and \emph{Mem2Mem} as target, and (ii) a block with \emph{Mem2Mem} as base and the identity relation on strings as target.
 
-A \emph{synchronization rule} includes all synchronization blocks sharing the same base isomorphism. In the Families to Persons benchmark, each synchronization rule contains just one synchronization block. A synchronization rule is defined by subclassing the generic class \code{SynchronizationRule} (lines~3, 11, and 17). The actual synchronization blocks are defined by overriding the method \code{Declare\-Synchron\-ization} (lines~4, 12, and 18). 
+Listing~\ref{lst:nmf} depicts fragments of the solution in C\#.
+The two relations are implemented as \emph{synchronization rules} subclassing the generic class \code{SynchronizationRule} (lines~2--16).
+The actual synchronization blocks are defined by overriding the method \code{Declare\-Synchron\-ization} (lines~4, 12, and 18).
+This is basically just a textual representation of figure~\ref{fig:NMFSynchronizationBlockBenchmark}.
 
-Altogether, the class starting at line~3 defines a multi-valued synchronization block with a base isomorphism between the roots of the families model and the persons model (of type \code{FamilyRegister} and \code{Person\-Register}, respectively) and a target isomorphism between family members and persons. The call to the method \code{SynchronizeMany} specifies the nested synchronization rule \code{MemberToMember}, as well as the \emph{get} functions for retrieving the collections of family members and persons. 
+Concerning the first synchronization block \code{Reg2Reg}, the target intra-model lens \code{.Persons} is simple enough (the \emph{get} function merely collects the elements obtained via a multi-valued reference) so updates (the \emph{put} function) can be inferred automatically.  
+In contrast, a \emph{custom collection} \code{FamilyMember\-Collection} is required for the source intra-model lens, implemented on lines~18--25.
+This helper class encapsulates the logic for determining the elements of the collection (traversing references to families and members sequentially), inserting an already created family member to the collection (line~21) at the appropriate location in the families model, depending on the configuration parameters \code{Prefer\-Existing\-To\-New\-Family} and \code{Prefer\-Parent\-To\-Child}. 
 
-\code{persons.Persons} is an \emph{invertible expression}: Since the \emph{get} function merely collects the elements obtained via a multi-valued reference, the updates may be inferred automatically. In contrast, a \emph{custom collection} is required at the opposite end, which is implemented in the helper class \code{FamilyMember\-Collection} (line~25). The implementation of the helper class has to define the path for getting the elements of the collection (traversing references to families and members sequentially), which is not shown here, and has to provide an update method for adding a family member to the collection (line~27). This \code{Add} method is required in a backward transformation to insert an already created family member at the appropriate location into the families model. To this end, a custom method \code{AddToFamily} is called (line~29) which performs this insertion depending on the configuration parameters \code{PreferExistingToNew\-Family} and \code{PreferParentToChild}. 
+Concerning the second synchronization block \code{Mem\-2\-Mem}, the situation is similar:  the target intra-model lens \code{.Name} can be handled automatically, while the source intra-model lens \code{.Get\-Full\-Name()} has to be implemented manually on lines~27--46.
+On line~27, an  annotation is used to provide \code{SetFullName} as the \emph{put} implementation for \code{GetFullName}.
+The custom method \code{Set\-Full\-Name} sets the full name of a family member, potentially moving the member to a different family.
 
-\code{MemberToMember} defines a single-valued synchronization block which demands that the full name of the family member be synchronized with the name of the person (i.e., the respective strings must be equal). The method \code{GetFullName} composes the full name from the first name and the last name in a straightforward way. In addition to this \emph{get} function, we need to supply the corresponding \emph{put} to complete the definition of the intra-model lense. To this end, a custom method \code{Set\-Full\-Name} is defined which sets the full name, potentially moving the member to a different family.
+Finally, the annotation on line~28 and the implementation of the helper method \code{fullName} on lines~42--46 indicate that the NMF Synchronization framework provides hooks into infrastructure for an \emph{incrementalization} of the intra-model lens.
+The reader is referred to Hinkel et al.~\cite{SoSyM2017-Hinkel} for further details.
 
-Finally, we need to take care of the fact that the class \code{Person} is abstract and thus cannot be instantiated in forward direction. This is achieved by two synchronization rules, one of which is shown in line~17. The rule \code{MemberToFemale} refines the rule \code{MemberToMember} by defining the type to be instantiated. Please note that the base isomorphism of the synchronization is refined to \code{IFemale} on the persons model. Furthermore, the method call in line~19 defines the predicate which has to be satisfied in order to apply this refinement (the member must be a mother or a daughter).  
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
