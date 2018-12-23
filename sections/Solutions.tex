@@ -14,16 +14,16 @@ In the following subsections, one for each tool/solution in alphabetical order, 
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \begin{table*}[!tbp]
-\begin{tabular}{M{1.55cm}|M{1.7cm}|M{1.7cm}|M{1.9cm}|M{1.7cm}|M{1.7cm}|M{1.7cm}|M{1.65cm}}
-\textit{} & \textbf{BiGUL} & \textbf{BXtend} & \textbf{eMoflon} & \textbf{EVL + STrace} & \textbf{JTL} & \textbf{NMF Sync.} & \textbf{SDMLib} \\ \hline
-\textit{Style} & restoration-based & restoration-based & propagation-based & restoration-based & restoration-based & propagation-based &  restoration-based \\ \hline
-\textit{Scenario} & initial-state-based (with~hAln) & initial-diag-based & s-delta-corr-based & initial-diag-based & initial-diag-based & s-delta-state-based &  initial-diag-based \\ \hline
-\textit{Guarantees} & round-trip laws & none & correctness, completeness & none & correctness, hippocraticness & correctness, hippocraticness &  none \\ \hline
-\textit{Consistency} & implicit & implicit & explicit (grammar-based) & explicit (constraint-based) & explicit (constraint-based) & explicit (functional) &  implicit \\ \hline 
-\textit{Control} & explicit and implicit & explicit & implicit & explicit & implicit & explicit & explicit \\ \hline
-\textit{Direction} & directed & directed & directed & concurrent & directed & concurrent or directed & directed \\ \hline
-\textit{Time} & on-demand & on-demand & on-demand & on-demand & on-demand & live or on-demand & on-demand \\ \hline
-\textit{Automation} & automatic & automatic & automatic & interactive & automatic & automatic & automatic \\
+\begin{tabular}{M{1.55cm}|M{1.7cm}|M{1.6cm}|M{1.9cm}|M{2.1cm}|M{1.7cm}|M{1.7cm}|M{1.5cm}}
+\textit{} & \textbf{BiGUL} & \textbf{BXtend} & \textbf{eMoflon} & \textbf{EVL+STrace} & \textbf{JTL} & \textbf{NMF} & \textbf{SDMLib} \\ \hline
+\textit{Style (Tool)} & restoration-based & restoration-based & propagation-based & restoration-based & restoration-based & propagation-based &  restoration-based \\ \hline
+\textit{Scenario (Solution)} & initial-state-based (with~hAln) & initial-diag-based & s-delta-corr-based & initial-diag-based & initial-diag-based & o-delta-corr-based &  initial-diag-based \\ \hline
+\textit{Guarantees (Tool)} & round-trip laws & none & correctness, completeness & none & correctness, hippocraticness & correctness, hippocraticness &  none \\ \hline
+\textit{Consistency (Tool)} & implicit & implicit & explicit (grammar-based) & explicit (constraint-based) & explicit (constraint-based) & explicit (constraint-based) &  implicit \\ \hline 
+\textit{Control (Tool)} & explicit and implicit & explicit & implicit & explicit & implicit & explicit and implicit & explicit \\ \hline
+\textit{Direction (Tool)} & directed & directed & directed & concurrent & directed & directed & directed \\ \hline
+\textit{Time (Solution)} & on-demand & on-demand & on-demand & on-demand & on-demand & live & on-demand \\ \hline
+\textit{Automation (Solution)} & automatic & automatic & automatic & interactive & automatic & automatic & automatic \\
 \end{tabular}
 \caption{Summary of classification of all tools and solutions}
 \label{tab:features-all-tools}
