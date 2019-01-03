@@ -1,31 +1,77 @@
 \section{Related Work}
 \label{sec:RelatedWork}
 
-\NOTE{\emph{Length:} 1 p., \emph{Responsible:} Bernhard}
+In this section, we provide a discussion of related work divided into two broad groups:  (i)~existing results concerned with providing benchmark frameworks and examples in an MDE context, and (ii)~previous work on classifying and comparing bx approaches.
+The restriction of (i) and (ii) to MDE and bx, respectively, is to keep the scope of our discussion manageable.
 
-\NOTE{Mandatory part of a journal paper. At least, relations to previous publications of the main authors have to be established. Work of others on benchmarking bidirectional transformations? Work on classification, e.g., SoSyM paper by Hidaka?}
-
-\subsection{Benchmark frameworks}
+\subsection{Benchmark frameworks and examples}
 \label{sec:BenchmarkFrameworks}
 
+% Benchmarx
 To the best of our knowledge, Benchmarx is the first and only framework for developing and executing benchmarks for bidirectional transformations. The framework is based on initial conceptual work regarding the requirements which bx benchmarks and benchmark frameworks should satisfy \cite{AnjorinCG0RS14}. An implementation of these concepts was developed several years later and described in a paper for the BX 2017 workshop \cite{Anjorin2017}. This article goes considerably beyond the workshop paper inasmuch as it presents the selected benchmark case and its challenges more accurately, includes a significantly extended section on the underlying conceptual framework regarding bx tool architectures, and presents and compares a broad spectrum of solutions to the Families to Persons case, demonstrating the applicability of the Benchmarx framework to heterogeneous bx tools. 
 
-The Benchmarx framework has been designed specifically for benchmarking bidirectional transformations. In contrast, the SHARE environment\footnote{\url{https://fmttools.ewi.utwente.nl/redmine//} \url{projects/grabats/wiki}} (Sharing Hosted Autonomous Research Environments) provides general support for sharing research tools via virtual machines. SHARE has been used as support environment in the Transformation Tool Contest series to make benchmark solutions accessible without imposing any installation effort for inspecting and executing solutions. Solutions based on the Benchmarx framework may be distributed via SHARE or other virtual environments. Thus, Benchmarx and SHARE satisfy orthogonal needs.    
+% SHARE
+The Benchmarx framework has been designed specifically for benchmarking bidirectional transformations. In contrast, the SHARE environment\cite{DBLP:journals/procedia/GorpM11} (Sharing Hosted Autonomous Research Environments) provides general support for sharing research tools via virtual machines. SHARE has been used as support environment in the Transformation Tool Contest series to make benchmark solutions accessible without imposing any installation effort for inspecting and executing solutions. Solutions based on the Benchmarx framework may be distributed via SHARE or other virtual environments. Thus, Benchmarx and SHARE satisfy orthogonal needs.    
 
-\subsection{Benchmark examples}
-\label{sec:BenchmarkExamples}
+% TTC
+\footnote{http://www.transformation-tool-contest.eu}
 
+% GT benchmarks
+DBLP:conf/vl/VarroSV05
+
+Pattern matching, graph transformation tools, not much to do with bx at all
+
+% Incr benchmarks
+DBLP:conf/gg/BergmannHRV08
+
+Focus on incremental PM, one of the examples is actually a bx problem but not specific focus on bx tools
+
+% BigMDE
+DBLP:conf/staf/0001KAPR16
+Novelty:  focus also on the size of the specification (we do this too). Nothing for bx.
+
+DBLP:conf/staf/IzsoSRV14:  Framework with a broader view on benchmarking further MT tasks.  Nothing specific for bx.
+
+% Repos of bx examples
 In recognition of the need to collect bx examples, a repository \cite{Cheney2014} was set up which is continuously extended and maintained\footnote{\url{http://bx-community.wikidot.com/examples:home}}. The repository includes a short description of the Families to Persons case, which we selected as initial example for proving the feasibility of the Benchmarx framework. This case was originally proposed as part of the ATL~\cite{SCP-Jouault2008} transformation zoo\footnote{\url{http://www.eclipse.org/atl/atlTransformations/\#Families2Persons}}. Several variants of the Families to Persons case exist. For its implementation in the Families to Persons benchmark, the case was refined into a bidirectional incremental transformation with a configurable backward transformation, for which a comprehensive set of test cases was developed. The refined case was accepted for the Transformation Tool Contest 2017 and described in a TTC 2017 workshop paper \cite{Anjorin2017a}. For this article, this description was refined, reorganized, and supplemented with a list of challenges, which constituted an essential driver for selecting the Families to Persons case.
 
+% Collection of examples
 In order to enable a more comprehensive evaluation, bx tools should be compared with the help of a spectrum of benchmarks rather than with the help of just a single case (Families to Persons). In fact, more benchmarks are already available for evaluation with the Benchmarx framework, but have been implemented only in a few bx tools to date. For example, all cases presented in \cite{SoSym2018-Westfechtel} were implemented in the Benchmarx framework. Originally, these cases were designed for evaluating the bx language QVT Relations (QVT-R \cite{QVT-1.3}), but they can be meaningfully applied to other bx languages and tools, as well. Some of these cases are quite challenging (e.g, the bidirectional transformation between expression trees and expression dags, in which common subexpressions are shared rather than replicated).
 
-\subsection{Classification of bx approaches}
+
+
+\subsection{Classification and comparison of bx approaches}
 \label{sec:ClassificationOfBxApproaches}
 
+% Zinovys work - tiles as formal schematic classification
+DBLP:conf/gttse/Diskin09
+
+% Bidirectional languages
+DBLP:conf/ssgip/FosterMV10
+
+% JTL vs. TGG
+DBLP:journals/eceasst/EramoB13
+
+% TGG comparison papers
+DBLP:journals/eceasst/HildebrandtLGRGSLAS13
+DBLP:journals/eceasst/LeblebiciASHRG14
+
+
+% Romina - Taxonomy (kind of glossary of definitions and requirements)
+DBLP:conf/sattose/EramoMP14
+
+% Soichiro - detailed feature model for bx
 For classifying bx approaches, we developed a feature model which serves two purposes: First, the feature model demonstrates that the Benchmarx framework may be used with heterogeneous tools which differ in particular with respect to their underlying architecture. Second, the feature model is also employed to explore the relationships between the features of bx tools and their capabilities in solving bidirectional transformation problems. 
 
 Compared to the feature model proposed in \cite{SOSYM-Hidaka2016}, our feature model focuses on the aspects mentioned above and does not intend to provide a comprehensive classification of the bx landscape. Furthermore, our feature model is not just a subset of Hidaka's feature model, but introduces different features and organizes them in a different way. Essentially, as far as the bx tool architecture is concerned (see left-hand side of Figure~\ref{fig:featureModelBxTools}), our feature model precisely reflects the conceptual framework introduced in Section~\ref{sec:Foundations} and constitutes an original contribution, while the remaining parts are also covered by Hidaka's feature model in a slightly different way.
 
+% Zinovys work - domain analysis
+DBLP:journals/jss/DiskinGWC16
 
-\subsection{Conceptual framework and bx tool architectures}
-\label{sec:ConceptualFrameworkAndBxToolArchitectures}
+% Lämmel - metamodelling?
+DBLP:conf/sle/Lammel16
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
