@@ -51,7 +51,7 @@ Conversely, a given persons model is consistent with multiple families models (d
 
 \subsubsection{Properties of synchronization}
 
-The Families-to-Persons case is \emph{symmetric}~\cite{Diskin2014}, i.e., neither model is a strict view of the other and information loss may occur in both transformation directions. We consider only \emph{directed synchronization}, assuming that changes have been applied to the master model, while the dependent model has not been changed at all or the changes do not affect the consistency relation (e.g., changes of birthdays in the persons model are allowed). 
+The Families-to-Persons case is \emph{symmetric}~\cite{DBLP:journals/jss/DiskinGWC16}, i.e., neither model is a strict view of the other and information loss may occur in both transformation directions. We consider only \emph{directed synchronization}, assuming that changes have been applied to the master model, while the dependent model has not been changed at all or the changes do not affect the consistency relation (e.g., changes of birthdays in the persons model are allowed). 
 
 We cover both \emph{batch synchronization}, where the dependent model is created from scratch, and \emph{incremental synchronization}, where the dependent model is changed to maintain consistency with the master model. 
 Finally, changes are provided to the tools indirectly via an ordered\footnote{The results of some test cases depend on the order of elementary change operations.} sequence of change operations referred to as \emph{edits}.
