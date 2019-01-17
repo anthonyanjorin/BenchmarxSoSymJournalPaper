@@ -4,3 +4,47 @@
 \NOTE{\emph{Length:} 1 p., \emph{Responsible:} Thomas}
 
 \NOTE{Design of the internal DSL, package structure of test cases, classification of test cases according to the taxonomy}
+
+\renewcommand{\arraystretch}{1.2}
+
+%\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+%\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\begin{table*}[!tbp]
+	\begin{tabular}{M{7cm}|M{1.4cm}|M{1.6cm}|M{1.9cm}|M{1.3cm}|M{1.3cm}}
+		\textbf{Name of Test} & \textbf{Direction} & \textbf{Horizontal Input} & \textbf{Vertical Input} & \textbf{Change Type} & \textbf{Runtime Config}  \\ \hline
+		\textit{testInitialiseSynchronisation} & fwd/bwd & none & initial-based & - & no   \\ \hline
+		\textit{testFamilyNameChangeOfEmpty} & fwd & none & initial-based & attribute  & no \\ \hline
+		\textit{testCreateFamily} & fwd & none & initial-based & add & no \\ \hline
+		\textit{testCreateFamilyMember} & fwd & none & initial-based & add & no \\ \hline
+		\textit{testDuplicateFamilyMemberNames} & fwd & none & initial-based & add & no \\ \hline
+		\textit{testNewDuplicateFamilyNames} & fwd & none & initial-based & add & no \\ \hline
+		\textit{testNewFamilyWithMultiMembers} & fwd & none & initial-based & add & no \\ \hline
+		\textit{testCreateFamilyMembersInExistingFamily\-As\-Parent} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateMalePersonAsSon} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateFamilyMemberInExistingFamily\-As\-Children} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateDuplicateFamilyMembersInExisting\-Family\-As\-Children} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateMalePersonAsParent} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateFamilyMembersInNewFamily\-As\-Parents} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateDuplicateFamilyMembersInNewFamily\-As\-Parents} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateFamilyMembersInNewFamily\-As\-Children} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testCreateDuplicateFamilyMembersInNewFamily\-As\-Children} & bwd & none & initial-based & add & yes \\ \hline
+		\textit{testIncrementalInserts} & fwd & state-based & state-based & add & no\\ \hline
+		\textit{testIncrementalDeletions} & fwd & corr-based & s-delta-based & del & no \\ \hline
+		\textit{testIncrementalRename} & fwd & corr-based & s-delta-based & attribute & no \\ \hline
+		\textit{testIncrementalMove} & fwd & state-based & s-delta-based & move (del+add) & no \\ \hline
+		\textit{testIncrementalMixed} & fwd & state-based & s-delta-based & add, del & no \\ \hline
+		\textit{testIncrementalRoleChange} & fwd & state-based & s-delta-based & add, del & no\\ \hline
+		\textit{testStability} & fwd & state-based & state-based & - & no \\ \hline
+		\textit{testHippocraticness} & fwd & state-based & state-based & attribute & no\\ \hline
+		\textit{testIncrementalInsertsFixedConfig} & bwd & state-based & state-based & add & yes \\ \hline
+		\textit{testIncrementalInsertsDynamicConfig} & bwd & state-based & state-based & add & yes \\ \hline
+		\textit{testIncrementalDeletions} & bwd & state-based & state-based & del & yes \\ \hline
+		\textit{testIncrementalRenamingDynamic} & bwd & corr-based & s-delta-based & attribute & yes \\ \hline
+		\textit{testIncrementalMixedDynamic} & bwd & state-based & s-delta-based & add, del & yes \\ \hline
+		\textit{testIncrementalOperational} & bwd & state-based & o-delta-based & add & yes \\ \hline
+		\textit{testStability} & bwd & state-based & state-based & - & yes \\ \hline
+		\textit{Hippocraticness} & bwd & state-based & state-based & attribute & yes \\ \hline
+	\end{tabular}
+	\caption{Classification of Test Cases according to the Taxonomy}
+	\label{tab:classification-test-cases}
+\end{table*}

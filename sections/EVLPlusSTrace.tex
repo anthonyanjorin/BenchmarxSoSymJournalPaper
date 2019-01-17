@@ -50,7 +50,7 @@ Automatic synchronization is possible, but requires rewriting of EVL constraints
 \label{sec:solutionEVL}
 
 The following description is based on the solution in EVL+STrace submitted to TTC 2017 \cite{Samimi-Dehkordi2017}.
-Figure~\ref{fig:evltracemetamodel} displays the \emph{trace metamodel} for the Families to Persons benchmark. Specific types of trace links and trace link ends are defined by subclassing built-in abstract superclasses \code{TraceLink} and \code{TraceLinkEnd}, respectively. Each \emph{trace link} references a set of trace link ends, which may be considered proxies of source or target model objects. \emph{Trace link ends} store links to source or target model objects with the help of attributes of type \code{EObject}. In addition, trace link ends may store attribute values and may be connected by links. In this way, the trace model may shadow the relevant parts of the source and target models. In the case of the Families to Persons benchmark, the trace metamodel defines two types of trace links for relating family and person registers as well as for relating family members along with their families with persons.
+Figure~\ref{fig:evltracemetamodel} displays the \emph{trace metamodel} for the Families to Persons benchmark. Specific types of trace links and trace link ends are defined by subclassing built-in abstract superclasses \code{TraceLink} and \code{TraceLinkEnd}, respectively. In the case of the Families to Persons benchmark, the trace metamodel defines two types of trace links for relating family and person registers as well as for relating family members along with their families with persons. Each \emph{trace link} references a set of trace link ends, which may be considered proxies of source or target model objects. \emph{Trace link ends} store links to source or target model objects with the help of attributes of type \code{EObject}. In addition, trace link ends may store attribute values and may be connected by links. In this way, the trace model may shadow the relevant parts of the source and target models. 
 
 
  
@@ -106,7 +106,7 @@ Listing~\ref{lst:evl} gives an example of an \emph{EVL} constraint along with it
 As indicated by the name of the constraint (line~2), it handles the creation of a new male member.
 Its guard (line~3) ensures that it may be applied only to male family members.
 The check (line~4) defines that the member must not be new, i.e., there must be a corresponding person in the persons model.
-If this check fails, a meaningful message (line~5--6) is created and displayed in the user interface.
+If this check fails, a meaningful message (line~5--6) is created and displayed at the user interface.
 The fix (line~7--36) has a title (line~8--9) explaining the repair action to the user, as well as a \code{do} part (starting at line~10) which defines all operations to restore consistency in a procedural way.
 Note that these operations refer both to the persons model and the trace model.
 
@@ -115,7 +115,7 @@ First, the benchmark comprises only alternating direct rather than concurrent ch
 Second, the test suite is executed automatically, without any user interaction.
 %
 As EVL+STrace is designed to support the more general case of concurrent synchronization, it can of course also handle the simplified case of directed synchronization.
-For automatic synchronization, the constraint definitions have to be modified by moving the \code{do} part into the \code{check} part, as well as eliminating the \code{message} and the \code{fix} parts.
+For automatic synchronization, the constraint definitions for interactive synchronization (as shown in Listing~\ref{lst:evl}) have to be modified by moving the \code{do} part into the \code{check} part, as well as eliminating the \code{message} and the \code{fix} parts.
 These mechanical transformations were applied throughout the EVL code to execute the Families-to-Persons benchmark without user interaction.
 
 

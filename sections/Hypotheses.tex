@@ -1,0 +1,43 @@
+\subsection{Hypotheses}
+\label{sec:Hypotheses}
+
+Before presenting the actual evaluation of the solutions for the Families-to-Persons case, we state some hypotheses concerning the expected results. These hypotheses are based on the features of bx tools, as introduced in section~\ref{sec:Foundations} and summarized in figure~\ref{fig:featureModelBxTools}, and are exemplified with the help of the classification of the bx tools in which the benchmark case was solved (table~\ref{tab:features-all-tools}). We will revisit our hypotheses after having presented the results of our evaluation, and discuss to what extent they are supported by the evaluation results. 
+
+\subsubsection{Size of transformation definitions}
+\label{sec:HypothesesSize}
+
+\begin{hypothesis}
+	\label{hyp:size1}
+	Implicit control reduces the size of a transformation definition.
+\end{hypothesis}
+
+\emph{Justification.} In the case of implicit control, there is no need to program synchronization behavior explicitly; rather, it is derived from some specification. Either the consistency relation is specified (e.g., in terms of constraints as in JTL or grammar rules as in eMoflon), or one direction of the synchronization is derived from the opposite, explicitly programmed direction (BiGUL). In any case, it is expected that the size of a transformation definition is reduced because there is no need to program both directions of synchronizations explicitly. 
+
+\subsubsection{Correctness}
+\label{sec:HypothesesCorrectness}
+
+A solution is considered \emph{correct} if it satisfies the requested execution behavior. As far as the benchmark is concerned, a solution is considered correct if it passed all test cases. 
+
+\begin{hypothesis}
+	\label{hyp:correctness1}
+	Implicit control trades expressiveness\\for well-behavedness guarantees.
+\end{hypothesis}
+
+\emph{Justification.} Approaches which are based on implicit control provide certain well-behavedness guarantees at the cost of expressiveness. I.e., these guarantees are given only under certain assumptions: In BiGUL, round-trip laws hold only when transformations are composed from a restricted set of primitives, in eMoflon restrictions apply to grammar rules, etc. Thus, the class of bidirectional transformations which may be expressed in approaches based on implicit control is usually restricted. As a consequence, it may not be possible to fully realize the requested synchronization behavior.
+
+\begin{hypothesis}
+	\label{hyp:corrrectness2}
+	The ability to achieve correctness increases with the amount of input data used by a bx tool.
+\end{hypothesis}
+
+\emph{Justification.} The application scenario (figure~\ref{fig:featureModelBxTools}) strongly determines the capabilities of a bx tool. At the low end of the spectrum, an initial-state-based tool like BiGUL merely receives the new version of the master model and the old version of the dependent model as inputs. At the opposite high end, an o-delta-corr-based tool like NMF may exploit correspondences between models which may not be reconstructable based on the model states alone. Furthermore, it may precisely propagate operational deltas, processing the operations in the order in which they were executed, and may thus realize order-dependent synchronization. 
+
+\subsubsection{Performance}
+\label{sec:HypothesesPerformance}
+
+\begin{hypothesis}
+	\label{hyp:performance}
+	Delta-based synchronization increases\\the performance of incremental synchronizers.
+\end{hypothesis}
+
+\emph{Justification.} A bx tool such as eMoflon or NMF which receives a (structural or operational) delta as input is provided with the information which change operations have been applied at which locations. This knowledge may be exploited to restore consistency efficiently. In contrast, bx tools which lack this information (e.g., BiGUL or BXtend) need to perform a global analysis to derive the delta. This analysis may be expensive in the case of large models; the cost of restoring consistency may be neglectable compared to the cost of analysis.  

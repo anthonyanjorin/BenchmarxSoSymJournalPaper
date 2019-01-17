@@ -31,7 +31,7 @@ As synchronization blocks pair such updates, they can be viewed as an implementa
 \subsubsection{Classification}
 \label{sec:ClassificationNMF}
 
-As synchronization blocks can be viewed as pairs of updates (and queries), the style of specification is probably closest to \emph{propagataion-based}.
+As synchronization blocks can be viewed as pairs of updates (and queries), the style of specification is probably closest to \emph{propagation-based}.
 %
 The addressed application scenario is \emph{o-delta-corr-based}: the NMF solution accepts o-deltas and a corr as vertical and horizontal input, respectively.
 %
@@ -119,8 +119,8 @@ The following description of the NMF Synchronizations solution to the Families-t
 Two synchronization blocks are required for the transformation and are depicted in figure~\ref{fig:NMFSynchronizationBlockBenchmark}:  (i) a block with the top-level relation \emph{Reg2Reg} as base, and \emph{Mem2Mem} as target, and (ii) a block with \emph{Mem2Mem} as base and the identity relation on strings as target.
 
 Listing~\ref{lst:nmf} depicts fragments of the solution in C\#.
-The two relations are implemented as \emph{synchronization rules} subclassing the generic class \code{SynchronizationRule} (lines~2--16).
-The actual synchronization blocks are defined by overriding the method \code{Declare\-Synchron\-ization} (lines~4, 12, and 18).
+The two relations are implemented as \emph{synchronization rules} subclassing the generic class \code{SynchronizationRule} (lines~2--15).
+The actual synchronization blocks are defined by overriding the method \code{Declare\-Synchron\-ization} (lines~4 and 12).
 This is basically just a textual representation of figure~\ref{fig:NMFSynchronizationBlockBenchmark}.
 
 Concerning the first synchronization block \code{Reg2Reg}, the target intra-model lens \code{.Persons} is simple enough (the \emph{get} function merely collects the elements obtained via a multi-valued reference) so updates (the \emph{put} function) can be inferred automatically.  

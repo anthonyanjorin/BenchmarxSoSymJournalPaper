@@ -55,33 +55,33 @@ As this would result in highly redundant rules with many copies of rule elements
           #with FamiliesToPersons
 
 #source { 
-    families : FamilyRegister {
-        ++ -families->f
-    }
-    ++ f : Family
-    ++ fm : FamilyMember
+  families : FamilyRegister {
+    ++ -families->f
+  }
+  ++ f : Family
+  ++ fm : FamilyMember
 }
 
 #target {
-    persons : PersonRegister {
-        ++ -persons->p
-    }
-    ++ p : Person
+  persons : PersonRegister {
+    ++ -persons->p
+  }
+  ++ p : Person
 }
 
 #correspondence {
-    families2persons : FamiliesToPersonsCorr {
-        #src->families
-        #trg->persons
-    }
-    ++ member2Persons : FamilyMemberToPerson {
-        #src->fm
-        #trg->p
-    }
+  families2persons : FamiliesToPersonsCorr {
+    #src->families
+    #trg->persons
+  }
+  ++ member2Persons : FamilyMemberToPerson {
+    #src->fm
+    #trg->p
+  }
 }
 
 #attributeConditions {
-    concat(", ", f.name, fm.name, p.name)
+  concat(", ", f.name, fm.name, p.name)
 }
 \end{lstlisting}
 
@@ -101,10 +101,10 @@ Finally, the attribute condition (line~31) specifies that the name of the person
           #with FamiliesToPersons
 
 #source { 
-    families : FamilyRegister {
-        -families->f
-    }
-    f : Family
+  families : FamilyRegister {
+    -families->f
+  }
+  f : Family
 }
 \end{lstlisting}
 
@@ -118,14 +118,14 @@ The subrule inherits all elements from its superrule, but redefines the binding 
 #with FamiliesToPersons
 
 #source { 
-    ++ f : Family {
-        ++ -daughters->fm
-    }
-    ++ fm : FamilyMember
+  ++ f : Family {
+    ++ -daughters->fm
+  }
+  ++ fm : FamilyMember
 }
 
 #target {
-    ++ p : Female
+  ++ p : Female
 }
 \end{lstlisting}
 
@@ -139,7 +139,7 @@ The rule adds the edge between the family and the member, which has been missing
 \end{lstlisting}
 
 Listing~\ref{lst:emoflonDaughterOfExistingFamilyToFemale} demonstrates the use of \emph{multiple inheritance}: The rule for creating a daughter in an existing family as well as well as a female person is obtained by extending both the abstract rule for mapping members in existing families to persons (Listing~\ref{lst:emoflonExistingFamily2Person}) and the concrete rule for mapping daughters in new families to females (Listing~\ref{lst:emoflonDaughterToFemale}).
-Conflicts are resolved by favoring ``context over create'' (black over green).
+Conflicts are resolved by favoring ``context over create''.
 This means that subrules are allowed to extend the precondition of their superrules but never reduce it.
 The family node \code{f} in \code{DaughterOfExistingFamiltyToFemale} thus obtains its binding state from the rule \code{ExistingFamily2Person}.
 

@@ -66,28 +66,22 @@ For the purpose of benchmarking, all bx laws are considered as \emph{properties}
 We test whether these laws hold for two reasons: First, a specific bx tool may not be designed to guarantee a certain bx law. 
 Second, even if the tool has been designed to guarantee some law, its implementation may still contain faults, resulting in failing test cases.
 
-From the bx  laws introduced in section~\ref{sec:Consistency}, the benchmark takes \emph{correctness} into account by the design of the test cases: All test cases check for consistency by requiring a dependent model which is consistent with the master model. Similarly, \emph{termination} and \emph{completeness} are considered implicitly as a violation of these properties would result in failing test cases.
+From the bx  laws introduced in section~\ref{sec:Consistency}, the benchmark takes \emph{correctness} into account by the design of the test cases: All test cases check for consistency by requiring a dependent model which is consistent with the master model. Similarly, \emph{termination} and \emph{completeness} are considered implicitly as a violation of these properties would result in failing test cases. Finally, a few test cases of the benchmark explicitly address \emph{hippocraticness} by performing updates that do not affect consistency, respectively, to the master model. 
 
-Hippocraticness is addressed by performing updates that do not affect consistency, respectively, to the master model.
-%
 Several variants of \emph{round-trip laws} have been proposed in the literature.
 In the symmetric bx case considered in the Families to Persons benchmark, two round-trip laws are required to hold: If the backward (forward) transformation is executed immediately after the forward (backward) transformation, the source model (target model) must not be changed.
 These laws are not tested explicitly because they are implied in the case of correct and hippocratic synchronizers.
-Additional tests for other round-trip laws such as \emph{putput} (well-behaved composition of forward (backward) synchronization) can be added in the future.
 
-As mentioned earlier, the consistency relation between families models and persons models is non-de\-ter\-min\-istic in both directions.
-In addition to bx laws such as correctness and hippocraticness, further guidance is needed to confine the possible choices in restoring consistency.
-\emph{Least change} and \emph{least surprise} are useful principles to determine how the dependent model should be changed in a synchronization.
-As they are, however, in general insufficient to derive synchronization behavior in a unique way, we state the desired behavior explicitly, taking correctness, hippocraticness, but also the principles of least change and/or least surprise (as informal guidelines) into account. 
-We refrain from a formal specification and provide an informal --- yet (hopefully) precise --- description of the expected behavior.
-Formalizing these requirements is a task which we intentionally leave to the developers who implement the benchmark in a specific bx tool. 
-All test cases conform to and assert this informal description.
+In the design of all test cases, we generally assume \emph{compositionality} of changes: The effect of the synchronization of a composite change is reduced to the composition of the effects of elementary changes. This corresponds to the \emph{put-put law} for delta lenses, as introduced in \cite{JOT:issue_2011_01/article6}. Furthermore, we take the principles of \emph{least change} and \emph{least surprise} into account.
+
+Unfortunately, the expected behavior of a synchronizer may not be derived in a unique way by applying bx laws. In particular, this applies to the backward transformation, which is highly non-deterministic. To resolve non-determinism (which considerably complicates automatic testing and often is not desirable in practice anyway), we describe the expected behavior explicitly and uniquely, taking bx laws into account. The description is informal, yet (hopefully) precise (see below). 
+
 
 \subsubsection{Synchronization behavior}      
 
 In the following, we discuss the expected synchronization behavior for a series of ``small'' changes grouped according to model element (family, family member, person, \ldots) and then according to a limited set of change types (create, delete, update, move).
 This overview is sufficient to provide a high-level intuition for the benchmark.
-The actual test cases of course combine different changes and are more involved. However, the behavior of composite changes is \emph{induced} by the behavior of elementary changes.
+The actual test cases of course combine different changes and are more involved. However, the behavior of composite changes is \emph{induced} by the behavior of elementary changes (see above).
 
 \paragraph{Forward synchronization:}
 

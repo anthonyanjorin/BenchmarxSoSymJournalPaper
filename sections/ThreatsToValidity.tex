@@ -1,4 +1,33 @@
-\subsection{Threats to Validity}
+\subsection{Threats to validity}
 \label{sec:ThreatsToValidity}
 
 \NOTE{\emph{Length:} 0.5 p., \emph{Responsible:} Tony, Thomas}
+
+Threat:  Our collection of tests is ad-hoc, i.e., we did not "cover" the feature model in any systematic manner.  This could be improved in the future using combinatoric approaches such as all pairs of features, etc.   
+
+Mitigation:  We discussed the tests (three researchers using 3 different tools) and decided together what is correct and incorrect (at least not just one person).  Tests were again discussed during TTC with feedback/review from solution experts.  Test suite is not meant to be complete in any sense and is only to demonstrate what is possible with the framework.
+
+Measurements:  
+
+EMF compatibility:
+- NMF requires costly conversion so we had to omit this when measuring (also the reason why we had to extrapolate values)
+- BiGUL also required conversion but this was negligible so we did not do any handling
+- SDMLib uses a rewrite of the tests to solve the compatibility problem
+- all other tools are EMF conform and could work directly with the models
+- weren't able to automate EVL+STrace as required (rather slow though based on manual tests)
+
+Non-determinism, manual steps:
+
+- EVL+STrace required a series of complex manual steps.  This means that the probability of making manual errors is also higher.
+
+- eMoflon (pattern matching) is non-deterministic.  Some tests might fail if repeated often enough.
+
+Just a single, rather simple example
+
+Plots might be different for different deltas (wrt. incremental updates)
+
+Framework:
+
+- Threat: is clearly delta-based and favours corr-based, delta-based approaches. 
+- Mitigation:  Interpretation of test results and classification in expected/unexpected fails/passes.  This enable a fair evaluation of tools with a restricted set of features.
+

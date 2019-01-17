@@ -1,6 +1,32 @@
-\subsection{Size of the Transformation Definition}
+\subsection{Size of transformation definitions}
 \label{sec:Size}
 
 \NOTE{\emph{Length:} 0.5 p., \emph{Responsible:} Thomas}
 
 \NOTE{In lines of code and/or number of tokens?}
+
+A quantitative evaluation of the different tools and solution to the Families-to-Persons case presented in this paper may be given by comparing the size of the dif\-ferent transformation definitions. As all of the discussed solutions are based on tools allowing for a textual specification of model-transformations, a comparison in terms of the following metrics is provided:
+\begin{description}
+	\item[Lines of Code:] The total number of source code lines needed to describe the transformation. Empty lines as well as lines containing comments are not considered in this metrics.
+	\item[Number of Words:] The total number of words used in the transformation specification (comments are ignored).
+	\item[Number of Characters:] The total number of characters used for the Families-to-Persons transformation (comments are omitted).
+\end{description}
+
+\renewcommand{\arraystretch}{1.2}
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\begin{table*}[!tbp]
+	\begin{tabular}{M{1.55cm}|M{1.7cm}|M{1.6cm}|M{1.9cm}|M{2.1cm}|M{1.7cm}|M{1.7cm}|M{1.5cm}}
+		\textit{} & \textbf{BiGUL} & \textbf{BXtend} & \textbf{eMoflon} & \textbf{EVL+STrace} & \textbf{JTL} & \textbf{NMF} & \textbf{SDMLib} \\ \hline
+		\textit{Lines of Code} & 176 & 211 & 192 & 1299 & 168 & 279 &  236 \\ \hline
+\textit{Number of Words} & 1010 & 565 & 256 & 2878 & 260 & 607 &  427 \\ \hline
+\textit{Number of Characters} & 6197 & 7571 & 3195 & 50109 & 4338 & 7215 &  6761 \\ \hline
+
+	\end{tabular}
+	\caption{Size of the transformation definitions of all tools and solutions}
+	\label{tab:size-all-solutions}
+\end{table*}
+
+Table \ref{tab:size-all-solutions} shows the numbers obtained for the metrics described above. They give a good impression about the effort required to specify the transformation as well as the verbosity of the used tools. Hypothesis 1 (see Section \ref{sec:HypothesesSize}) implies that declarative approaches, which allow for the derivation of both transformation directions from a single specification should require significantly smaller transformation definitions. JTL, BiGUL and eMoflon are tools that allow specifications on a high level of abstraction and an explicit programming of the synchronization behavior is not required. As a result the corresponding transformation specifications are the smallest in this comparison. However, for resolving non-determinism in the backward direction, additional code was required for eMoflon and JTL. While in eMoflon Java code was supplied to orchestrate the code generated from the TGG specification, a significant amount of ASP code was needed for JTL. \NOTE{Tony, could you please supply the missing numbers?}
+The most interesting observation is that both BXtend and SDMLib almost match the size of the JTL, eMoflon and BiGUL specifications although in both tools each transformation specification has to be programmed explicitly. The EVL+Strace specification requires approx. 7 times as much lines of code as the most concise specification. 

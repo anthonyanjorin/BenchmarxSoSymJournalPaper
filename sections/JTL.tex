@@ -7,6 +7,8 @@ JTL is EMF compatible and provides tool support via an Eclipse plugin.
 A transformation developer using JTL provides a set of constraints specifying a consistency relation.
 Together with the metamodels, these constraints are transformed to an Answer Set Programming (ASP)~\cite{GL88} problem, which an ASP solver can use to enable consistency restoration.
 
+JTL reuses QVT-R syntax \cite{QVT-1.3}, but deviates from its semantics deliberately and significantly. In particular, JTL maintains a persistent trace, in contrast to the purely state-based design of QVT-R. Second, JTL takes non-determinism into account by generating all possible models which may be obtained by selecting one of multiple rules being applicable to a given match. From these candidates, the user has to select the desired result, which is continued to be used in further synchronizations.
+
 
 \subsubsection{Classification}
 A summary of the features of JTL is provided in table~\ref{tab:features-all-tools}.
@@ -21,7 +23,7 @@ JTL requires an \emph{explicit} consistency relation defined as a set of constra
 %
 Consistency restoration is \emph{implicit}:  the underlying constraint solver automatically derives \emph{fCR} and \emph{bCR} based on the provided constraints.
 %
-JTL currently supports \emph{directed}, \emph{on-demand}, and \emph{automatic} synchronization.
+JTL currently supports \emph{directed}, \emph{on-demand}, and \emph{interactive} synchronization (which reduces to automatic synchronization in the case of deterministic transformations).
 
 \lstdefinelanguage{jtl}{
 	morekeywords = {transformation,top,relation,enforce,domain,where,when},

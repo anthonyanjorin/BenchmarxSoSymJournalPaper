@@ -100,7 +100,7 @@ If pattern matching succeeds, the method \code{ensure\-Name\-And\-Gender} is inv
 
 Lines~20--31 deal with the case where there is no corresponding person object.
 This is handled with a \emph{negative application condition}, defined on lines~20--23.
-On lines~17--19, elements of story patterns are created that define the actions to be performed when the negative application condition holds: A person object has to be created and linked to the person register; the method \code{ensure\-Name\-And\-Gender} is then called to establish consistency with the family object.
+On lines~24--31, elements of story patterns are created that define the actions to be performed when the negative application condition holds: A person object has to be created and linked to the person register; the method \code{ensure\-Name\-And\-Gender} is then called to establish consistency with the family object.
 
 Finally, the temporary link between the family register and the family member --- which is set in the course of changes to the families model --- is matched and then removed (lines~33--35), the story pattern object for the family register is bound (line~37), and the pattern is applied to all matches (line~38).
 
